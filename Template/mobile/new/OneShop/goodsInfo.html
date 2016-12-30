@@ -1,0 +1,841 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>{$goods.goods_name}_{$tpshop_config.shop_info_store_title}</title>
+    <meta http-equiv="keywords" content="{$tpshop_config['shop_info_store_keyword']}"/>
+    <meta name="description" content="{$tpshop_config['shop_info_store_desc']}"/>
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/public.css"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/goods.css"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/layer.css"/>
+    <script type="text/javascript" src="__STATIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/touchslider.dev.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/layer.js"></script>
+    <script src="__PUBLIC__/js/global.js"></script>
+    <script src="__PUBLIC__/js/mobile_common.js"></script>
+    <script src="__STATIC__/js/common.js"></script>
+    <style type="text/css">
+        .treasure_progress {
+            font-size: 12px
+        }
+
+        .treasure_progress .no {
+            color: #333
+        }
+
+        .treasure_progress .progress_bar {
+            margin: 7px 0;
+            position: relative;
+            height: 10px;
+            border-radius: 10px;
+            background-color: #ddd
+        }
+
+        .treasure_progress .progress_bar .progress_bar_rate {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 10px;
+            background-color: #e4393c;
+            border-radius: 10px
+        }
+
+        .treasure_progress .info {
+            color: #666
+        }
+
+        .treasure_progress .info em {
+            color: #e4393c
+        }
+
+        .treasure_progress .info .fr {
+            float: right
+        }
+
+        .treasure_tip {
+            margin: 10px 0;
+            padding: 15px 10px;
+            color: #666;
+            text-align: center;
+            font-size: 12px;
+            background-color: #f2f2f7
+        }
+
+        .treasure_rule {
+            margin-bottom: 10px;
+            padding: 0 10px;
+            background-color: #fff
+        }
+
+        .treasure_rule .rule {
+            position: relative;
+            padding: 15px 0
+        }
+
+        .treasure_rule .rule:before {
+            margin-right: -10px
+        }
+
+        .treasure_rule .rule:last-child:before {
+            display: none
+        }
+
+        .treasure_rule .rule .rule_hd {
+            color: #333;
+            font-size: 14px;
+            line-height: 1
+        }
+
+        .treasure_rule .rule .rule_hd .lnk {
+            font-size: 12px;
+            float: right;
+            color: #3985ff
+        }
+
+        .treasure_rule a.rule {
+            display: block
+        }
+
+        .treasure_rule a.rule:after {
+            right: 3px;
+            width: 8px;
+            height: 8px
+        }
+
+        .treasure_rule a.rule span {
+            float: right;
+            margin-right: 18px;
+            font-size: 12px;
+            color: #999
+        }
+
+        .treasure_rule .steps {
+            margin: 10px 0 0 0
+        }
+
+        .treasure_rule .steps .steps_item {
+            position: relative;
+            float: left;
+            width: 25%;
+            font-size: 12px;
+            color: #333;
+            text-align: center
+        }
+
+        .treasure_rule .steps .steps_item:after {
+            right: -3px;
+            top: 25px;
+            width: 10px;
+            height: 10px
+        }
+
+        .treasure_rule .steps .steps_item:last-child:after {
+            display: none
+        }
+
+        .treasure_rule .steps .steps_item .icon {
+            position: relative;
+            display: block;
+            margin: 0 auto;
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            background-color: #f2f2f7
+        }
+
+        .treasure_rule .steps .steps_item .icon:before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            content: '';
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            overflow: hidden
+        }
+
+        .treasure_rule .steps .steps_item p {
+            margin-top: 10px;
+            line-height: 1
+        }
+
+        .steps .steps_item:nth-child(1) .icon:before {
+            background-position: 0 -54px;
+        }
+
+        .steps .steps_item:nth-child(2) .icon:before {
+            background-position: 0 -114px;
+        }
+
+        .steps .steps_item:nth-child(3) .icon:before {
+            background-position: 0 -174px;
+        }
+
+        .steps .steps_item:nth-child(4) .icon:before {
+            background-position: 0 -234px
+        }
+
+        .treasure_result {
+            position: relative
+        }
+
+        .treasure_result span {
+            color: #999
+        }
+
+        .treasure_result u {
+            margin-right: 5px;
+            text-decoration: none
+        }
+
+        .treasure_result .icon_arrow {
+            width: 30px;
+            height: 30px
+        }
+
+        .treasure_result .icon_arrow:after {
+            margin-top: -7px;
+            left: 50%;
+            margin-left: -4px;
+            width: 8px;
+            height: 8px
+        }
+
+        .treasure_result .treasure_result_hd {
+            margin: 15px 0;
+            position: relative;
+            padding-right: 10px;
+            font-size: 12px;
+            color: #333
+        }
+
+        .treasure_result .treasure_result_hd .number {
+            position: relative;
+            padding: 0 40px 0 60px;
+            height: 23px;
+            overflow: hidden
+        }
+
+        .treasure_result .treasure_result_hd .number span {
+            position: absolute;
+            top: 0;
+            left: 0
+        }
+
+        .treasure_result .treasure_result_hd .number .icon_arrow {
+            position: absolute;
+            right: 0;
+            bottom: -7px
+        }
+
+        .treasure_result .treasure_result_hd .number.expand {
+            height: auto
+        }
+
+        .treasure_result .treasure_result_hd .number.expand .icon_arrow {
+            -webkit-transform: rotate(180deg);
+            transform: rotate(180deg)
+        }
+
+        .treasure_result .treasure_result_content {
+            position: relative;
+            padding: 10px 0
+        }
+
+        .treasure_result .treasure_result_content .user {
+            position: relative;
+            padding: 15px 0 15px 70px;
+            background-color: #e8e8ed
+        }
+
+        .treasure_result .treasure_result_content .user:before {
+            position: absolute;
+            content: '';
+            top: -2px;
+            left: 6px;
+            width: 57px;
+            height: 25px
+        }
+
+        .treasure_result .treasure_result_content .user .photo {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 25px
+        }
+
+        .treasure_result .treasure_result_content .user .photo img {
+            border-radius: 25px;
+            width: 100%
+        }
+
+        .treasure_result .treasure_result_content .user .info {
+            color: #333;
+            font-size: 12px
+        }
+
+        .treasure_result .treasure_result_content .treasure_result_formula {
+            position: relative;
+            padding: 0 10px;
+            font-size: 14px;
+            height: 50px;
+            line-height: 50px;
+            color: #fff;
+            background-color: #e43955
+        }
+
+        .treasure_result .treasure_result_content .treasure_result_formula:before {
+            position: absolute;
+            top: -4px;
+            left: 0;
+            content: '';
+            width: 100%;
+            height: 9px;
+            background-repeat: repeat-x
+        }
+
+        .treasure_result .treasure_result_content .treasure_result_formula .btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+            color: #e43955;
+            width: 80px;
+            height: 25px;
+            line-height: 25px;
+            text-align: center;
+            background-color: #fff;
+            border-radius: 2px
+        }
+
+        .user:before, .icon:before {
+            background: url('__STATIC__/images/detail.png') no-repeat;
+            background-size: 355px 284px;
+            background-position: 0 -19px;
+        }
+
+        .treasure_users {
+            padding: 0 10px;
+            background-color: #fff
+        }
+
+        .treasure_users .treasure_users_hd {
+            position: relative;
+            height: 45px;
+            line-height: 45px
+        }
+
+        .treasure_users .treasure_users_hd:after {
+            margin: 0 -10px
+        }
+
+        .treasure_users .treasure_users_hd .date {
+            float: right;
+            font-size: 10px;
+            color: #e4393c
+        }
+
+        .treasure_users .treasure_users_list .user {
+            position: relative;
+            padding: 10px 10px 10px 60px
+        }
+
+        .treasure_users .treasure_users_list .user:last-child:after {
+            display: none
+        }
+
+        .treasure_users .treasure_users_list .user .photo {
+            position: absolute;
+            top: 50%;
+            -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+            left: 0;
+            width: 50px;
+            height: 50px;
+            border-radius: 50px;
+            overflow: hidden
+        }
+
+        .treasure_users .treasure_users_list .user .photo img {
+            width: 100%;
+            border-radius: 50px
+        }
+
+        .treasure_users .treasure_users_list .user .info {
+            font-size: 12px;
+            color: #999
+        }
+
+        .treasure_users .treasure_users_list .user .info .name {
+            color: #6a77b6;
+            font-size: 14px
+        }
+
+        .treasure_users .treasure_users_list .user .info span {
+            color: #333;
+            margin-right: 5px
+        }
+
+        .treasure_users .treasure_users_list .user .info em {
+            color: #e4393c
+        }
+
+        .icon_tag_txt {
+            display: inline-block;
+            vertical-align: middle;
+            margin-top: -2px;
+            height: 15px;
+            line-height: 15px;
+            padding: 0 5px;
+            color: #fff;
+            font-size: 10px;
+            border-radius: 1px
+        }
+
+        .icon_tag_txt.c_red {
+            background-color: #e4393c
+        }
+
+        .icon_tag_txt.c_orange {
+            background-color: #ff9600
+        }
+
+        .icon_tag_txt.c_blue {
+            background-color: #3985ff
+        }
+
+        .subNavBox > ul {
+            width: 100%
+        }
+
+        .subNavBox > ul > li {
+            width: 100%
+        }
+
+        .treasure_hd .cover:after, .treasure_rule .rule:before, .treasure_users .treasure_users_hd:after, .treasure_users .treasure_users_list .user:after {
+            content: '';
+            height: 0;
+            display: block;
+            border-bottom: 1px solid #ddd;
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .treasure_result .treasure_result_hd {
+            margin: 20px 0;
+            position: relative;
+            padding-right: 10px;
+            font-size: 12px;
+            color: #333;
+            background-color: white;
+        }
+
+        .treasure_btmlnk {
+            height: 50px;
+        }
+
+        .treasure_btmlnk.fixed a {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            max-width: 540px;
+            z-index: 90;
+        }
+
+        .treasure_btmlnk a {
+            display: block;
+            height: 50px;
+            line-height: 50px;
+            color: #fff;
+            text-align: center;
+            background-color: #e4393c;
+        }
+    </style>
+</head>
+<body>
+<script type="text/javascript">
+    var process_request = "正在处理您的请求...";
+</script>
+<div class="main">
+    <div class="tab_nav">
+        <div class="header">
+            <div class="h-left"><a class="sb-back" href="javascript:history.back(-1)" title="返回"></a></div>
+            <div class="h-mid">
+                <ul>
+                    <li><a href="javascript:;" class="tab_head on" id="goods_ka1" onClick="setGoodsTab('goods_ka',1,3)">商品</a>
+                    </li>
+                    <li><a href="javascript:;" class="tab_head" id="goods_ka2"
+                           onClick="setGoodsTab('goods_ka',2,3)">详情</a></li>
+                    <li><a href="javascript:;" class="tab_head" id="goods_ka3"
+                           onClick="setGoodsTab('goods_ka',3,3)">评价</a></li>
+                </ul>
+            </div>
+            <div class="h-right">
+                <aside class="top_bar">
+                    <div onClick="show_menu();$('#close_btn').addClass('hid');" id="show_more"><a
+                            href="javascript:;"></a></div>
+                    <!--<a href="{:U('Mobile/Cart/cart')}" class="show_cart"><em class="global-nav__nav-shop-cart-num"-->
+                    <!--id="tp_cart_info"></em></a>-->
+                </aside>
+            </div>
+        </div>
+    </div>
+    <include file="Public/menu"/>
+    <div class="main" id="user_goods_ka_1" style="display:block;">
+        <div class="banner">
+            <div id="slider" class="slider"
+                 style="overflow: hidden; visibility: visible; list-style: none; position: relative;">
+                <ul id="sliderlist" class="sliderlist"
+                    style="position: relative; overflow: hidden; transition: left 600ms ease; -webkit-transition: left 600ms ease;">
+                    <foreach name="goods_images_list" item="pic">
+                        <li style="float: left; display: block; width: 100%;"><span><a href="javascript:void(0)">
+      	<img title="" width="100%" src="{$pic.image_url}"></a></span></li>
+                    </foreach>
+                </ul>
+                <div id="pagenavi">
+                    <foreach name="goods_images_list" item="pic" key="k">
+                        <a href="javascript:void(0);"
+                        <if condition="$k eq 0">class="active"</if>
+                        ></a>
+                    </foreach>
+                </div>
+            </div>
+        </div>
+        <div class="s_bottom"></div>
+        <script type="text/javascript">$(function () {
+            $("div.module_special .wrap .major ul.list li:last-child").addClass("remove_bottom_line");
+        });
+        var active = 0,
+                as = document.getElementById('pagenavi').getElementsByTagName('a');
+
+        for (var i = 0; i < as.length; i++) {
+            (function () {
+                var j = i;
+                as[i].onclick = function () {
+                    t2.slide(j);
+                    return false;
+                }
+            })();
+        }
+        var t2 = new TouchSlider({
+            id: 'sliderlist', speed: 600, timeout: 6000, before: function (index) {
+                as[active].className = '';
+                active = index;
+                as[active].className = 'active';
+            }
+        });
+        </script>
+        <form name="buy_goods_form" method="post" id="buy_goods_form">
+            <div class="product_info">
+                <div class="info_dottm">
+                    <h3 class="name">{$goods.goods_name}</h3>
+                    <div class="right">
+
+                        <!-- JiaThis Button BEGIN -->
+                        <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt" target="_blank">
+                            <div id="pro_share" class="share"></div>
+                        </a>
+                        <script>
+                            var jiathis_config = {
+                                url: "http://{$_SERVER[HTTP_HOST]}/index.php?m=Mobile&c=Goods&a=goodsInfo&id={$_GET[id]}",
+                                pic: "http://{$_SERVER[HTTP_HOST]}{$goods[goods_id]|goods_thum_images=400,400}",
+                            }
+                            var is_distribut = getCookie('is_distribut');
+                            var user_id = getCookie('user_id');
+                            // 如果已经登录了, 并且是分销商
+                            if (parseInt(is_distribut) == 1 && parseInt(user_id) > 0) {
+                                jiathis_config.url = jiathis_config.url + "&first_leader=" + user_id;
+                            }
+                            //alert(jiathis_config.url);
+                        </script>
+                        <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js"
+                                charset="utf-8"></script>
+                        <!-- JiaThis Button END -->
+
+                    </div>
+                </div>
+                <div class="treasure_progress"><p class="no">第{$goods.periods}期&nbsp<i
+                        class="icon_tag_txt {$icon_color}">{$msg_status}</i></p>
+                    <div class="progress_bar">
+                        <div class="progress_bar_rate" style="width:{$goods.width}%;"></div>
+                    </div>
+                    <p class="info"> 总需{$goods.db_count}人次
+                        <if condition="$goods.status gt 1">
+                            <span class="fr">人次已集满</span>
+                            <else/>
+                            <span class="fr">距离揭晓还差<em>{$goods.shengyu}</em>人次</span>
+                        </if>
+                    </p>
+                </div>
+                <div class="treasure_result">
+                    <if condition="$count eq 0">
+                        <div class="treasure_tip">
+                            <p>暂未参与本期</p>
+                            <p>您购买的人次越多，抢中机率越大哟~</p>
+                        </div>
+                        <else/>
+                        <div class="treasure_result_hd">
+                            <p><span>本期参与：</span>{$count}人次</p>
+                            <p class="number">
+                                <span>参与号码：</span> <i class="icon_arrow" style="display: none;"></i>
+                                <u>{$nums}</u>
+                            </p>
+                        </div>
+                    </if>
+                    <if condition='$goods.status eq 2'>
+                        <div class="treasure_result_content">
+                            <div class="user">
+                                <div class="photo"><img src='{$goods.head_url}'
+                                                        onerror="javascript:this.onerror='';this.src='//img11.360buyimg.com/jdphoto/s160x160_jfs/t2977/243/1558083655/15607/bbb3b2eb/5786f7a6N4b1151cd.png'">
+                                </div>
+                                <div class="info"><p class="no">第{$goods.periods}期</p>
+                                    <p><span>幸运用户：</span>{$goods.nickname}</p>
+                                    <p><span>用户ID：</span>{$goods.user_id}(唯一不变的标识)</p>
+                                    <p><span>参与人次：</span>{$goods.buy_count}人次</p>
+                                    <p><span>揭晓时间：</span>{$goods.win_time|date='Y-m-d H:m:i',###}</p></div>
+                            </div>
+                            <div class="treasure_result_formula"> 幸运号码：{$goods.win_code}<em>时间和{$goods.time_sum}</em>
+                                <a href="#" class="btn">计算公式</a></div>
+                        </div>
+                    </if>
+                </div>
+
+            </div>
+            <div class="treasure_rule">
+                <div class="rule">
+                    <div class="rule_hd">抢宝玩法<a href="//wqs.jd.com/qiangbao/rule/sq.htm" ptag="7331.2.2" class="lnk">查看玩法</a>
+                    </div>
+                    <ul class="steps">
+                        <li class="steps_item"><i class="icon"></i>
+                            <p>一元参与</p></li>
+                        <li class="steps_item"><i class="icon"></i>
+                            <p>筹满揭晓</p></li>
+                        <li class="steps_item"><i class="icon"></i>
+                            <p>揭晓公示</p></li>
+                        <li class="steps_item"><i class="icon"></i>
+                            <p>领取商品</p></li>
+                    </ul>
+                </div>
+                <a href="javascript:;" onclick="setGoodsTab('goods_ka',2,3)" class="rule">
+                    <div class="rule_hd"> 图文详情 <span>建议WIFI下查看</span></div>
+                </a>
+                <a href="#" class="rule">
+                    <div class="rule_hd"><a href="{:U('OneShop/history',array('goods_id'=>$goods['goods_id']))}"> 往期回顾</a></div>
+                </a>
+            </div>
+
+            <div class="treasure_users">
+                <div class="treasure_users_hd"> 已有<span id="joinNumber">{$goods.ydb_count}</span>人次参与
+                    <p class="date">本期抢宝于{$goods.start_time|date='Y-m-d H:i',###}开始</p>
+                </div>
+                <div class="treasure_users_list">
+                    <volist name="users" id="v">
+                        <div class="user">
+                            <div class="photo"><img
+                                    src="{$v.head_url}">
+                            </div>
+                            <div class="info"><p class="name">{$v.nickname}</p>
+                                <p>用户ID：<span>{$v.user_id}(唯一不变的标识)</span></p>
+                                <p><span>参与了<em>{$v.db_count}</em>人次</span>{$v.pay_time}</p></div>
+                        </div>
+                    </volist>
+                </div>
+                <div id="members_loading" class="loading" style="visibility: hidden;"><img
+                        src="//static.paipaiimg.com/wx/img/common/loading.gif"> <span>加载中</span></div>
+            </div>
+            <script type="text/javascript">
+                $(function () {
+                    $(".subNav").click(function () {
+                        $(this).next(".navContent").slideToggle(300).siblings(".navContent").slideUp(500);
+                        $(this).toggleClass("on").siblings(".subNav").removeClass("on");
+                        if ($(".is_scroll").length <= 0) {
+                            $('html,body').animate({'scrollTop': $('body')[0].scrollHeight}, 600);
+                        }
+                    });
+                    commentType = 1; // 评论类型
+                    ajaxComment(1, 1);// ajax 加载评价列表
+                })
+            </script>
+
+            <div style=" height:8px; background:#eeeeee; margin-top:-1px;"></div>
+        </form>
+    </div>
+    <div class="main" id="user_goods_ka_2" style="display:none">
+        <div class="product_main" style=" margin-top:40px;"> <!-- 产品图片 -->
+            <div class="product_images product_desc" id="product_desc"> {$goods.goods_content|htmlspecialchars_decode}
+            </div>
+        </div>
+        <section class="index_floor">
+            <h2 style=" border-bottom:1px solid #ddd "><span></span> 商品信息 </h2>
+            <ul class="xiangq">
+                <foreach name="goods_attr_list" item="v" key="k">
+                    <li><p>{$goods_attribute[$v[attr_id]]}:</p><span>{$v[attr_value]}</span></li>
+                </foreach>
+                <li><p>上架时间：</p><span>{$goods.on_time|date='Y-m-d H:i',###}</span></li>
+                <li></li>
+            </ul>
+        </section>
+    </div>
+    <div class="tab_attrs tab_item hide" id="user_goods_ka_3" style="display:none;">
+
+        <div id="ECS_COMMENT">
+            <link href="__STATIC__/css/photoswipe.css" rel="stylesheet" type="text/css">
+            <script src="__STATIC__/js/klass.min.js"></script>
+            <script src="__STATIC__/js/photoswipe.js"></script>
+            <div class="my_comment_list" id="ECS_MYCOMMENTS"></div>
+
+        </div>
+    </div>
+    <if condition="$goods.status eq 2">
+        <div class="treasure_btmlnk fixed"><a href="{:U('OneShop/goodsInfo',array('goods_id'=>$goods['goods_id']))}">前往最新一期</a></div>
+    </if>
+</div>
+<script>
+    function goTop() {
+        $('html,body').animate({'scrollTop': 0}, 600);
+    }
+</script>
+<a href="javascript:goTop();" class="gotop"><img src="__STATIC__/images/topup.png"></a>
+<div style=" height:60px;"></div>
+<div class="footer_nav">
+    <ul>
+        <li class="bian"><a href="{:U('OneShop/index')}"><em class="goods_nav1"></em><span>首页</span></a></li>
+        <li class="bian"><a href="tel:{$tpshop_config['shop_info_phone']}"><em
+                class="goods_nav2"></em><span>客服</span></a></li>
+        <li><a href="javascript:collect_goods({$goods.goods_id})" id="favorite_add"><em
+                class="goods_nav3"></em><span>收藏</span></a></li>
+    </ul>
+    </dd>
+    <dl>
+        <dd>
+            <div class="ui-sx bian1">
+                <div class="subNavBox">
+                    <ul class="navContent" style="display: block;">
+                        <li style=" border-bottom:1px solid #eeeeee">
+                            <div class="item1">
+                              <span class="ui-number">
+                              <button type="button" class="decrease" onClick="goods_cut();">-</button>
+                                <input type="number" class="num" id="number" name="goods_num" value="1"
+                                       min="1" max="1000" onkeyup="this.value=this.value.replace(/\D/g,'')"
+                                       onchange="changeNumber()"
+                                       onafterpaste="this.value=this.value.replace(/\D/g,'')"/>
+                                <input type="hidden" name="goods_id" value="{$goods.goods_id}"/>
+                              <button type="button" class="increase" onClick="goods_add();">+</button>
+                              </span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        <dd class="goumai">
+            <a style="display:block;" href="javascript:void(0);" onclick="confirm_order();">立即支付</a>
+        </dd>
+    </dl>
+</div>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        if ({$goods['ydb_count']} == {$goods['db_count']}) {
+            $('.footer_nav').hide();
+        }
+    })
+    ;
+    //支付
+    function confirm_order() {
+        var count = document.getElementById('number').value;
+        window.location.href = "/index.php?m=Mobile&c=OneShop&a=confirm_order&goods_id={$goods['goods_id']}&dbshop_id={$goods['dbshop_id']}&periods={$goods['periods']}&count=" + count;
+//        $.ajax({
+//            type: "GET",
+//            url: "/index.php?m=Mobile&c=OneShop&a=confirm_order&goods_id={$goods['goods_id']}&dbshop_id={$goods['dbshop_id']}&periods={$goods['periods']}&count=" + count,
+//            success: function (data) {
+//                if(data['status']==0){
+//                    layer.open({
+//                        content: data['msg']
+//                        , skin: 'msg'
+//                        , time: 2 //2秒后自动关闭
+//                    });
+//                }else {
+//                    window.location.href = "/index.php?m=Mobile&c=OneShop&a=confirm_order&goods_id={$goods['goods_id']}&dbshop_id={$goods['dbshop_id']}&periods={$goods['periods']}&count=" + count;
+//                }
+//            }
+//        });
+    }
+    //购买数量改变时检查值是否合法
+    function changeNumber() {
+        var num_val = document.getElementById('number').value;
+        var limit = {$goods.db_limit
+    }
+        ;
+        var shengyu = {$goods.shengyu
+    }
+        ;
+        if (num_val > limit) {
+            layer.open({
+                content: '你夺宝的数量以超过此商品每人最大夺宝数量，请修改夺宝数量'
+                , skin: 'msg'
+                , time: 2 //2秒后自动关闭
+            });
+            document.getElementById('number').value = 1;
+        }
+        else if (num_val > shengyu) {
+            layer.open({
+                content: '你已经超过此商品剩余夺宝数量，请修改夺宝数量'
+                , skin: 'msg'
+                , time: 2 //2秒后自动关闭
+            });
+            document.getElementById('number').value = 1;
+        }
+    }
+    function goods_cut() {
+        var num_val = document.getElementById('number');
+        var new_num = num_val.value;
+        var Num = parseInt(new_num);
+        if (Num > 1)Num = Num - 1;
+        num_val.value = Num;
+        changeNumber();
+    }
+
+    function goods_add() {
+        var num_val = document.getElementById('number');
+        var new_num = num_val.value;
+        var Num = parseInt(new_num);
+        Num = Num + 1;
+        num_val.value = Num;
+        changeNumber();
+    }
+    function ajaxComment(commentType, page) {
+        $.ajax({
+            type: "GET",
+            url: "/index.php?m=Mobile&c=goods&a=ajaxComment&goods_id={$goods['goods_id']}&commentType=" + commentType + "&p=" + page,//+tab,
+            success: function (data) {
+                $(".my_comment_list").empty().append(data);
+                var myPhotoSwipe = $("#gallery a").photoSwipe({
+                    enableMouseWheel: false,
+                    enableKeyboard: false,
+                    allowUserZoom: false,
+                    loop: false
+                });
+            }
+        });
+    }
+</script>
+<script src="__PUBLIC__/js/jqueryUrlGet.js"></script><!--获取get参数插件-->
+<script> set_first_leader(); //设置推荐人 </script>
+<!-- 微信浏览器 调用微信 分享js-->
+<if condition="$signPackage neq null">
+    <include file="Public/wx_share"/>
+</if>
+<!-- 微信浏览器 调用微信 分享js  end-->
+</body>
+</html>

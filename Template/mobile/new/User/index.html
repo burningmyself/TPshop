@@ -1,0 +1,43 @@
+<include file="Public/header"/>
+<body>      
+<div id="tbh5v0">
+<div class="user_com">
+
+<include file="Public/uer_topnav"/>
+
+<div class="Wallet">
+	<ul>
+	<li class="bain1"><strong>￥{$user['user_money']}元</strong><span>余额</span></li>
+	<li class="bain1"><strong>{$coupon_count}</strong><span>优惠券</span></li>
+	<li><strong>{$user['pay_points']}</strong><span>积分</span></li>
+	</ul>
+	<a href="{:U('Mobile/User/account')}"><em class="Icon Icon1"></em><dl><dt>我的钱包</dt><dd style="color:#aaaaaa;">查看我的钱包</dd></dl></a>
+</div>
+
+
+<div class="Wallet">
+	<a href="{:U('Mobile/User/order_list')}" ><em class="Icon Icon2"></em><dl class="b"><dt>全部订单</dt><dd>查看订单</dd></dl></a>
+	<a href="{:U('Mobile/User/coupon')}"><em class="Icon Icon3"></em><dl class="b"><dt>我的优惠券</dt><dd>&nbsp;</dd></dl></a>
+	<a href="{:U('Mobile/User/comment')}"><em class="Icon Icon4"></em><dl class="b"><dt>我的评价</dt><dd>查看评价</dd></dl></a>
+	<a href="{:U('Mobile/User/collect_list')}"><em class="Icon Icon10"></em><dl class="b"><dt>我的收藏</dt><dd>&nbsp;</dd></dl></a>
+	<a href="{:U('Mobile/User/withdrawals')}"><em class="Icon Icon1"></em><dl><dt>申请提现</dt><dd>&nbsp;</dd></dl></a>
+</div>
+<div class="Wallet">
+	<a href="{:U('User/address_list')}"><em class="Icon Icon5"></em><dl class="b"><dt>地址管理</dt><dd>&nbsp;</dd></dl></a>
+	<a href="{:U('User/points')}"><em class="Icon Icon6"></em><dl class="b"><dt>积分余额</dt><dd>&nbsp;</dd></dl></a>
+	<a href="{:U('User/message_list')}"><em class="Icon Icon7"></em><dl class="b"><dt>我的留言</dt><dd>&nbsp;</dd></dl></a>
+	<a href="{:U('User/return_goods_list')}"><em class="Icon Icon11"></em><dl class="<if condition="$tpshop_config['distribut_switch'] eq 1">b</if>"><dt>售后服务</dt><dd>&nbsp;</dd></dl></a>
+    
+    <if condition="$tpshop_config['distribut_switch'] eq 1">
+	<a href="{:U('Distribut/index')}"><em class="Icon Icon1"></em><dl><dt>我发展收益</dt><dd>&nbsp;</dd></dl></a>    
+    </if>    
+</div>
+<div class="Wallet">
+	<a href="{:U('User/logout')}"><em class="Icon Icon8"></em><dl><dt>注销登录</dt></dl></a>
+</div>
+</div>
+<include file="Public/footer"/>
+</div>
+<include file="Public/footer_nav"/>
+</body>
+</html>

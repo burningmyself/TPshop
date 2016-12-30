@@ -1,0 +1,164 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>用户中心-{$tpshop_config['shop_info_store_title']}</title>
+    <meta http-equiv="keywords" content="{$tpshop_config['shop_info_store_keyword']}" />
+    <meta name="description" content="{$tpshop_config['shop_info_store_desc']}" />
+    <link rel="stylesheet" href="__STATIC__/css/index.css" type="text/css">
+    <script src="__STATIC__/js/jquery-1.10.2.min.js"></script>
+    <script src="__STATIC__/js/slider.js"></script>
+
+</head>
+
+<body>
+<!--------头部开始-------------->
+<include file="Public/header" />
+<!--------头部结束-------------->
+
+<div class="layout ov-hi">
+    <div class="breadcrumb-area">    
+	    <foreach name="navigate_user" key="k" item="v">
+	        <if condition="$k neq '首页'"> > </if>  
+            <a href="{$v}">{$k}</a> 
+        </foreach>
+    </div>
+</div>
+<div class="layout pa-to-10 fo-fa-ar">
+    <!--菜单-->
+    <include file="User/menu" />
+    <!--菜单-->
+    <div class="fr wi940">
+        <div class="myhome-welcome pa-to-20">
+            <div class="fl myhome-tx">
+                <div class="w-img"><img src="{$user.head_pic|default='__STATIC__/images/img88.jpg'}" alt=""></div>
+                <div class="w-vip po-ab"><i class="w-v0"></i></div>
+            </div>
+            <div class="ov-hi ma-le-158">
+                <h2 class="n-name">{$user.nickname}，欢迎您！</h2>
+                <div class="w-info">
+                    <span>我的余额：&nbsp;<em><a href="">{$user.user_money}</a></em></span>
+					<span>等级：{$level[$user['level']][level_name]}</span>
+                    <span>
+                        <if condition="$user['mobile_validated'] eq 1">
+                            <span><a class="link-non-validated" href="">已验证手机</a></span>
+                            <else/>
+                            <a class="link-non-validated2" href="{:U('Home/User/mobile_validate',array('step'=>1))}">未验证手机</a>
+                        </if>
+                    </span>
+                    <span>
+                        <if condition="$user['email_validated'] eq 1">
+                            <span><a class="link-non-validated" href="">已验证邮箱</a></span>
+                            <else/>
+                            <a class="link-non-validated2" href="{:U('Home/User/email_validate',array('step'=>1))}">未验证邮箱</a>
+                        </if>
+                    </span>
+                    <!--<span><a class="link-non-validated" href="">未实名认证</a></span>-->
+                    <span>优惠券&nbsp;<em><a href="">{$user.coupon_count}</a></em>&nbsp;张</span>
+                    <!--<span>站内信&nbsp;<em><a href="">0</a></em>&nbsp;张</span>-->
+                </div>
+                <!--<div class="w-ple pa-to-10">-->
+                    <!--<dl>-->
+                        <!--<dt>我的特权：</dt>-->
+                        <!--<dd><a href=""><img src="__STATIC__/images/icon_privilege_vip_small_light.png"/></a></dd>-->
+                        <!--<dd><a href=""><img src="__STATIC__/images/icon_privilege_v_small_light.png"/></a></dd>-->
+                        <!--<dd><a href=""><img src="__STATIC__/images/icon_privilege_yh_small_light.png"/></a></dd>-->
+                        <!--<dd><a href=""><img src="__STATIC__/images/icon_privilege_vipDay_small_gray.png"/></a></dd>-->
+                    <!--</dl>-->
+                <!--</div>-->
+            </div>
+            <div class="clickshop">
+            	<p>-- 欢迎光临土老肥商城 --</p>
+                <p style="margin-top:20px"><a href="/"><span>开始购物</span></a></p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="he80"></div>
+
+<script src="__PUBLIC__/js/global.js"></script>
+<script src="__PUBLIC__/js/pc_common.js"></script>
+
+<script> 
+    function delimg(file,t){
+        $.get(
+                "/index.php?m=Admin&c=Uploadify&a=delupload",{action:"del", filename:file},function(){}
+        );
+        $('#head_pic').val('');
+        $('#preview').attr('src','');
+        $(t).remove();
+    }
+    function add_img(str){
+        var head_pic = $('#head_pic').val();
+        $('#head_pic').val(str);
+        $('#preview').attr('src',str);
+
+//        if(!$('#delimg')){
+//            $('#img_box').append('<button id="delimg" type="button" onclick="delimg('+"'"+str+"'"+',this)">删除图片</button>');
+//        }else{
+//            $('#delimg').attr('onclick','delimg('+"'"+str+"'"+',this)');
+//        }
+        if(!head_pic){
+            $('#img_box').append('<button id="delimg" type="button" onclick="delimg('+"'"+str+"'"+',this)">删除图片</button>');
+        }else{
+            $('#delimg').attr('onclick','delimg('+"'"+str+"'"+',this)');
+        }
+
+    }
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        var icon_wh=$(".icon_wh");
+        icon_wh.each(function(){
+            var thisObj=$(this);
+            thisObj.bind("mouseout",function(){
+                $(this).next().css("display","none");
+            });
+            thisObj.bind("mouseover",function(){
+                $(this).next().css("display","block");
+            });
+        });
+    });
+</script>
+<!--------footer-开始-------------->
+<include file="Public/footer" />
+<!--------footer-结束-------------->
+</body>
+<script>
+    /*$(function () {
+     $("#h-s").click(function () {
+     $('.ec-ta-x').css('left','124px');
+     $('.ec-ta-x').css('width','110px');
+     $(this).addClass("cullent");
+     $('#q-s').removeClass("cullent");
+     });
+     });
+     */
+</script>
+
+<script>
+    $(function () {
+        $("#h-s").mouseover(function () {
+            $('.ec-ta-x').css('left','124px');
+            $('.ec-ta-x').css('width','110px');
+            $(this).addClass("cullent");
+        });
+        $("#h-s").mouseout(function () {
+            $('.ec-ta-x').css('left','0px');
+            $('.ec-ta-x').css('width','124px');
+            $(this).removeClass("cullent");
+        });
+    });
+    $(function () {
+        $("#q-s").mouseover(function () {
+            $('.ec-ta-x').css('left','0px');
+            $(this).addClass("cullent");
+        });
+        $("#q-s").mouseout(function () {
+            $('.ec-ta-x').css('left','0px');
+        });
+    });
+
+</script>
+</html>

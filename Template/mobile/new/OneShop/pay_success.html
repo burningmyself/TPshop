@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>支付成功</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/one_record.css"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/one_order_success.css"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/layer.css"/>
+    <script type="text/javascript" src="__STATIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/layer.js"></script>
+</head>
+<body>
+<div class="pay_tip">
+    <i class="icon_success"></i>
+    <div class="txt">
+        <h2 id="sucDesc">支付成功</h2>
+        <div class="sub_tit" id="sucSub">请等待系统分配抢宝号码</div>
+        <div class="tip" id="wuliuDesc" style="display: none;">
+            <p>请等待商家为您发货～</p>
+            <p>现可在“<span class="c_blue" id="myIndiana">个人中心－我的抢宝</span>”里查看最新物流进度</p>
+        </div>
+        <div class="mod_btns">
+            <a id="order_detail1" href="{:U('Mobile/OneShop/order_detail',array('order_id'=>$order_id))}" target="_blank" class="mod_btn bg_2">查看订单</a>
+            <a id="goHome" href="{:U('Mobile/OneShop/index')}" target="_blank" class="mod_btn indiana">继续逛逛</a>
+        </div>
+    </div>
+</div>
+<div class="shop_list" id="shopList">
+    <div class="wx_loading" id="wxloading" style="display: none;">
+        <div class="wx_loading_inner">
+            <i class="wx_loading_icon"></i>
+            正在加载...
+        </div>
+    </div>
+</div>
+<!-- S 推荐商品 -->
+<div class="treasure_sugguest" style="visibility: visible;">
+    <div class="treasure_sugguest_title">
+        热门推荐
+    </div>
+    <div class="treasure_sugguest_list">
+
+    </div>
+</div>
+<!-- E 推荐商品 -->
+<div class="wx_footer">
+    <div class="jd_logo" id="jdBtmLogo"></div>
+</div>
+<script>
+    //热门推荐
+    $(function () {
+        $.ajax({
+            url: "/index.php/Mobile/OneShop/treasure_sugguest_list",
+            dataType: "html",
+            type: "get",
+            success: function (data) {
+                if (data.length > 20) {
+                    $('.treasure_sugguest_list').append(data);
+                }
+            }
+        });
+        //热销商品点击事件
+        $('.treasure_sugguest_list').on('click','.go_goods', function () {
+            var goods_id = $(this).data('goods_id');
+            window.location.href = '/Mobile/OneShop/goods_info/goods_id/' + goods_id;
+        });
+    });
+
+</script>
+</body>
+</html>

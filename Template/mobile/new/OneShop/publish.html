@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>最新揭晓</title>
+    <meta http-equiv="keywords" content="{$tpshop_config['shop_info_store_keyword']}"/>
+    <meta name="description" content="{$tpshop_config['shop_info_store_desc']}"/>
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/oneshop.css"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/layer.css"/>
+    <script type="text/javascript" src="__STATIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/layer.js"></script>
+    <style type="text/css">
+
+        /** 加载样式 */
+        .loading {
+            margin: 20px;
+            text-align: center;
+        }
+
+        .loading img {
+            display: block;
+            width: 16px;
+            height: 16px;
+            margin: 0 auto 5px;
+        }
+
+        .loading_img {
+            width: 16px;
+            height: 16px;
+        }
+
+        .sharetips {
+            display: none;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            background: rgba(0, 0, 0, .8);
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #fff;
+            text-align: center;
+            z-index: 9999;
+        }
+
+        .sharetips::before {
+            content: '';
+            display: block;
+            margin-right: 0.5rem;
+            height: 8rem;
+            background-size: 4.2rem 5rem;
+        }
+
+    </style>
+<body>
+<div class="wx_wrap">
+    <div class="treasure_record" data-type="0" style="display: block;">
+        <div class="list_view">
+
+        </div>
+        <div class="list_loading loading">
+            <img src="__STATIC__/images/oneshop/loading.gif">
+            <span>加载中</span>
+        </div>
+        <div class="treasure_hint" style="display: none;">
+            <div data-type="page"><i class="icon icon_empty"></i>
+                <p>活动太火爆了！<br>请您稍等一会刷新看看~</p>
+                <div class="btns"><a class="btn btn_2">刷新看看</a></div>
+            </div>
+            <div data-type="next"><p>太火爆了，稍等一会刷新看看~</p>
+                <div class="btns"><a class="btn btn_2">刷新看看</a></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- S 底部导航 -->
+<!--<include file="OneShop/foot_nav"/>-->
+<!-- E 底部导航-->
+<div class="wx_footer">
+    <div class="jd_logo" id="jdBtmLogo"></div>
+</div>
+</body>
+<script type="text/javascript">
+    //控制脚部导航样式
+//    $(function () {
+//        $('.footer_inner_item').removeClass('cur');
+//        var $obj = $('.footer_inner_item:eq(0)');
+//        $obj.addClass('cur');
+//        $obj.find('.footer_item_img img').attr('src', '__STATIC__/images/oneshop/publishred.png');
+//    });
+    $(function () {
+        getGoodsList();
+    });
+
+    var page = 1;
+    function getGoodsList() {
+        $('.get_more').show();
+        $.ajax({
+            type: "get",
+            url: "/index.php?m=Mobile&c=OneShop&a=publish_ajax&page=" + page,
+            dataType: 'html',
+            success: function (data) {
+                if (data.length > 20) {
+                    $(".list_view").append(data);
+                    page++;
+                }
+                else {
+                    if (page == 1) {
+                        layer.open({
+                            content: '暂时还没有揭晓信息~', time: 2, end: function () {
+                                //history.back();
+                                window.location.href="/index.php?m=Mobile&c=OneShop&a=index";
+                            }
+                        });
+                    }
+                }
+                $('.list_loading').hide();
+            }
+        });
+    }
+    $(window).scroll(function () {
+        // When scroll at bottom, invoked getData() function.
+        if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+            getGoodsList();
+        }
+    });
+</script>
+</html>

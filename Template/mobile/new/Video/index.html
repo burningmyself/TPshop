@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>每个人的直播平台</title>
+    <meta name="format-detection" content="telephone=no, email=no">
+    <meta name="keyword" content="">
+    <meta name="description" content="">
+    <meta name="viewport" content="initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/video_reset.css">
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/video_app.css">
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/layer.css"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/slider.css"/>
+    <script type="text/javascript" src="__STATIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/layer.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/one_Slider_Touch.js"></script>
+    <script>
+        function get_type_hot_video_list(type_id, $this) {
+            //alert($this);
+            $.ajax({
+                type: "get",
+                dataType: "html",
+                url: '/index.php?m=Mobile&c=Video&a=get_type_hot_video_list&type_id=' + type_id,
+                success: function (data) {
+                    if (data.length > 20) {
+                        $this.append(data);
+                    }
+                }, error: function () {
+                    layer.open(
+                        {
+                            content: '加载失败'
+                            , skin: 'msg'
+                            , time: 2 //2秒后自动关闭
+
+                        }
+                    );
+                }
+
+            });
+        }
+    </script>
+</head>
+<body data-page-point="h5tv2" style="font-size: 24px;">
+<div class="container">
+    <include file="Video/header"/>
+    <div class="mainbody">
+        <!-- S banner -->
+        <div class="slider">
+            <div class="slider_inner">
+                <div class="slider_list">
+                    <adv limit="$ad_count" item="v" pid="600">
+                        <a class="item" href="{$v.ad_link}"
+                        <if condition="$v['target'] eq 1"> target="_blank"</if>
+                        >
+                        <img src="{$v[ad_code]}">
+                        </a>
+                    </adv>
+                </div>
+            </div>
+            <div class="slider_indexs">
+                <for start="1" end="$ad_count+1">
+                    <span no="{$i}"></span>
+                </for>
+            </div>
+        </div>
+        <!-- E banner-->
+        <!--hot start-->
+        <div class="m-row">
+            <div class="title"><span><img
+                    src="https://shark.douyucdn.cn/app/douyu-mobile/m-douyu/res/icon_hot.png?mv=2.5"
+                    alt="最热直播">最热直播</span><a href="{:U('Video/video_hot_list',array('name'=>'全部'))}">全部</a></div>
+            <div class="live-list">
+                <volist name="hot_videos" id="v">
+                    <a href="{:U('Video/play_video',array('video_id'=>$v[video_id]))}" class="live">
+                        <img src="{$v[img_url]}" class="live-feature">
+                        <div class="live-title">{$v[title]}</div>
+                        <div class="live-info">
+                            <span class="dy-name">{$v[content]}</span>
+                            <span class="popularity">{$v[play_count]}人</span>
+                        </div>
+                    </a>
+                </volist>
+            </div>
+        </div>
+        <!--hot end-->
+        <volist name="types_hot" id="v">
+            <div class="m-row">
+                <div class="title">
+                    <span>
+                        <img src="__STATIC__/images/video/icon_hot.png" alt="最热直播">{$v['name']}
+                    </span>
+                    <a href="{:U('Video/video_type_list',array('type_id'=>$v[type_id],'name'=>$v[name]))}">全部</a>
+                </div>
+                <div id="video_list_{$v['type_id']}">
+                    <script>
+                        get_type_hot_video_list({$v[type_id]}, $("#video_list_{$v['type_id']}"));
+                    </script>
+                </div>
+            </div>
+        </volist>
+
+        <div class="mainbody-mask"></div>
+    </div>
+    <include file="Video/foot"/>
+</div>
+
+<div class="share-bar" data-point="4">
+    <div class="share-list" data-share-btn="more">
+        <a id="weixin" href="javascript:;" data-point-2="1"><img
+                src="https://shark.douyucdn.cn/app/douyu-mobile/m-douyu/res/weixin.png?mv=2.5"><span>朋友圈</span></a>
+        <a href="javascript:;" target="_blank" data-to="tsina" data-point-2="2"><img
+                src="https://shark.douyucdn.cn/app/douyu-mobile/m-douyu/res/weibo.png?mv=2.5"><span>微博</span></a>
+        <a href="javascript:;" target="_blank" data-to="cqq" data-point-2="3"><img
+                src="https://shark.douyucdn.cn/app/douyu-mobile/m-douyu/res/qq.png?mv=2.5"><span>QQ好友</span></a>
+        <a href="javascript:;" target="_blank" data-to="qzone" data-point-2="4"><img
+                src="https://shark.douyucdn.cn/app/douyu-mobile/m-douyu/res/zone.png?mv=2.5"><span>QQ空间</span></a>
+    </div>
+    <div class="close">取 消</div>
+</div>
+
+<div class="modal" id="url-modal">
+    <div class="mask close"></div>
+    <div class="modal-body url-content">
+        <div class="x-close close"></div>
+        <p>分享到朋友圈</p>
+        <img src="https://shark.douyucdn.cn/app/douyu-mobile/m-douyu/res/moe.png?mv=2.5" class="moe">
+        <p class="url"></p>
+        <p class="description"></p>
+        <span>长按复制地址</span>
+    </div>
+</div>
+<a class="modal" id="download-modal" href="client/mobile" target="_blank">
+    <div class="mask"></div>
+    <div class="modal-body guide">
+        <img class="bg" src="https://shark.douyucdn.cn/app/douyu-mobile/m-douyu/res/guide.png?mv=2.5">
+        <div class="download-btn"><img src="https://shark.douyucdn.cn/app/douyu-mobile/m-douyu/res/download.png?mv=2.5">
+        </div>
+    </div>
+</a>
+<div class="modal" id="weixin-modal">
+    <div class="mask"></div>
+    <div class="modal-body weixin-guide">
+        <img src="https://shark.douyucdn.cn/app/douyu-mobile/m-douyu/res/weixin-guide.png?mv=2.5">
+    </div>
+</div>
+<script>
+    //配置轮播图
+    $(function () {
+        var config = ({
+            dom: $('.slider_list'),
+            dom_items: $('.slider_list a'),
+            tab_items: $('.slider_indexs span')
+        });
+        var self = slider(config);
+    });
+</script>
+
+</body>
+</html>

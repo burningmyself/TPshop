@@ -1,0 +1,136 @@
+<include file="Public/min-header"/>
+<div class="wrapper">
+    <include file="Public/breadcrumb"/>
+    <section class="content">
+        <!-- Main content -->
+        <div class="container-fluid">
+            <div class="pull-right">
+
+                <a href="javascript:history.go(-1)" data-toggle="tooltip" title="" class="btn btn-default"
+                   data-original-title="返回"><i class="fa fa-reply"></i></a>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-list"></i> 获佣记录</h3>
+                </div>
+                <div class="panel-body">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab_tongyong" data-toggle="tab">获佣用户</a></li>
+                    </ul>
+                    <!--表单数据-->
+                    <form method="post" id="editForm">
+                        <!--通用信息-->
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab_tongyong">
+
+                                <table class="table table-bordered">
+                                    <tbody>
+                                    <tr>
+                                        <td>获佣用户id</td>
+                                        <td>
+                                            <a href="/index.php/Admin/user/detail/id/{$data.user_id}">{$data.user_id}</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>获佣用户名</td>
+                                        <td>
+                                            {$data.nickname}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>获佣订单</td>
+                                        <td>
+                                            <a href="/index.php/Admin/order/detail/order_id/{$data.order_id}">{$data.order_sn}</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>获佣金额</td>
+                                        <td>
+                                            {$data.money}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>获佣用户级别</td>
+                                        <td>
+                                            {$data.level}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>分成记录生成时间</td>
+                                        <td>
+                                            {$data.create_time|date='Y-m-d H-i-s',###}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>状态</td>
+                                        <td>
+                                            <switch name='data.status'>
+                                                <case value="0">未付款</case>
+                                                <case value="1">已付款</case>
+                                                <case value="2">等待分成(已收货)</case>
+                                                <case value="3">已分成</case>
+                                                <case value="4">已取消</case>
+                                                <default/>
+                                                未知
+                                            </switch>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>确定分成或者取消时间</td>
+                                        <td>
+                                            {$data.confirm_time|date='Y-m-d H-i-s',###}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>备注</td>
+                                        <td>
+                                            <textarea rows="4" cols="60" id="remark" name="remark" value="{$data.remark}"></textarea>
+                                            <span id="err_remark" style="color:#F00; display:none;"></span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="pull-right">
+                            <input type="hidden" name="id" value="117">
+                            <input type="hidden" name="user_id" value="573">
+                            <input type="hidden" id="status" name="status" value="0">
+                            <button class="btn btn-primary" data-toggle="tooltip" type='submit'>修改备注</button>
+                        </div>
+                    </form><!--表单数据-->
+                </div>
+            </div>
+        </div>    <!-- /.content -->
+    </section>
+</div>
+<script>
+    // 确定分成
+    function confirm_rebate() {
+        if (!confirm('金额将直接转入用户余额,确定要分成吗?'))
+            return false;
+
+        if ($.trim($('#remark').val()).length == 0) {
+            alert('请填写分成备注');
+            return false;
+        }
+
+        $('#status').val('3');
+        $('#editForm').submit();
+    }
+    // 取消分成
+    function cancel_rebate() {
+        if (!confirm('确定要取消分成吗?'))
+            return false;
+
+        if ($.trim($('#remark').val()).length == 0) {
+            alert('请填写取消备注');
+            return false;
+        }
+
+        $('#status').val('4');
+        $('#editForm').submit();
+    }
+</script>
+</body>
+</html>

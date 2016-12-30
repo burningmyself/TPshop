@@ -1,0 +1,25 @@
+<volist name="infos" id="v">
+        <div class="search_prolist_item  " data-info_id="{$v[info_id]}">
+            <div class="search_prolist_item_inner">
+                <div class="search_prolist_cover"><img class="photo" alt="" src="{$v[img_url]}">
+                </div>
+                <div class="search_prolist_info">
+                    <div class="search_prolist_title">
+                        <!--<div class="mod_sign_tip icon_txt_red"><b>3免1</b></div>-->
+                       {$v[name]}
+                    </div>
+                    <div class="search_prolist_price"> <em>☏ <span class="int">{$v[phone]}</span></em> </strong></div>
+                    <div class="search_prolist_line">{$v[content]|getSubstr=0,10}</div>
+                    <!--<div class="search_prolist_other text_small">-->
+                        <!--<span class="search_prolist_comment" >-->
+                            <!--<span>813</span>人评价</span>-->
+                        <!--<span class="search_prolist_rate" >好评率<span>91</span>%</span>-->
+                    <!--</div>-->
+                    <div class="search_prolist_other">{$v[address]|getSubstr=0,10}</div>
+                    <!--<div class="search_prolist_func" ><a href="javascript:" class="search_prolist_func_item"><span class="text" >查找相似商家</span></a>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+</volist>
+

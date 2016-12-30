@@ -1,0 +1,98 @@
+<include file="Public/min-header"/>
+<style>
+.iconspan{
+	padding:1px;
+}
+</style>
+<div class="wrapper">
+     <form method="post" id="handlepost" action="{:U('System/menuSave')}">
+      <input type="hidden" name="mod_id" value="{$menu.mod_id}">
+      <div class="tab-content col-md-10">                 	  
+          <div class="tab-pane active" id="tab_tongyong">                           
+	        <table class="table table-bordered">
+	            <tbody>
+	            <tr>
+	                <td class="col-sm-2">菜单名称：</td>
+	                <td class="col-sm-8">
+	                    <input type="text" class="form-control" name="title" value="<if condition="$action eq 'edit'">{$menu.title} </if>" >                                                         
+	                </td>
+	            </tr> 
+	            <tr>
+	            <td>上级菜单：</td>
+	            <td>
+		   		<if condition="($menu.module eq 'top') and ($action eq 'edit')">
+					顶级菜单
+				<else/>						
+				<select name="parent_id" id="parent_id" value="{$menu.parent_id}">	
+					<php>if(!$menu && !$pid) echo '<option value="0">顶级菜单</option>';</php>		
+					<foreach name="tree" item="v">
+						<option value="{$v.mod_id}" <if condition="($v.mod_id eq $menu[parent_id]) or ($v.mod_id eq $pid )"> selected="selected"</if>>&nbsp;&nbsp;|--{$v.title}</option>
+					</foreach>
+				</select>
+				</if>                          
+	            </td>
+	            </tr>
+	            <tr>
+	            	<td>图标：</td>
+	            	<td>
+	            		<div class="row">
+	            			<span class="iconspan"><input type="radio" <if condition="$menu.icon eq 'fa-tasks'">checked</if> name="icon" value="fa-tasks">&nbsp;&nbsp;<i class="fa fa-tasks"></i></span>
+	            			<span class="iconspan"><input type="radio" <if condition="$menu.icon eq 'fa-cog'">checked</if> name="icon" value="fa-cog">&nbsp;&nbsp;<i class="fa fa-cog"></i></span>
+	            			<span class="iconspan"><input type="radio" <if condition="$menu.icon eq 'fa-dashboard'">checked</if> name="icon" value="fa-dashboard">&nbsp;&nbsp;<i class="fa fa-dashboard"></i></span>
+	            			<span class="iconspan"><input type="radio" <if condition="$menu.icon eq 'fa-retweet'">checked</if> name="icon" value="fa-retweet">&nbsp;&nbsp;<i class="fa fa-retweet"></i></span>
+	            			<span class="iconspan"><input type="radio" <if condition="$menu.icon eq 'fa-navicon'">checked</if> name="icon" value="fa-navicon">&nbsp;&nbsp;<i class="fa fa-navicon"></i></span>
+	            			<span class="iconspan"><input type="radio" <if condition="$menu.icon eq 'fa-table'">checked</if> name="icon" value="fa-table">&nbsp;&nbsp;<i class="fa fa-table"></i></span>
+	            			<span class="iconspan"><input type="radio" <if condition="$menu.icon eq 'fa-bar-chart'">checked</if>  name="icon" value="fa-bar-chart">&nbsp;&nbsp;<i class="fa fa-bar-chart"></i></span>
+	            		</div>
+	            		<div class="row">
+	            			<span class="iconspan"><input type="radio"  <if condition="$menu.icon eq 'fa-plug'">checked</if> name="icon" value="fa-plug">&nbsp;&nbsp;<i class="fa fa-plug"></i></span>
+	            			<span class="iconspan"><input type="radio"  <if condition="$menu.icon eq 'fa-book'">checked</if> name="icon" value="fa-book">&nbsp;&nbsp;<i class="fa fa-book"></i></span>
+	            			<span class="iconspan"><input type="radio"  <if condition="$menu.icon eq 'fa-flag'">checked</if> name="icon" value="fa-flag">&nbsp;&nbsp;<i class="fa fa-flag"></i></span>
+	            			<span class="iconspan"><input type="radio"  <if condition="$menu.icon eq 'fa-home'">checked</if> name="icon" value="fa-home">&nbsp;&nbsp;<i class="fa fa-home"></i></span>
+	            			<span class="iconspan"><input type="radio"  <if condition="$menu.icon eq 'fa-pencil'">checked</if> name="icon" value="fa-pencil">&nbsp;&nbsp;<i class="fa fa-pencil"></i></span>
+	            			<span class="iconspan"><input type="radio"  <if condition="$menu.icon eq 'fa-star'">checked</if> name="icon" value="fa-star">&nbsp;&nbsp;<i class="fa fa-star"></i></span>
+	            			<span class="iconspan"><input type="radio"  <if condition="$menu.icon eq 'fa-user'">checked</if> name="icon" value="fa-user">&nbsp;&nbsp;<i class="fa fa-user"></i></span>
+	            		</div>
+	            	</td>
+	            </tr>
+	            <tr>
+	                <td>排序：</td>
+	                <td><input type="text" name="orderby" value="<if condition="$menu.orderby gt 0">{$menu.orderby}<else/>50</if>" /></td>
+	            </tr>
+	            </tbody> 
+	            <tfoot>
+	            	<tr>
+	            	<td><input type="hidden" name="action" value="{$action}">
+	            	</td>
+	            	<td class="text-right"><input class="btn btn-primary" type="button" onclick="dataSave()" value="保存"></td></tr>
+	            </tfoot>                               
+	          </table>
+	          </div>                           
+	      </div>              
+</form>
+</div>
+<script type="text/javascript">
+	function dataSave(){
+		var title = $('input[name="title"]').val();
+		var parent_id = $('#parent_id').val();
+		var orderby = $('input[name="orderby"]').val();
+		var action = $('input[name="action"]').val();
+		var mod_id = $('input[name="mod_id"]').val();
+		var icon = $('input:radio[name="icon"]:checked').val();
+		$.ajax({
+			url : "{:U('System/menuSave')}",
+			data : {title:title,parent_id:parent_id,orderby:orderby,action:action,mod_id:mod_id,icon:icon},
+			type : 'post',
+			dataType : 'json',
+			success :function(data){
+				if(data.stat=='ok'){
+					window.parent.call_back(1);	
+				}else{
+					window.parent.call_back(0);
+				}						
+			}			
+		});		
+	}
+</script>
+</body>
+</html>

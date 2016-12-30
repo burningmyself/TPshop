@@ -1,0 +1,95 @@
+<include file="Public/min-header"/>
+<div class="wrapper">
+    <include file="Public/breadcrumb"/>
+    <section class="content ">
+        <!-- Main content -->
+        <div class="container-fluid">
+            <div class="pull-right">
+                <a href="javascript:history.go(-1)" data-toggle="tooltip" title="" class="btn btn-default"
+                   data-original-title="返回视频类型列表"><i class="fa fa-reply"></i></a>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-list"></i> 添加视频类型</h3>
+                </div>
+                <div class="panel-body ">
+                    <!--表单数据-->
+                    <form method="post" id="dbtypeHandle" action="{:U('Video/typeHandle',array())}">
+                        <!--通用信息-->
+                        <div class="tab-content col-md-10">
+                            <div class="tab-pane active" id="tab_tongyong">
+                                <table class="table table-bordered">
+                                    <tbody>
+                                    <tr>
+                                        <td class="col-sm-2">类型名称：</td>
+                                        <td class="col-sm-8">
+                                            <input type="text" class="form-control" name="name" value="{$info.name}">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>类型图片：</td>
+                                        <td>
+                                            <div class="col-sm-3">
+                                                <input type="text" class="form-control"
+                                                       style="width:350px;margin-left:-15px;" name="img_url"
+                                                       id="img_url" value="{$info.img_url}">
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="button" class="btn btn-default"
+                                                       onClick="GetUploadify(1,'img_url','VideoType','')" value="上传图片"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>是否显示：</td>
+                                        <td>
+                                            <select name="is_show">
+                                                <option value="0"
+                                                <if condition="$info.is_show eq 0"> selected="selected"</if>
+                                                >不显示</option>
+                                                <option value="1"
+                                                <if condition="$info.is_show eq 1"> selected="selected"</if>
+                                                >显示</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <!--<tr>-->
+                                    <!--<td>所属管理员：</td>-->
+                                    <!--<td>-->
+                                    <!--<select name="admin_id">-->
+                                    <!--<volist name="admin" id="item">-->
+                                    <!--<option value="{$item.admin_id}" >{$item.user_name}</option>-->
+                                    <!--</volist>-->
+                                    <!--</select>-->
+                                    <!--</td>-->
+                                    <!--</tr>-->
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <td><input type="hidden" name="act" value="{$act}">
+                                            <input type="hidden" name="type_id" value="{$info.type_id}">
+                                        </td>
+                                        <td class="text-right"><input class="btn btn-primary" type="button"
+                                                                      onclick="adsubmit()" value="保存"></td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </form><!--表单数据-->
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+    function adsubmit() {
+        if ($('input[name=title]').val() == '') {
+            layer.msg('名称不能为空！', {icon: 2, time: 1000});   //alert('少年，用户名不能为空！');
+            return false;
+        }
+        $('#dbtypeHandle').submit();
+    }
+</script>
+</body>
+</html>

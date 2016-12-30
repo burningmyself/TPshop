@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN" style="font-size: 24.5625px;">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>订单详情</title>
+    <meta http-equiv="keywords" content="{$tpshop_config['shop_info_store_keyword']}"/>
+    <meta name="description" content="{$tpshop_config['shop_info_store_desc']}"/>
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/one_common.css"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/one_order_detail.css"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/layer.css"/>
+    <script type="text/javascript" src="__STATIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/layer.js"></script>
+    <style>
+        .dongdong {
+            padding: 10px 10px;
+            color: #3985ff;
+        }
+
+        .dongdong:after {
+            content: '\20';
+            display: inline-block;
+            text-align: center;
+            vertical-align: middle;
+            margin-left: 5px;
+            width: 15px;
+            height: 15px;
+            background-image: url(__STATIC__/images/oneshop/ling.png);
+            background-size: 15px;
+        }
+
+        /*share*/
+        .treasure_mask_layer .content .btns {
+            display: -webkit-box;
+            display: box;
+            display: -webkit-flex;
+            display: flex
+        }
+
+        .treasure_mask_layer .content .btns .btn {
+            display: block;
+            -webkit-box-flex: 1;
+            box-flex: 1;
+            -webkit-flex: 1;
+            flex: 1
+        }
+
+        .treasure_mask_layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, .7);
+            z-index: 900
+        }
+
+        .treasure_mask_layer.hide {
+            display: none
+        }
+
+        .treasure_mask_layer .content {
+            position: absolute;
+            top: 150px;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            width: 300px
+        }
+
+        .treasure_mask_layer .content .close {
+            position: absolute;
+            width: 35px;
+            height: 35px;
+            right: 2px;
+            top: 10px;
+            z-index: 10;
+        }
+
+        .treasure_mask_layer .content .img {
+            position: relative;
+            margin: 0 auto;
+            width: 300px
+        }
+
+        .treasure_mask_layer .content .img img {
+            max-width: 100%
+        }
+
+        .treasure_mask_layer .content .img .text {
+            position: absolute;
+            bottom: 5px;
+            left: 68px;
+            right: 48px;
+            font-size: 14px;
+            text-align: center;
+            color: #fff
+        }
+
+        .treasure_mask_layer .content .img .text .no {
+            display: inline-block;
+            padding: 0 5px;
+            font-size: 12px;
+            background: rgba(169, 0, 40, .2)
+        }
+
+        .treasure_mask_layer .content .btns {
+            margin: 30px auto 0 auto;
+            width: 300px
+        }
+
+        .treasure_mask_layer .content .btns .btn {
+            margin: 0 10px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            font-size: 14px;
+            border-radius: 2px;
+            color: #fff
+        }
+
+        .treasure_mask_layer .content .btns .btn.btn_1 {
+            background: #ffb21d
+        }
+
+        .treasure_mask_layer .content .btns .btn.btn_1:active {
+            background: #ffa904
+        }
+
+        .treasure_mask_layer .content .btns .btn.btn_2 {
+            background: #f22253
+        }
+
+        .treasure_mask_layer .content .btns .btn.btn_2:active {
+            background: #ed0e42
+        }
+    </style>
+</head>
+<body>
+
+<div class="qq_menu_layer_v2" style="display:none;z-index:1005" id="__mqqmenu">
+</div>
+
+<div style="display:none">
+
+</div>
+
+<div class="wx_wrap">
+
+    <div id="status"><!-- S 订单状态 -->
+        <div class="order_state">
+            <ul class="order_progress order_progress_short order_progress_3" style="display:none">
+                <li><span>失败退款</span><i></i></li>
+                <li><span>退款中</span><i></i></li>
+                <li><span>退款完成</span><i></i></li>
+            </ul>
+            <div class="order_info">
+                <div class="inner">
+                    <p><span>订单状态：</span>
+                        <em>
+                            <switch name="order.status">
+                                <case value="-5">退款失败</case>
+                                <case value="-4">退款成功</case>
+                                <case value="-3">退款中</case>
+                                <case value="-2">退款</case>
+                                <case value="-1">支付失败</case>
+                                <case value="0">未支付</case>
+                                <case value="1">待揭晓</case>
+                                <case value="2">已揭晓</case>
+                                <case value="3">待发货</case>
+                                <case value="4">待签收</case>
+                                <case value="5">已签收</case>
+                                <case value="6">已晒单</case>
+                                <default/>
+                                未知
+                            </switch>
+                        </em>
+                    </p>
+                    <p><span>订单编号：</span>{$order.order_sn}&nbsp;</p>
+                    <p><span>下单时间：</span>{$order.create_time|date='Y-m-d H:i:s',###}&nbsp;</p></div>
+            </div>
+            <div id="btns" class="mod_btns">
+                <if condition="$order[is_win] eq 1">
+                    <a href="{:U('OneShop/confirm_address',array('order_id'=>$order['order_id']))}"
+                       class="mod_btn bg_1">确认收货地址</a>
+                    <else/>
+                    <if condition="$order[status] eq 4 || $win_order[shipping_status] eq 1">
+                        <a id="act_receipt" class="mod_btn bg_2" data-order_id="{$order['order_id']}">确定收货</a>
+                    </if>
+                    <a href="{:U('OneShop/goods_info',array('goods_id'=>$order['goods_id']))}"
+                       class="mod_btn bg_3">继续抢宝</a>
+                </if>
+            </div>
+        </div><!-- E 订单状态 --></div>
+    <div id="info">
+        <if condition="$info.status gt 1">
+            <div class="order_detail"><h3 class="order_detail_title">揭晓信息</h3>
+                <p><span>揭晓号码：</span>{$info.win_code}</p>
+                <p><span>揭晓时间：</span>{$info.win_time|date='Y-m-d H:m:i',###}</p>
+                <p><span>得宝用户：</span>{$info.nickname}</p>
+                <p><span>参与次数：</span>{$info.buy_count}次</p>
+                <p><span>夺宝IP：</span>{$info.ip}</p>
+            </div>
+        </if>
+        <div class="order_detail"><h3 class="order_detail_title">参与信息</h3>
+            <p><span>手机号码：</span>{$order.phone}</p>
+            <p><span>参与次数：</span>{$order.db_count}次（在线支付）</p>
+            <p><span>下单时间：</span>{$order.pay_time}</p>
+            <p id="treasureCodes" class="order_detail_number oneline">
+                <span>参与号码：</span> <i class="arrow" id="show_more"></i>
+                <volist name="nums" id="vo">
+                    <u>{$vo}</u>
+                </volist>
+            </p>
+            <p><span>夺宝IP&nbsp&nbsp&nbsp：</span>{$order.ip}</p>
+            <div id="goodsInfo" class="order_detail_goods">
+                <div class="cover">
+                    <a href="{:U('OneShop/goods_info',array('goods_id'=>$order['goods_id'],'dbshop_id'=>$order['dbshop_id'],'periods'=>$order['periods']))}"><img
+                            src="{$img_url}"></a>
+                </div>
+                <p class="name">{$order.name}</p>
+                <p class="des">第{$order.periods}期</p></div>
+        </div>
+        <div class="order_total">
+            <ul>
+                <li>商品总额：<span>¥{$order.order_amount}</span></li>
+                <li><i>-</i>商品优惠：<span>¥0.00</span></li>
+                <li><i>-</i>余额：<span>¥0.00</span></li>
+            </ul>
+            <p class="total">实付金额：<strong>¥{$order.order_amount}</strong></p></div>
+    </div>
+
+    <!-- S 幕帘 -->
+    <if condition="$order[is_win] eq 1">
+        <div class="treasure_mask_layer">
+            <div class="content"><span class="close"></span>
+                <div class="img"><img src="//wq.360buyimg.com/fd/h5/base/treasure/images/treasure_mask_1_a5fd5bcc.png">
+                    <div class="text"><p class="no">抢中第{$order[periods]}期</p>
+                        <p>{$order[name]}</p></div>
+                </div>
+                <div class="btns"><a id="check_order" class="btn btn_1">查看订单</a> <a id="share_order"
+                                                                                    class="btn btn_2">分享喜悦</a>
+                </div>
+            </div>
+        </div>
+    </if>
+    <!-- E 幕帘-->
+
+    <div style="text-align:center;margin-bottom:10px;">
+        <a id="openIM" class="dongdong">联系客服</a>
+    </div>
+
+    <div class="order_recommend">
+        <br>
+        <a id="intoHome" href="{:U('OneShop/index')}" class="btn">看看其他抢宝商品</a>
+    </div>
+</div><!-- END wrapper -->
+<div class="wx_loading" style="display:none;">
+    <div class="wx_loading_inner"><i class="wx_loading_icon"></i>请求处理中...</div>
+</div>
+<div class="wx_footer">
+    <div class="jd_logo" id="jdBtmLogo"></div>
+</div>
+<div id="wx_share" style="display: none;">
+    <div class="share_panel">
+        <div class="mod_sharetips active"><p>点击右上角， <br><span id="sharetips">分享到【朋友圈】或发送给微信好友</span></p></div>
+    </div>
+</div>
+</body>
+<script>
+    $(function () {
+        //联系客服
+        $('#openIM').on('click', function () {
+            layer.open({content: '抱歉客服不在，请稍后在联系...', time: 2});
+        })
+        $('.close,#check_order').on('click', function () {
+            $('.treasure_mask_layer').hide();
+        });
+        $('#share_order').on('click', function () {
+            $('#wx_share').show();
+        });
+        $('#wx_share').on('click', function () {
+            $('#wx_share').hide();
+        })
+        $('#show_more').on('click', function () {
+            $('#treasureCodes').toggleClass('oneline');
+        });
+        //确认收货
+        $('#act_receipt').on('click', function () {
+            var order_id = $(this).data('order_id');
+            alert_confrim(function (flag) {
+                if (flag) {
+                    confirm_receipt(order_id);
+                }
+            });
+        });
+    })
+    //确认收货
+    function confirm_receipt(order_id) {
+        $('.wx_loading').show();
+        $.ajax({
+            url: '/index.php?m=Mobile&c=OneShop&a=confirm_receipt&order_id=' + order_id,
+            type: 'get',
+            dataType: 'json',
+            success: function (data) {
+                if (data['status'] == 1) {
+                    layer.open({content: data['msg'], time: 2});
+                    window.location.href = '/index.php?m=Mobile&c=OneShop&a=db_record';
+                } else {
+                    layer.open({content: data['msg'], time: 2});
+                }
+            },
+            error: function () {
+                $('wx_loading').content('请求处理失败');
+            }
+        });
+        $('wx_loading').hide();
+    }
+    //弹出确认框
+    function alert_confrim(callback) {
+        var html = '<div class="mod_alert show fixed"><p>确认签收?</p><p class="btns"><a href="javascript:;" id="ui_btn_confirm" class="btn btn_1">确定</a><a href="javascript:;" id="ui_btn_cancel" class="btn btn_1">取消</a></p></div>';
+        $('.wx_wrap').append(html);
+        $('#ui_btn_confirm').on('click', function () {
+            $('.mod_alert').remove();
+            callback(true);
+        })
+        $('#ui_btn_cancel').on('click', function () {
+            $('.mod_alert').remove();
+            callback(false);
+        })
+    }
+</script>
+</html>

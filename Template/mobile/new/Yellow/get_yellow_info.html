@@ -1,0 +1,57 @@
+<div>
+    <adv limit="1" item="v" pid="$pid">
+        <a class="guanggao" href="{$v.ad_link}"
+        <if condition="$v['target'] eq 1"> target="_blank"</if>
+        >
+        <img src="{$v[ad_code]}" title="{$v[title]}" style="{$v[style]}">
+        </a>
+    </adv>
+    <div id="category2" style="padding-bottom:10px;min-height:600px">
+     <if condition="!empty($bus_hot)">
+         <div class="theme"><p class="theme_tit">商家推荐</p>
+            <ul class="theme_list">
+                <volist name="bus_hot" id="v">
+                    <li class="theme"><a href="{:U('Yellow/get_detail',array('info_id'=>$v[info_id]))}"
+                                         data-info_id="{$v[info_id]}"
+                                         target="_self"
+                                         class="theme_url">
+                        <div class="theme_cover"><img
+                                src="{$v[img_url]}">
+                        </div>
+                        <div class="theme_info"><p class="tit">{$v[name]}</p>
+                            <p class="desc">{$v[content]|getSubstr=0,10}</p></div>
+                    </a></li>
+                </volist>
+            </ul>
+        </div>
+     </if>
+        <dl class="category2">
+            <dt>本周热搜</dt>
+            <dd>
+                <volist name="hot_business" id="v">
+                    <a href="{:U('Yellow/get_detail',array('info_id'=>$v[info_id]))}" target="_self"
+                       data-info_id="{$v[info_id]}">
+                        <div class="cover"><img
+                                src="{$v[img_url]}"
+                                alt="{$v[name]}"></div>
+                        <p class="tit">{$v[name]}</p>
+                    </a>
+                </volist>
+            </dd>
+        </dl>
+        <dl class="category2">
+            <dt>其他商家</dt>
+            <dd>
+                <volist name="other_bus" id="v">
+                    <a href="{:U('Yellow/get_detail',array('info_id'=>$v[info_id]))}" target="_self"
+                       data-info_id="{$v[info_id]}">
+                        <div class="cover"><img
+                                src="{$v[img_url]}"
+                                alt="{$v[name]}"></div>
+                        <p class="tit">{$v[name]}</p>
+                    </a>
+                </volist>
+            </dd>
+        </dl>
+    </div>
+</div>

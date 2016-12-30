@@ -1,0 +1,41 @@
+<volist name="list" id="v">
+    <div class="treasure_feedback">  <!-- 晒单商品 -->
+        <div class="treasure_feedback_pro">
+            <a href="{:U('OneShop/order_detail',array('order_id'=>$v['order_id']))}">
+                <div class="treasure_feedback_pro_cover"></div>
+                <div class="treasure_feedback_pro_info">
+                    <p class="treasure_feedback_pro_name">{$v[name]}</p>
+                    <p class="treasure_feedback_pro_issue">第{$v[periods]}期</p>
+                    <p class="treasure_feedback_pro_time">{$v[add_time]|date='Y-m-d H:i:s',###}</p></div>
+            </a>
+        </div> <!-- 晒单内容 -->
+        <div class="treasure_feedback_content gotodetail"  data-order_id="{$v['order_id']}">
+            <div>
+                <span class="showAll">{$v[content]}</span>
+            </div>
+            <if condition="$v[is_show] eq 0">
+                <span style="color: red">图片审核中</span>
+                <else/>
+                <div class="treasure_feedback_content_img">
+                    <ul class="list_cols_3">
+                        <if condition="!empty($v[img_url0])">
+                        <li><a><img
+                                src="{$v[img_url0]}"
+                                data-loaded="1" class="full_w"></a></li>
+                        </if>
+                        <if condition="!empty($v[img_url1])">
+                        <li><a><img
+                                src="{$v[img_url1]}"
+                                data-loaded="1" class="full_w"></a></li>
+                        </if>
+                        <if condition="!empty($v[img_url2])">
+                        <li><a><img
+                                src="{$v[img_url2]}"
+                                data-loaded="1" class="full_w"></a></li>
+                        </if>
+                    </ul>
+                    <i class="treasure_feedback_content_img_num">{$v[img_sum]}</i></div>
+            </if>
+        </div>
+    </div>
+</volist>

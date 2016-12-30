@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN" style="font-size: 24.5625px;">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>一元抢宝</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta itemprop="name" content="一元抢宝">
+    <meta itemprop="description" content="一块钱的梦想你敢不敢谈">
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/one_common.css"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/one_treasure_index.css"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/layer.css"/>
+    <script type="text/javascript" src="__STATIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/layer.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/one_Slider_Touch.js"></script>
+    <style>
+        /** 加载样式 */
+        .loading {
+            margin: 20px;
+            text-align: center;
+        }
+
+        .loading img {
+            display: block;
+            width: 16px;
+            height: 16px;
+            margin: 0 auto 5px;
+        }
+
+        .loading_img {
+            width: 16px;
+            height: 16px;
+        }
+
+        .sharetips {
+            display: none;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            background: rgba(0, 0, 0, .8);
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #fff;
+            text-align: center;
+            z-index: 9999;
+        }
+
+        .sharetips::before {
+            content: '';
+            display: block;
+            margin-right: 0.5rem;
+            height: 8rem;
+            background-size: 4.2rem 5rem;
+        }
+    </style>
+
+    <style>
+        .treasure_cate .treasure_cate_board .item .icon img.on {
+            display: none;
+        }
+
+        .treasure_cate .treasure_cate_board .item .icon img {
+            display: block;
+        }
+
+        .treasure_cate .treasure_cate_board .item.cur img {
+            display: none;
+        }
+
+        .treasure_cate .treasure_cate_board .item.cur img.on {
+            display: block;
+        }
+
+        .QQ_wallet_guide .QQ_wallet_guide_lnk > a {
+            position: static;
+        }
+
+        .treasure_goods .item .cover {
+            padding-top: 80%;
+        }
+
+        .treasure_goods .item .cover img {
+            left: 10%;
+            width: 80%;
+        }
+    </style>
+</head>
+<body ontouchstart>
+<div class="wx_wrap">
+    <!-- S banner -->
+    <div class="slider">
+        <div class="slider_inner">
+            <div class="slider_list">
+                <adv limit="$ad_count" item="v" pid="500">
+                    <a class="item" href="{$v.ad_link}"
+                    <if condition="$v['target'] eq 1"> target="_blank"</if>
+                    >
+                    <img src="{$v[ad_code]}">
+                    </a>
+                </adv>
+            </div>
+        </div>
+        <div class="slider_indexs">
+            <for start="1" end="$ad_count+1">
+                <span no="{$i}"></span>
+            </for>
+        </div>
+    </div>
+    <!-- E banner-->
+    <!-- S 通告 -->
+    <div class="treasure_broadcast" style="visibility: visible;">
+        <volist name="win_infos" id="v">
+            <p style="transition: none; -webkit-transition: none; transform: translate3d(0px, 0px, 0px); -webkit-transform: translate3d(0px, 0px, 0px);">
+                {$v.nickname} 抢到 <em>{$v.name}</em>
+            </p>
+        </volist>
+    </div>
+    <!-- E 通告-->
+    <!-- S 导航 -->
+    <div class="treasure_cate_wrap">
+        <div id="tab_list" class="treasure_cate">
+            <a data-type="1" class="item cur">人气</a>
+            <a data-type="2" class="item">进度</a>
+            <a data-type="3" class="item" data-orderby="asc">总需人次<i class="icon_dborder"></i></a>
+            <a data-type="4" class="item">分类<i class="icon_order_dec"></i></a>
+            <!-- 隐藏分类面板： treasure_cate_board 添加 class="hide" -->
+            <div id="categorys" class="treasure_cate_board hide">
+                <!-- 切换成一行自适应：list_cols_flex -->
+                <ul class="list_cols_5">
+                    <volist name="menus" id="v">
+                        <li class="item" data-id="{$v.dbtype_id}">
+                            <div class="icon"><img
+                                    src="{$v.img_url1}"
+                                    data-active="1" class="on"> <img
+                                    src="{$v.img_url2}"
+                                    data-active="0"></div>
+                            <p class="text">{$v.name}</p></li>
+                    </volist>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- E 导航-->
+    <!-- S 商品列表 -->
+    <div id="treasure_panel">
+        <div name="treasure" data-type="1" style="display: none;">
+            <ul class="treasure_goods">
+
+            </ul>
+            <div class="loading">
+                <img src="//static.paipaiimg.com/wx/img/common/loading.gif">
+                <span>加载中</span>
+            </div>
+            <div class="treasure_hint" style="display: none;">
+                <div data-type="page"><i class="icon icon_fail"></i>
+                    <p>活动太火爆了！<br>请您稍等一会刷新看看~</p>
+                    <div class="btns"><a class="btn btn_2">刷新看看</a></div>
+                </div>
+                <div data-type="next"><p>太火爆了，稍等一会刷新看看~</p>
+                    <div class="btns"><a class="btn btn_2">刷新看看</a></div>
+                </div>
+            </div>
+        </div>
+        <div name="treasure" data-type="2" style="display: none;">
+            <ul class="treasure_goods">
+            </ul>
+            <div class="loading">
+                <img src="//static.paipaiimg.com/wx/img/common/loading.gif">
+                <span>加载中</span>
+            </div>
+        </div>
+        <div name="treasure" data-type="3" style="display: none;">
+            <ul class="treasure_goods">
+            </ul>
+            <div class="loading">
+                <img src="//static.paipaiimg.com/wx/img/common/loading.gif">
+                <span>加载中</span>
+            </div>
+        </div>
+        <div name="treasure" data-type="4" style="display: none;">
+            <ul class="treasure_goods">
+            </ul>
+            <div class="loading">
+                <img src="//static.paipaiimg.com/wx/img/common/loading.gif">
+                <span>加载中</span>
+            </div>
+        </div>
+        <div name="treasure" data-type="7" style="display: none;">
+            <ul class="treasure_goods">
+            </ul>
+            <div class="loading">
+                <img src="//static.paipaiimg.com/wx/img/common/loading.gif">
+                <span>加载中</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- E 商品列表-->
+
+    <!-- S QQ钱包返回引导 -->
+    <div class="QQ_wallet_guide" style="display: none;">
+        <div class="QQ_wallet_guide_img">
+            <img src="//wq.360buyimg.com/fd/h5/base/treasure/images/qqwallet_ef2c9c7c.jpg">
+        </div>
+        <div class="QQ_wallet_guide_lnk show">
+            <a href="mqqapi://wallet/open?src_type=web&amp;viewtype=0&amp;version=1&amp;view=0">返回 QQ钱包 &gt;&gt;</a>
+        </div>
+    </div>
+    <!-- E QQ钱包返回引导-->
+
+    <!-- S 底部导航 -->
+    <include file="OneShop/foot_nav"/>
+    <!-- E 底部导航-->
+
+    <!-- S side_floating -->
+    <!-- <athena widget:treasure/widget/treasure_sidefloat> -->
+    <div class="floating" style="visibility: visible;">
+        <span class="fl_closer"></span>
+        <img alt="" src="//img11.360buyimg.com/jdphoto/jfs/t2620/17/3110483248/47374/d29f1469/577f41f8N27c42ec4.gif">
+    </div>
+    <!-- <athena widget:/treasure/widget/treasure_sidefloat> -->
+    <!-- E side_floating-->
+    <!-- S 二维码 -->
+    <!-- <athena widget:treasure/widget/treasure_qrcode> -->
+    <div class="mod_foot_layer" id="floating_wx_follow">
+        <div class="inner">
+            <span class="close"></span>
+            <p>关注“一元抢宝”服务号，
+                <br>才能及时获取活动信息哦！</p>
+            <div class="qr">
+                <img id="J_dialog_wx_following_jd_qrcode"
+                     src="__STATIC__/images/gz_weixin.jpg">
+                <span>长按二维码关注</span>
+            </div>
+        </div>
+    </div>
+    <!-- <athena widget:/treasure/widget/treasure_qrcode> -->
+    <!-- E 二维码-->
+    <!-- S 侧边导航 -->
+    <div class="treasure_aside" style="bottom:60px">
+        <a id="aside_up" style="visibility: visible; display: none;" data-clicktype="up" class="btn_top">返回顶部</a>
+    </div>
+    <!-- E 侧边导航-->
+</div>
+<div class="wx_footer">
+    <div class="jd_logo" id="jdBtmLogo"></div>
+</div>
+<script>
+    //控制脚部导航样式
+    $(function () {
+        $('.footer_inner_item').removeClass('cur');
+        var $obj = $('.footer_inner_item:eq(0)');
+        $obj.addClass('cur');
+        $obj.find('.footer_item_img img').attr('src', '__STATIC__/images/oneshop/onered.png');
+    });
+    //页数
+    var page_1 = 0, page_2 = 0, page_3 = 0, page_4 = 0;
+    var type = 1;//加载数据的类型
+    //是升序还是降序
+    var orderby = "";
+    //夺宝类型id
+    var dbtype_id = 0;
+    //配置轮播图
+    $(function () {
+        var config = ({
+            dom: $('.slider_list'),
+            dom_items: $('.slider_list a'),
+            tab_items: $('.slider_indexs span')
+        });
+        var self = slider(config);
+    });
+    //加载人气商品
+    $(function () {
+        $current = $("#treasure_panel div[name='treasure']:first");
+        get_dbshoplist(1, null, page_1++, $current, function () {
+            $current.show();
+        });
+    });
+    //控制中奖公告
+    $(function () {
+        win_notify();
+    });
+    $(function () {
+        //监听导航事件
+        $('#tab_list a').on('click', function () {
+            $this = $(this);
+            type = $this.data('type');
+            $current = $("#treasure_panel div[data-type='" + type + "']");
+            switch (type) {
+                case 1:
+                    page_1++;
+                    get_dbshoplist(type, null, page_1, $current, function () {
+                        //切换类型
+                        $("#treasure_panel div[name='treasure']").hide();
+                        $current.show();
+                        //让上导航栏靠顶
+                        $(window).scrollTop($(".treasure_cate_wrap").offset().top);
+                    });
+                    break;
+                case 2:
+                    page_2++;
+                    get_dbshoplist(type, null, page_2, $current, function () {
+                        //切换类型
+                        $("#treasure_panel div[name='treasure']").hide();
+                        $current.show();
+                        //让上导航栏靠顶
+                        $(window).scrollTop($(".treasure_cate_wrap").offset().top);
+                    });
+                    break;
+                case 3:
+                    //清除列表, 页数归零
+                    page_3 = 0;
+                    flag_3 = true;
+                    $current.find('.treasure_goods').empty();
+                    if ($this.data('orderby') == 'asc') {
+                        $this.find('.icon_dborder').removeClass('down').addClass('up');
+                        orderby = 'asc';
+                        $this.data('orderby', 'desc');
+                    } else if ($this.data('orderby') == 'desc') {
+                        $this.find('.icon_dborder').removeClass('up').addClass('down');
+                        orderby = 'desc';
+                        $this.data('orderby', 'asc');
+                    }
+                    page_3++;
+                    get_dbshoplist(type, orderby, page_3, $current, function () {
+                        //切换类型
+                        $("#treasure_panel div[name='treasure']").hide();
+                        $current.show();
+                        //让上导航栏靠顶
+                        $(window).scrollTop($(".treasure_cate_wrap").offset().top);
+                    });
+                    break;
+                case 4:
+                    $('#categorys').toggleClass('hide');
+                    return;
+                    break;
+            }
+            if (type != 3) {
+                $('#tab_list').find('.icon_dborder').removeClass('up').removeClass('down');
+            }
+            $('#tab_list a').removeClass('cur');
+            $this.addClass('cur');
+        });
+        //点击商品事件
+        $('.treasure_goods').on('click', 'li', function () {
+            var goods_id = $(this).data('goods_id');
+            window.location.href = '/Mobile/OneShop/goods_info/goods_id/' + goods_id;
+        });
+        //家用电器类点击事件
+        $('#categorys li').on('click', function () {
+//            //让上导航栏靠顶
+//            $(window).scrollTop( $(".treasure_cate_wrap").offset().top);
+            $this = $(this);
+            $('#categorys li').removeClass('cur');
+            $this.addClass('cur');
+            dbtype_id = $this.data('id');
+            $current = $("#treasure_panel div[data-type=4]");
+            page_4 = 1;
+            flag_4 = true;
+            $current.find('.treasure_goods').empty();//清除以前加载的数据
+            get_dbshoplist(4, dbtype_id, page_4, $current, function () {
+                //切换类型
+                $("#treasure_panel div[name='treasure']").hide();
+                $current.show();
+                //让上导航栏靠顶
+                $(window).scrollTop($(".treasure_cate_wrap").offset().top);
+            });
+
+            $('#tab_list').find('.icon_dborder').removeClass('up').removeClass('down');
+            //将导航更改选择类别的名字
+            var content = $this.find('p').text();
+            $('#categorys').toggleClass('hide');
+            $('#tab_list a').removeClass('cur');
+            $('#tab_list a:last').addClass('cur').html(content + "<i class='icon_order_dec'></i>");
+        });
+        //关闭右下边图标事件
+        $('.floating').on('click', '.fl_closer', function () {
+            $('.floating').hide();
+        });
+        //点击左下边图标时弹出二维码
+        $('.floating').on('click', 'img', function () {
+            $('#floating_wx_follow').addClass('show');
+        });
+        //关闭二维码
+        $('#floating_wx_follow').on('click', '.close', function () {
+            $('#floating_wx_follow').removeClass('show');
+        });
+        //跳到顶部
+        $('#aside_up').on('click', function () {
+            $(window).scrollTop(0);
+        });
+    });
+    //根据类型的到夺宝商品列表
+    function get_dbshoplist(type, by_or_id, page, current, call_back) {
+        current.find('.loading').show();
+        $.ajax({
+            url: '/index.php/Mobile/OneShop/get_dbshoplist',
+            data: {type: type, by_or_id: by_or_id, page: page},
+            dataType: 'html',
+            type: 'get',
+            success: function (data) {
+                if (data.length > 20) {
+                    current.find('.treasure_goods').append(data);
+                }
+                call_back(data);
+                current.find('.loading').hide();
+            },
+            error: function () {
+                current.find('.loading').hide();
+            }
+        });
+    }
+    //屏幕滚动监听
+    var flag = true, flag_1 = true, flag_2 = true, flag_3 = true, flag_4 = true;
+    $(window).scroll(function () {
+        var height = $(document).height();//文档高度
+        var w_height = $(window).height();//窗体的高度
+        var scroll_height = $(window).scrollTop();//滚动的高度
+        var tcw_height = $(".treasure_cate_wrap").offset().top;//导航偏移量的高度
+//        var tp_height=$("#treasure_panel div[name='treasure']:visible").height();
+        if (scroll_height > tcw_height) {
+            $('#aside_up').show();
+            $('#tab_list').addClass('fixed');
+        } else {
+            $('#aside_up').hide();
+            $('#tab_list').removeClass('fixed');
+        }
+        if (w_height + scroll_height == height && flag) {
+            flag = false;
+            $current = $("#treasure_panel div[data-type='" + type + "']:visible");
+            var by_or_id = null;
+            switch (type) {
+                case 1:
+                    if (flag_1) {
+                        page_1++;
+                        get_dbshoplist(type, by_or_id, page_1, $current, function (data) {
+                            if (data.length < 20) {
+                                flag_1 = false;
+                            }
+
+                        });
+                    }
+                    break;
+                case 2:
+                    if (flag_2) {
+                        page_2++;
+                        get_dbshoplist(type, by_or_id, page_2, $current, function (data) {
+                            if (data.length < 20) {
+                                flag_2 = false;
+                            }
+
+                        });
+                    }
+                    break;
+                case 3:
+                    by_or_id = orderby;
+                    if (flag_3) {
+                        page_3++;
+                        get_dbshoplist(type, by_or_id, page_3, $current, function (data) {
+                            if (data.length < 20) {
+                                flag_3 = false;
+                            }
+
+                        });
+                    }
+                    break;
+                case 4:
+                    by_or_id = dbtype_id;
+                    if (flag_4) {
+                        page_4++;
+                        get_dbshoplist(type, by_or_id, page_4, $current, function (data) {
+                            if (data.length < 20) {
+                                flag_4 = false;
+                            }
+                            console.log(page_4);
+                        });
+                    }
+                    break;
+            }
+            flag = true;
+        }
+    });
+    //中奖公告
+    function win_notify() {
+        var self = {};
+        var speed = 2000;
+        var _transitionEnd = 'onwebkittransitionend' in window ? "webkitTransitionEnd" : 'transitionend';
+        var DOM_inner = $(".treasure_broadcast p"),
+                domOut = $('.treasure_broadcast'),
+                hidedom = null;
+        DOM_inner.first().on(_transitionEnd, swich);
+        function move() {
+            hidedom = $(".treasure_broadcast p")[0];
+            var moveY = hidedom.getBoundingClientRect().height;
+            DOM_inner.css({
+                'transition': 'transform 0.5s linear',
+                '-webkit-transition': '-webkit-transform 0.5s linear',
+                'transform': "translate3d(0,-" + moveY + "px,0)",
+                '-webkit-transform': "translate3d(0,-" + moveY + "px,0)"
+            });
+        }
+
+        function swich() {
+            DOM_inner.css({
+                'transition': 'none',
+                '-webkit-transition': 'none',
+                'transform': 'translate3d(0,0,0)',
+                '-webkit-transform': 'translate3d(0,0,0)'
+            });
+            domOut.append(domOut.find('p').first());
+        }
+
+        if (self.interval) {
+            clearInterval(self.interval);
+        }
+        self.interval = setInterval(move, speed);
+    }
+    ;
+</script>
+</body>
+</html>

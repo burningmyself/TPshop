@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta itemprop="name" content="一元抢宝">
+    <meta itemprop="description" content="一块钱的梦想你敢不敢谈">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    <title>晒单广场</title>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/onemain.css"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/one_feedback.css"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/layer.css"/>
+    <script type="text/javascript" src="__STATIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/layer.js"></script>
+    <style>
+        body {
+            background: #e8e8ed;
+        }
+
+        .treasure_feedback_pro {
+            padding-left: 0;
+        }
+
+        .treasure_feedback_pro .treasure_feedback_pro_info .treasure_feedback_pro_btn {
+            bottom: 50%;
+            transform-origin: 50% 50%;
+            -webkit-transform-origin: 50% 50%;
+            -webkit-transform: translate3d(0, 50%, 0);
+            transform: translate3d(0, 50%, 0);
+        }
+
+        .treasure_feedback_content .treasure_feedback_content_img ul.list_cols_3 li {
+            padding-right: 4px;
+            box-sizing: border-box;
+        }
+
+        .treasure_feedback_pro .treasure_feedback_pro_info .treasure_feedback_pro_name {
+            margin-right: 90px;
+        }
+
+        .treasure_feedback_content {
+            word-wrap: break-word;
+            word-break: break-all;
+        }
+
+        .treasure_feedback_content .treasure_feedback_content_img ul li a {
+            border: 1px #e8e8ed solid;
+            border-radius: 4px;
+        }
+
+        .treasure_feedback_content .treasure_feedback_content_full:before {
+            margin: -8px 5px 0 5px;
+        }
+    </style>
+    <style>
+        /** 加载样式 */
+        .loading {
+            margin: 20px;
+            text-align: center;
+        }
+
+        .loading img {
+            display: block;
+            width: 16px;
+            height: 16px;
+            margin: 0 auto 5px;
+        }
+
+        .loading_img {
+            width: 16px;
+            height: 16px;
+        }
+
+        .sharetips {
+            display: none;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            background: rgba(0, 0, 0, .8);
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #fff;
+            text-align: center;
+            z-index: 9999;
+        }
+
+        .sharetips::before {
+            content: '';
+            display: block;
+            margin-right: 0.5rem;
+            height: 8rem;
+            background-size: 4.2rem 5rem;
+        }
+    </style>
+</head>
+<body>
+<div class="wx_wrap">
+    <!-- S 晒单模块 -->
+    <div id="shareList">
+
+    </div>
+    <div class="list_loading loading" style="display:none">
+        <img src="//static.paipaiimg.com/wx/img/common/loading.gif">
+        <span>加载中</span>
+    </div>
+    <!-- E 晒单模块 -->
+
+    <!-- S 晒单发表按钮 -->
+    <div class="treasure_feedback_edit fixed" style="display: none;">
+        <i class="treasure_feedback_edit_icon"></i>
+        <p>晒单</p>
+    </div>
+    <!-- E 晒单发表按钮 -->
+
+    <!-- S 底部导航 -->
+    <include file="OneShop/foot_nav"/>
+    <!-- E 底部导航-->
+
+</div>
+<div class="wx_footer">
+    <div class="jd_logo" id="jdBtmLogo"></div>
+</div>
+</body>
+<script>
+    var page = 1;
+    //控制脚部导航样式
+    $(function () {
+        $('.footer_inner_item').removeClass('cur');
+        var $obj = $('.footer_inner_item:eq(1)');
+        $obj.addClass('cur');
+        $obj.find('.footer_item_img img').attr('src', '__STATIC__/images/oneshop/publishred.png');
+    });
+    $(function () {
+        ajax_comment_list(page);
+        //查看晒单详情
+        $('.wx_wrap').on('click', '.gotodetail', function () {
+            var order_id = $(this).data('order_id');
+            window.location.href = '/index.php?m=Mobile&c=OneShop&a=share_order_detail&order_id=' + order_id;
+        });
+    });
+    //加载分页数据
+    function ajax_comment_list(page) {
+        var url = '/index.php?m=Mobile&c=OneShop&a=ajax_share_all_order&goods_id={$goods_id}&p=' + page;
+        $('.list_loading').show();
+        $.ajax({
+            url: url,
+            dataType: 'html',
+            type: 'get',
+            success: function (data) {
+                if (data.length > 20) {
+                    $('#shareList').append(data);
+                } else {
+                    if (page == 1) {
+                        layer.open({content: '暂时还没有人晒单~', time: 2,end:function () {
+                            //history.back();
+                            window.location.href="/index.php?m=Mobile&c=OneShop&a=index";
+                        }});
+                    }
+                }
+
+                $('.list_loading').hide();
+            },
+            error: function () {
+                $('.list_loading').hide();
+            }
+        })
+    }
+    var flag = true;
+    //滚动监听
+    $(window).scroll(function () {
+        if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+            ++page;
+            if (!flag)return;
+            ajax_comment_list(page);
+        }
+    });
+</script>
+</html>

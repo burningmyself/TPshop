@@ -1,0 +1,192 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>一元夺宝-{$tpshop_config['shop_info_store_title']}</title>
+    <meta http-equiv="keywords" content="{$tpshop_config['shop_info_store_keyword']}"/>
+    <meta name="description" content="{$tpshop_config['shop_info_store_desc']}"/>
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/public.css"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/index.css"/>
+    <script type="text/javascript" src="__STATIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/TouchSlide.1.1.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/jquery.json.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/touchslider.dev.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/layer.js"></script>
+    <script src="__PUBLIC__/js/global.js"></script>
+    <script src="__PUBLIC__/js/mobile_common.js"></script>
+    <style type="text/css">
+        .index_pro .info {
+            position: relative;
+            padding: 7px 10px 10px 10px
+        }
+
+        .index_pro .info .name {
+            height: 36px;
+            color: #333;
+            font-size: 12px
+        }
+
+        .index_pro .info .num {
+            margin-top: 10px;
+            height: 25px;
+            line-height: 25px;
+            color: #999;
+            font-size: 10px
+        }
+
+        .index_pro .info .num em {
+            color: #e4393c
+        }
+
+        .treasure_goods .info .btn {
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+            width: 65px;
+            height: 25px;
+            line-height: 25px;
+            text-align: center;
+            font-size: 12px;
+            color: #e4393c
+        }
+
+        .index_pro .info .btn:before {
+            border-radius: 4px;
+            border-color: #e4393c
+        }
+
+        .index_pro .info .progress .progress_bar {
+            margin: 7px 0;
+            position: relative;
+            height: 10px;
+            border-radius: 10px;
+            background-color: #ddd
+        }
+
+        .index_pro .info .progress .progress_bar .progress_bar_rate {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 10px;
+            background-color: #e4393c;
+            border-radius: 10px
+        }
+        .top_home {
+            background: url('__STATIC__/images/category/search_sprite.png')  no-repeat 15px center;
+            width: 45px;
+            height: 45px;
+            position: absolute;
+            left: 15px;
+            top: 4px;
+            background-position: 0 0px;
+        }
+        .sb-back{ display:block; width:40px; height:40px; margin:auto; background: url(../images/category/arrow_left.png) no-repeat 15px center; background-size: auto 16px; }
+    </style>
+</head>
+<body>
+<div id="page" class="showpage">
+    <div>
+        <header id="header">
+            <a href="javascript:history.back(-1)" class="top_home"></a>
+            <span href="javascript:void(0)" class="logo">{$tpshop_config['shop_info_store_name']}</span>
+        </header>
+
+        <div id="scrollimg" class="scrollimg">
+            <div class="bd">
+                <ul>
+                    <adv pid="401" limit="5" item="v">
+                        <li><a href="{$v.ad_link}"
+                            <if condition="$v['target'] eq 1">target="_blank"</if>
+                            ><img src="{$v[ad_code]}" title="{$v[title]}" width="100%" style="{$v[style]}"/></a></li>
+                    </adv>
+                </ul>
+            </div>
+            <div class="hd">
+                <ul></ul>
+            </div>
+        </div>
+        <script type="text/javascript">
+            TouchSlide({
+                slideCell: "#scrollimg",
+                titCell: ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+                mainCell: ".bd ul",
+                effect: "leftLoop",
+                autoPage: true,//自动分页
+                autoPlay: true //自动播放
+            });
+        </script>
+
+        <script type="text/javascript">
+            TouchSlide({
+                slideCell: "#index_banner",
+                titCell: ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+                mainCell: ".bd ul",
+                effect: "leftLoop",
+                autoPage: true,//自动分页
+                autoPlay: true //自动播放
+            });
+        </script>
+
+        <script type="text/javascript">
+            var url = "index.php?m=Mobile&c=OneShop&a=ajaxGetMore&dbtype_id={$dbtype_id}";
+            $(function () {
+                //$('#J_ItemList').more({'address': url});
+                getGoodsList();
+            });
+
+            var page = 1;
+            function getGoodsList() {
+                $('.get_more').show();
+                $.ajax({
+                    type: "get",
+                    url: "/index.php?m=Mobile&c=OneShop&a=ajaxGetMore&p=" + page+"&dbtype_id={$dbtype_id}",
+                    dataType: 'html',
+                    success: function (data) {
+                        if (data) {
+                            $("#J_ItemList>ul").append(data);
+                            page++;
+                            $('.get_more').hide();
+                        } else {
+                            $('.get_more').hide();
+                            $('#getmore').remove();
+                        }
+                    }
+                });
+            }
+        </script>
+        <div class="floor_body2">
+            <div id="J_ItemList" class="treasure_goods">
+                <ul class="product single_item info">
+                </ul>
+                <a href="javascript:;" class="get_more" style="text-align:center; display:block;">
+                    <img src='__STATIC__/images/category/loader.gif' width="12" height="12"> </a>
+            </div>
+            <div id="getmore" style="font-size:.24rem;text-align: center;color:#888;padding:.25rem .24rem .4rem;">
+                <a href="javascript:void(0)" onClick="getGoodsList()">点击加载更多</a>
+            </div>
+        </div>
+
+        <script>
+            function goTop() {
+                $('html,body').animate({'scrollTop': 0}, 600);
+            }
+        </script>
+        <a href="javascript:goTop();" class="gotop"><img src="__STATIC__/images/topup.png"></a>
+    </div>
+</div>
+<include file="OneShop/footer_nav"/>
+
+<script type="text/javascript">
+    $(function () {
+        $('#J_ItemList').on('click','.go_goods_info',function(){
+            var goods_id=$(this).data('goods_id');
+            window.location.href='/Mobile/OneShop/goods_info/goods_id/' + goods_id;
+        });
+    })
+</script>
+<script src="__PUBLIC__/js/jqueryUrlGet.js"></script><!--获取get参数插件-->
+<script> set_first_leader(); //设置推荐人 </script>
+</body>
+</html>

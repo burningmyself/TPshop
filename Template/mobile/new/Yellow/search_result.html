@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>搜索结果</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    <link rel="stylesheet" href="/Template/mobile/new/Yellow/search_min.css">
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/layer.css"/>
+    <script type="text/javascript" src="__STATIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/layer.js"></script>
+    <script>
+        $(function () {
+            $('.hd_search_txt').on('click', function () {
+                $('#listmodeBtn').toggleClass('hide');
+                $('.hd_search_clear').toggleClass('hide');
+                $('.hd_search_btn_blue').toggleClass('hide');
+            });
+            //监听取消点击事件
+            $('.hd_search_clear').on('click', function () {
+                $(this).hide();
+                $('.hd_search_txt').val('');
+            });
+            $('#searchBtn').on('click', function () {
+                var keyWord = $('#keyWord').val();
+                search(keyWord);
+            });
+        })
+    </script>
+</head>
+<body>
+<div>
+    <div class="search_head">
+        <div class="hd_bar_wrap">
+            <div class="hd_bar">
+                <form action="###" class="hd_search_frm hd_search_frm_focus" onsubmit="return false;" id="searchForm">
+                    <input type="search" class="hd_search_txt" id="keyWord" autocomplete="off"
+                           placeholder="搜索">
+                    <a class="hd_search_clear hide" href="javascript:;" id="searchClearBtn">x</a>
+                </form>
+                <div class="hd_me">
+                    <a href="javascript:" id="searchBtn" class="hd_search_btn_blue hide">搜索</a>
+                    <a href="javascript:" id="cancelBtn" class="hd_search_btn hide">取消</a>
+                    <a href="javascript:" class="hd_search_btn btn_show_type" id="listmodeBtn"></a>
+                </div>
+            </div>
+        </div>
+        <div id="smartboxBlock" style="display:none;">
+            <div class="search_panel_wrapper" dtab="s-tab" style="display:none;">
+                <div class="search_panel_title">
+                    <div class="text">最近搜索</div>
+                    <div class="title_btn" dtab="s-btn" rd="7092.8.1">清除</div>
+                </div>
+                <div class="search_panel_con two_row">
+                    <ul class="tags" dtab="s-row"></ul>
+                </div>
+                <div class="search_panel_title">
+                    <div class="text">热门搜索</div>
+                    <div class="title_btn" dtab="c-btn" rd="7092.8.2">换一批</div>
+                </div>
+                <div class="search_panel_con">
+                    <ul class="tags" dtab="s-tag"></ul>
+                </div>
+            </div>
+            <ul class="s_row" dtab="smartWrap" style="display:none;"></ul>
+        </div>
+    </div>
+    <div class="search_head" id="searchHead">
+        <div class="search_banner hide" id="topBranner"></div>
+        <div class="search_shoplnk hide" id="keyshop"></div>
+        <div class="hide" id="carBlock"></div>
+        <div class="search_brand_list hide" id="brandOutBlock"></div>
+    </div>
+    <div id="searchResBlock" class="">
+        <div class="search_prolist cols_1" id="itemList">
+
+        </div>
+        <div class="wx_loading2 hide" id="loadingLogo"><i class="wx_loading_icon"></i></div>
+    </div>
+    <div class="s_null hide" id="sNull01">
+        <i class="icon"></i>
+        <p class="tip">抱歉！暂无相关商家</p>
+        <p class="small">换个关键词试试吧～</p>
+    </div>
+</div>
+<div class="wx_footer">
+    <div class="jd_logo" id="jdBtmLogo"></div>
+</div>
+<script>
+    $(function () {
+        //窗体加载时就搜索
+        search('{$keyWord}');
+        $('#listmodeBtn').on('click', function () {
+            $(this).toggleClass('list');
+            $this = $('.search_prolist');
+            if ($this.hasClass('cols_1')) {
+                $this.removeClass('cols_1');
+                $this.addClass('cols_2');
+            }
+            else {
+                $this.removeClass('cols_2');
+                $this.addClass('cols_1');
+            }
+            $this.find('search_prolist_item').toggleClass('item_longcover')
+        });
+        //查看详情
+        $('.search_prolist').on('click','.search_prolist_item',function () {
+            var info_id=$(this).data('info_id');
+            window.location.href='get_detail?info_id='+info_id;
+        });
+    });
+    function search(keyWord) {
+        var url = 'get_search_result'
+        $('.wx_loading2').removeClass('hide');
+        $.ajax({
+            url: url,
+            type: 'get',
+            dataType: 'html',
+            data: {keyWord: keyWord},
+            success: function (data) {
+                if (data.length > 20) {
+                    $('.search_prolist').removeClass('hide');
+                    $('#sNull01').addClass('hide');
+                    $('.search_prolist').empty().append(data);
+                } else {
+                    $('.search_prolist').addClass('hide');
+                    $('#sNull01').removeClass('hide');
+                }
+            }
+        });
+        $('.wx_loading2').addClass('hide');
+    }
+</script>
+</body>
+</html>

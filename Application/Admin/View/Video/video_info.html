@@ -1,0 +1,168 @@
+<include file="Public/min-header"/>
+<link href="__PUBLIC__/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css"/>
+<script src="__PUBLIC__/plugins/daterangepicker/moment.min.js" type="text/javascript"></script>
+<script src="__PUBLIC__/plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
+<div class="wrapper">
+    <include file="Public/breadcrumb"/>
+    <section class="content ">
+        <!-- Main content -->
+        <div class="container-fluid">
+            <div class="pull-right">
+                <a href="javascript:history.go(-1)" data-toggle="tooltip" title="" class="btn btn-default"
+                   data-original-title="返回视频列表"><i class="fa fa-reply"></i></a>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-list"></i> 添加视频</h3>
+                </div>
+                <div class="panel-body ">
+                    <!--表单数据-->
+                    <form method="post" id="videoeHandle" action="{:U('Video/videoHandle')}">
+                        <!--通用信息-->
+                        <div class="tab-content col-md-10">
+                            <div class="tab-pane active" id="tab_tongyong">
+                                <table class="table table-bordered">
+                                    <tbody>
+                                    <tr>
+                                        <td class="col-sm-2">视频标题：</td>
+                                        <td class="col-sm-8">
+                                            <input type="text" class="form-control" name="title" value="{$info.title}">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-sm-2">主播名称：</td>
+                                        <td class="col-sm-8">
+                                            <input type="text" class="form-control" name="name" value="{$info.name}">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-sm-2">分类：</td>
+                                        <td class="col-sm-8">
+                                            <select name="type_id" id="type_id"
+                                                    class="small form-control">
+                                                <foreach name="video_type" item="v">
+                                                    <option value="{$v[type_id]}">{$v[name]}</option>
+                                                </foreach>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>视频图片：</td>
+                                        <td>
+                                            <div class="col-sm-3">
+                                                <input type="text" class="form-control"
+                                                       style="width:350px;margin-left:-15px;" name="img_url"
+                                                       id="img_url" value="{$info.img_url}">
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="button" class="btn btn-default"
+                                                       onClick="GetUploadify(1,'img_url','Video','')" value="上传图片"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>视频：</td>
+                                        <td>
+                                            <div class="col-sm-3">
+                                                <input type="text" class="form-control"
+                                                       style="width:350px;margin-left:-15px;" name="video_url"
+                                                       id="video_url" value="{$info.video_url}">
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="button" class="btn btn-default"
+                                                       onClick="UploadifyVideo(1,'video_url','Video','')"
+                                                       value="上传视频"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>直播时间：</td>
+                                        <td>
+                                            <input name="play_time" class="form-control" id="play_time" type="text"
+                                                   value="{$info.play_time|date='Y-m-d H:i:s',###}">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>视频介绍</td>
+                                        <td>
+                                    <textarea type="text" id="content" name="content" placeholder="视频介绍"
+                                              class="form-control large" cols="100" rows="20">{$info.content}
+                                    </textarea>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>是否显示：</td>
+                                        <td>
+                                            <select name="is_show">
+                                                <option value="0"
+                                                <if condition="$info.is_show eq 0"> selected="selected"</if>
+                                                >不显示</option>
+                                                <option value="1"
+                                                <if condition="$info.is_show eq 1"> selected="selected"</if>
+                                                >显示</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <!--<tr>-->
+                                    <!--<td>所属管理员：</td>-->
+                                    <!--<td>-->
+                                    <!--<select name="admin_id">-->
+                                    <!--<volist name="admin" id="item">-->
+                                    <!--<option value="{$item.admin_id}" >{$item.user_name}</option>-->
+                                    <!--</volist>-->
+                                    <!--</select>-->
+                                    <!--</td>-->
+                                    <!--</tr>-->
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <td><input type="hidden" name="act" value="{$act}">
+                                            <input type="hidden" name="video_id" value="{$info.video_id}">
+                                        </td>
+                                        <td class="text-right"><input class="btn btn-primary" type="button"
+                                                                      onclick="adsubmit()" value="保存"></td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </form><!--表单数据-->
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+    function adsubmit() {
+        if ($('input[name=title]').val() == '') {
+            layer.msg('名称不能为空！', {icon: 2, time: 1000});   //alert('少年，用户名不能为空！');
+            return false;
+        }
+        $('#videoeHandle').submit();
+    }
+    $(document).ready(function () {
+        $('#play_time').daterangepicker({
+            format: "YYYY-MM-DD HH:mm:ss",
+            singleDatePicker: true,
+            showDropdowns: true,
+            minDate: '2016-12-31',
+            maxDate: '2030-01-01',
+            startDate: '{$min_date}',
+            timePicker: true, //是否显示小时和分钟
+            timePickerIncrement: 1,//time选择递增数
+            timePicker12Hour: false, //是否使用12小时制来显示时间
+            locale: {
+                applyLabel: '确定',
+                cancelLabel: '取消',
+                fromLabel: '起始时间',
+                toLabel: '结束时间',
+                customRangeLabel: '自定义',
+                daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
+                monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                firstDay: 1
+            }
+        })
+    });
+</script>
+</body>
+</html>

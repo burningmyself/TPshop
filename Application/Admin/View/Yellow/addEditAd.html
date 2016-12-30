@@ -1,0 +1,100 @@
+<include file="Public/min-header"/>
+<div class="wrapper">
+    <include file="Public/breadcrumb"/>
+    <section class="content">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">添加广告</h3>
+                        <div class="pull-right">
+                            <a href="javascript:history.go(-1)" data-toggle="tooltip" title="" class="btn btn-default"
+                               data-original-title="返回"><i class="fa fa-reply"></i></a>
+                            <!--<a href="javascript:;" class="btn btn-default" data-url="http://www.tp-shop.cn/Doc/Index/article/id/1006/developer/user.html" onclick="get_help(this)"><i class="fa fa-question-circle"></i> 帮助</a>-->
+                        </div>
+                    </div>
+
+                    <!-- /.box-header -->
+                    <form action="{:U('Yellow/addEditAd')}" method="post" class="form-horizontal"
+                          id="yellow_form">
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">分类</label>
+                                <div class="col-sm-3">
+                                    <select name="type_id" id="type_id"
+                                            class="small form-control">
+                                        <option value="0">热搜索推荐</option>
+                                        <foreach name="list" item="v">
+                                            <option value="{$v[type_id]}">{$v[name]}</option>
+                                        </foreach>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2">是否显示</label>
+
+                                <div class="col-sm-10">
+                                    <label>
+                                        <if condition="($ad_type.is_show eq 1) or ($ad_type.is_show eq NULL)">
+                                            <input checked="checked" type="radio" name="is_show" value="1"> 是
+                                            <input type="radio" name="is_show" value="0"> 否
+                                            <else/>
+                                            <input type="radio" name="is_show" value="1"> 是
+                                            <input checked="checked" type="radio" name="is_show" value="0"> 否
+                                        </if>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">广告id</label>
+                                <div class="col-sm-6">
+                                    <input type="text" placeholder="广告id" class="form-control large" name="pid"
+                                           value="{$ad_type.pid}">
+                                    <span class="help-inline" style="color:#F00; display:none;" id="pid"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-footer">
+                            <input type="hidden" name="ad_id" value="{$ad_type.ad_id}">
+                            <button type="reset" class="btn btn-primary pull-left"><i class="icon-ok"></i>重填</button>
+                            <button type="button"
+                                    onclick="ajax_submit_form('yellow_form','{:U('Yellow/addEditAd',array('is_ajax'=>$is_ajax))}');"
+                                    class="btn btn-primary pull-right"><i class="icon-ok"></i>提交
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+
+    /** 以下是编辑时默认选中某个商品分类*/
+
+    $(function () {
+        $('#type_id option[value={$ad_type[type_id]}]').attr('selected', true);
+
+        $('#parent_id').on('change', function () {
+            var parent_id = $(this).val();
+            get_type(parent_id);
+        });
+    });
+    //获得下级分类列表
+    function get_type(parent_id) {
+        $.ajax({
+            url: "/index.php/Admin/Yellow/get_type/?parent_id=" + parent_id,
+            type: "get",
+            dataType: "html",
+            success: function (data) {
+                $('#parent_id_1').empty();
+                data = "<option value='0'>请选择下级分类</option>" + data;
+                $('#parent_id_1').append(data);
+            }
+        })
+    }
+
+</script>
+
+</body>
+</html>

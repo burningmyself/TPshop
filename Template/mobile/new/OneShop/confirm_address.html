@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="sitemap" content="基础-其他">
+    <title>确认收货地址</title>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/one_common.css"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/confirm_address.css"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/layer.css"/>
+    <script type="text/javascript" src="__STATIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/layer.js"></script>
+    <style>
+        .order_info .order_info_list li:after {
+            display: none;
+        }
+
+        .order_info .hproduct .fn {
+            font-size: 15px;
+        }
+
+        .fn, .order_info .hproduct .sku_coll {
+            font-size: 15px;
+        }
+
+        .wxsq_topTips {
+            position: relative;
+            padding: 8px 35px 8px 8px;
+            background: #fffad0;
+            font-size: 10px;
+        }
+
+        .wxsq_topTips span {
+            display: block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            position: absolute;
+            top: 0;
+            right: 0;
+            color: #3985ff;
+            text-align: center;
+        }
+    </style>
+</head>
+<body style="background: #efefef;">
+<div class="wx_wrap" id="wrapBody">
+    <div id="pagePay">
+        <if condition="empty($d_address)">
+            <div id="addressNull" class="address_null">
+                <h3>！请填写收货地址</h3>
+            </div>
+            <else/>
+            <div class="address_defalut" id="addressDefault">
+                <div id="selectAddress">
+                    <h3>送至</h3>
+                    <ul>
+                        <li>{$d_address[address]}</li>
+                        <li><strong>{$d_address[consignee]}</strong>{$d_address[mobile]}</li>
+                    </ul>
+                </div>
+            </div>
+        </if>
+        <div class="order_info" id="orderInfo">
+            <ul>
+                <li class="hproduct"><a
+                        href="{:U('OneShop/goods_info',array('goods_id'=>$order['goods_id'],'dbshop_id'=>$order['dbshop_id'],'periods'=>$order['periods']))}"><img
+                        class="photo"
+                        src="{$order[img_url]}"
+                        alt=""></a>
+                    <div class="fn">{$order[name]}</div>
+                    <p class="sku_coll">第{$order[periods]}期</p></li>
+            </ul>
+            <ul class="order_info_list">
+                <li class="shipping noClick"><strong>配送方式：</strong>
+                    <div class="shipping_content"><p>商家配送</p></div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="mod_btns" id="confirmBtn">
+            <a href="javascript:void(0)" class="mod_btn bg_2">确认提交</a>
+        </div>
+
+    </div>
+    <div id="addressList" class="address_list" style="display: none;">
+        <volist name="as_list" id="v">
+            <div class="address">
+                <ul data-address_id="{$v[address_id]}" class="{$v[is_default]>0?'selected':''}"
+                >
+                    <li data-address="{$v[address]}">{$v.address}</li>
+                    <li data-mobile="{$v[consignee]}"><strong data-name="{$v[consignee]}">{$v[consignee]}</strong>{$v[mobile]}
+                    </li>
+                    <li class="edit" data-address_id="{$v[address_id]}" data-country="{$v[country]}"
+                        data-province="{$v[province]}" data-city="{$v[city]}" data-district="{$v[district]}"
+                        data-twon="{$v[twon]}">编辑
+                    </li>
+                </ul>
+                <p class="act" data-address_id="{$v[address_id]}"><span class="del">删除</span></p>
+            </div>
+        </volist>
+        <div class="address_list_link" id="addressLink">
+            <a id="addAddress" href="javascript:void(0);" class="item item_new">新增收货地址</a>
+        </div>
+    </div>
+    <div id="pageAddAddress" class="address_new" style="display: none;">
+
+    </div>
+    <div id="pageEditAddress" class="address_new" style="display: none;">
+
+    </div>
+
+</div>
+<div class="wx_loading" style="display: none;">
+    <div class="wx_loading_inner">
+        <i class="wx_loading_icon"></i>
+        请求加载中...
+    </div>
+</div>
+<div class="qq_menu_layer_v2" style="display:none;z-index:1005" id="__mqqmenu">
+</div>
+<div class="wx_footer">
+    <div class="jd_logo" id="jdBtmLogo"></div>
+</div>
+</body>
+<!--触摸事件-->
+<script>
+    var address = document.getElementsByClassName("address");
+    for (var i = 0, len = address.length; i < len; i++) {
+        var pressX = 0, pressY = 0;
+        var spanX = 0, spanY = 0;
+        //滑动是执行
+        address[i].addEventListener('touchmove', function (event) {
+            var touch = event.targetTouches[0];
+            spanX = touch.pageX - pressX, spanY = touch.pageY - pressY;
+            var direct = "none";
+            if (Math.abs(spanX) > Math.abs(spanY)) {
+                if (spanX > 0) {
+                    direct = "right";//向右
+                    if (spanX * 0.5 >= 0) {
+                        this.getElementsByTagName("ul")[0].style.WebkitTransition = "-webkit-transform 0.5s ease";
+                        this.getElementsByTagName("ul")[0].style.transition = "transform 0.5s ease";
+                        this.getElementsByTagName("ul")[0].style.transform = "translateX(0px)";
+                        this.getElementsByTagName("ul")[0].style.WebkitTransform = "translateX(0px)";
+                    } else {
+                        this.getElementsByTagName("ul")[0].style.WebkitTransition = "-webkit-transform 0s ease";
+                        this.getElementsByTagName("ul")[0].style.transition = "transform 0s ease";
+                        this.getElementsByTagName("ul")[0].style.transform = "translateX(" + spanX * 0.5 + "px)";
+                        this.getElementsByTagName("ul")[0].style.WebkitTransform = "translateX(" + spanX * 0.5 + "px)";
+                    }
+                } else {
+                    direct = "left";//向左
+                    if (spanX * 0.5 <= -70) {
+                        this.getElementsByTagName("ul")[0].style.WebkitTransition = "-webkit-transform 0.5s ease";
+                        this.getElementsByTagName("ul")[0].style.transition = "transform 0.5s ease";
+                        this.getElementsByTagName("ul")[0].style.transform = "translateX(-70px)";
+                        this.getElementsByTagName("ul")[0].style.WebkitTransform = "translateX(-70px)";
+                    } else {
+                        this.getElementsByTagName("ul")[0].style.WebkitTransition = "-webkit-transform 0s ease";
+                        this.getElementsByTagName("ul")[0].style.transition = "transform 0s ease";
+                        this.getElementsByTagName("ul")[0].style.transform = "translateX(" + spanX * 0.5 + "px)";
+                        this.getElementsByTagName("ul")[0].style.WebkitTransform = "translateX(" + spanX * 0.5 + "px)";
+                    }
+                }
+            } else {
+                if (spanY > 0) {
+                    direct = "down";//向下
+                } else {
+                    direct = "up";//向上
+                }
+            }
+        }, false);
+
+        address[i].addEventListener('touchend', function (event) {
+            if (spanX * 0.5 >= -40) {
+                this.getElementsByTagName("ul")[0].style.WebkitTransition = "-webkit-transform 0.4s ease";
+                this.getElementsByTagName("ul")[0].style.transition = "transform 0.4s ease";
+                this.getElementsByTagName("ul")[0].style.transform = "translateX(0px)";
+                this.getElementsByTagName("ul")[0].style.WebkitTransform = "translateX(0px)";
+            } else {
+                this.getElementsByTagName("ul")[0].style.WebkitTransition = "-webkit-transform 0.4s ease";
+                this.getElementsByTagName("ul")[0].style.transition = "transform 0.4s ease";
+                this.getElementsByTagName("ul")[0].style.transform = "translateX(-70px)";
+                this.getElementsByTagName("ul")[0].style.WebkitTransform = "translateX(-70px)";
+            }
+        }, false);
+        //触摸时执行
+        address[i].addEventListener('touchstart', function (event) {
+            var touch = event.targetTouches[0];
+            pressX = touch.pageX, pressY = touch.pageY;
+        }, false);
+    }
+</script>
+<script>
+    $(function () {
+        $('#addressNull,#addressDefault').on('click', function () {
+            $('.wx_wrap >*').hide();
+            $('#addressList').show();
+        });
+        //修改地址
+        $('.address ul>.edit').on('click', function () {
+            var address_id = $(this).data('address_id');
+//            var province = $(this).data('province');
+//            var city = $(this).data('city');
+//            var district = $(this).data('district');
+//            var twon = $(this).data('twon');
+            //去除添加html
+            $('#pageAddAddress').empty();
+            $('.wx_wrap >*').hide();
+            $('#pageEditAddress').show().data('address_id', address_id);
+            $('.wx_loading').show();
+            edit_address(address_id, function (data) {
+                $('#pageEditAddress').prepend(data);
+            });
+            $('.wx_loading').hide();
+        });
+        //添加修改地址
+        $('#pageAddAddress,#pageEditAddress').on('click', '#submitAddress', function () {
+            var data = checkForm();
+            if (data) {
+                //修改
+                $('.wx_loading').show();
+                $.ajax({
+                    type: "post",
+                    url: "/index.php?m=Mobile&c=OneShop&a=edit_address",
+                    dataType: "json",
+                    data: data,
+                    success: function (data) {
+                        $('.wx_loading').hide();
+                        layer.open({content: data['msg'], time: 2});
+                        //重新加载
+                        window.location.href = '/index.php?m=Mobile&c=OneShop&a=confirm_address&order_id=' + {$order[order_id]};
+                    },
+                    error: function () {
+                        $('.wx_loading').hide();
+                        layer.open({content: '修改失败', time: 2});
+                    }
+                })
+            }
+        })
+        //添加
+        $('#addAddress').on('click', function () {
+            //去除修改页面html
+            $('#pageEditAddress').empty();
+            $('.wx_wrap >*').hide();
+            $('#pageAddAddress').show();
+            $('.wx_loading').show();
+            add_address(function (data) {
+                $('#pageAddAddress').prepend(data);
+            });
+            $('.wx_loading').hide();
+        });
+        $("#pageEditAddress,#pageAddAddress").on('change', '#selectProvince', function () {
+            if ($(this).val() == 0) {
+                $('#selectProvince').parent('label').nextAll().hide();
+                return;
+            }
+            $('.wx_loading').show();
+            get_city(this, function (data) {
+                $('#selectCity').empty();
+                $('#selectCity').parent('label').nextAll().hide();
+                $('#selectCity').append(data);
+                $('#selectCity').parent('label').show();
+            });
+            $('.wx_loading').hide();
+        })
+        $("#pageEditAddress,#pageAddAddress").on('change', '#selectCity', function () {
+            if ($(this).val() == 0) {
+                $('#selectCity').parent('label').nextAll().hide();
+                return;
+            }
+            $('.wx_loading').show();
+            get_area(this, function (data) {
+                $('#selectCounty').empty();
+                $('#selectCounty').parent('label').nextAll().hide();
+                $('#selectCounty').append(data);
+                $('#selectCounty').parent('label').show();
+            });
+            $('.wx_loading').hide();
+        })
+        $("#pageEditAddress,#pageAddAddress").on('change', '#selectCounty', function () {
+            if ($(this).val() == 0) {
+                $('#selectCounty').parent('label').nextAll().hide();
+                return;
+            }
+            $('.wx_loading').show();
+            get_twon(this, function (data) {
+                $('#selectTown').empty();
+                $('#selectTown').parent('label').nextAll().hide()
+                $('#selectTown').append(data);
+                $('#selectTown').parent('label').show();
+            });
+            $('.wx_loading').hide();
+        })
+        //选择
+        $('.address ul>li:not(.edit)').on('click', function () {
+            var address_id = $(this).siblings('.edit').data('address_id');
+            $('.wx_loading').show();
+            select_address(address_id, function (data) {
+                if (data['status'] == 1) {
+                    //重新加载
+                    window.location.href = '/index.php?m=Mobile&c=OneShop&a=confirm_address&order_id=' + {$order[order_id]};
+                }
+            });
+            $('.wx_loading').hide();
+        });
+        //删除
+        $('.address > p').on('click', function () {
+            var address_id = $(this).data('address_id');
+            var $address = $(this).parent('.address');
+            alert_confrim(function (res) {
+                if (!res)return;
+                $('.wx_loading').show();
+                del_address(address_id, function (data) {
+                    if (data['status'] == 1) {
+                        //移除此列
+                        $address.remove();
+                        layer.open({content:data['msg'],time:2});
+                    }
+                });
+                $('.wx_loading').hide();
+            });
+        });
+        //确认提交
+        $('#confirmBtn').on('click',function(){
+            $('.wx_loading').show();
+            confirm_win(function(data){
+                $('.wx_loading').hide();
+                if(data['status']==1){
+                    layer.open({content:data['msg'],time:2});
+                    window.location.href = '/index.php?m=Mobile&c=OneShop&a=order_detail&order_id=' + {$order[order_id]};
+                }else {
+                    layer.open({content:data['msg'],time:2});
+                }
+            });
+        });
+    });
+    //选择
+    function select_address(address_id, callback) {
+        $.ajax({
+            type: "get",
+            url: "/index.php?m=Mobile&c=OneShop&a=set_default&address_id=" + address_id,
+            dataType: "json",
+            success: function (data) {
+                if (data['status'] == 1) {
+                    layer.open({content: data['msg'], time: 2});
+                    callback(data);
+                } else {
+                    layer.open({content: data['msg'], time: 2});
+                }
+            },
+            error: function () {
+                $('.wxloading').hide();
+            }
+        })
+    }
+    //编辑
+    function edit_address(address_id, callback) {
+        $.ajax({
+            type: "get",
+            url: "/index.php?m=Mobile&c=OneShop&a=edit_address&address_id=" + address_id,
+            dataType: "html",
+            success: function (data) {
+                callback(data);
+            },
+            error: function () {
+                $('.wxloading').hide();
+            }
+        })
+    }
+    //添加
+    function add_address(callback) {
+        $.ajax({
+            type: "get",
+            url: "/index.php?m=Mobile&c=OneShop&a=add_address",
+            dataType: "html",
+            success: function (data) {
+                callback(data);
+            },
+            error: function () {
+                $('.wxloading').hide();
+            }
+        })
+    }
+    //删除
+    function del_address(address_id, callback) {
+        $.ajax({
+            type: "get",
+            url: "/index.php?m=Mobile&c=OneShop&a=del_address&address_id=" + address_id,
+            dataType: "json",
+            success: function (data) {
+                callback(data);
+            },
+            error: function () {
+                $('.wxloading').hide();
+            }
+        })
+    }
+    //确认领奖
+    function confirm_win(callback){
+        $.ajax({
+            type: "get",
+            url: "/index.php?m=Mobile&c=OneShop&a=confirm_win&order_id=" + {$order[order_id]},
+            dataType: "json",
+            success: function (data) {
+                callback(data);
+            },
+            error: function () {
+                $('.wxloading').hide();
+            }
+        })
+    }
+    function checkForm() {
+        var consignee = $('#consignee').val();
+        var province = $('#selectProvince').find('option:selected').val();
+        var city = $('#selectCity').find('option:selected').val();
+        var district = $('#selectCounty').find('option:selected').val();
+        var town = $('#selectTown').find('option:selected').val();
+
+        var address = $('#adinfo').val();
+        var mobile = $('#mobile').val();
+        var address_id = $('#pageEditAddress').data('address_id');
+        var error = '';
+        if (consignee == '') {
+            error += '收货人不能为空 <br/>';
+        }
+        if (province == 0) {
+            error += '请选择省份 <br/>';
+        }
+        if (city == 0) {
+            error += '请选择城市 <br/>';
+        }
+        if (district == 0) {
+            error += '请选择区域 <br/>';
+        }
+//        if (town == 0) {
+//            error += '请选择街道 <br/>';
+//        }
+        if (address == '') {
+            error += '请填写地址 <br/>';
+        }
+        if (!checkMobile(mobile)) {
+            error += '手机号码格式有误 <br/>';
+        }
+        if (error) {
+            layer.open({content: error, time: 2});
+            return false;
+        }
+        var map = {
+            consignee: consignee,
+            province: province,
+            city: city,
+            district: district,
+            twon: town,
+            address: address,
+            mobile: mobile,
+            address_id: address_id,
+            is_default: 1
+        }
+        return map;
+    }
+    /**
+     * 手机号码格式判断
+     * @param tel
+     * @returns {boolean}
+     */
+    function checkMobile(tel) {
+        var reg = /(^1[3|4|5|7|8][0-9]{9}$)/;
+        if (reg.test(tel)) {
+            return true;
+        } else {
+            return false;
+        }
+        ;
+    }
+    /**
+     * 获取省份
+     */
+    function get_province(callback) {
+        var url = '/index.php?m=Admin&c=Api&a=getRegion&level=1&parent_id=0';
+        $.ajax({
+            type: "GET",
+            url: url,
+            error: function (request) {
+                alert("服务器繁忙, 请联系管理员!");
+                return;
+            },
+            success: function (province) {
+                province = '<option value="0" selected>请选择省</option>' + province;
+                callback(v);
+            }
+        });
+    }
+
+
+    /**
+     * 获取城市
+     * @param t  省份select对象
+     */
+    function get_city(t, callback) {
+        var parent_id = $(t).val();
+        if (!parent_id > 0) {
+            return;
+        }
+        $('#twon').empty().css('display', 'none');
+        var url = '/index.php?m=Home&c=Api&a=getRegion&level=2&parent_id=' + parent_id;
+        $.ajax({
+            type: "GET",
+            url: url,
+            error: function (request) {
+                alert("服务器繁忙, 请联系管理员!");
+                return;
+            },
+            success: function (city) {
+                city = '<option value="0" selected>请选择城市</option>' + city;
+                callback(city);
+            }
+        });
+    }
+
+    /**
+     * 获取地区
+     * @param t  城市select对象
+     */
+    function get_area(t, callback) {
+        var parent_id = $(t).val();
+        if (!parent_id > 0) {
+            return;
+        }
+        var url = '/index.php?m=Home&c=Api&a=getRegion&level=3&parent_id=' + parent_id;
+        $.ajax({
+            type: "GET",
+            url: url,
+            error: function (request) {
+                alert("服务器繁忙, 请联系管理员!");
+                return;
+            },
+            success: function (area) {
+                area = '<option value="0" selected>请选择区县</option>' + area;
+                callback(area);
+            }
+        });
+    }
+    // 获取最后一级乡镇
+    function get_twon(t, callback) {
+        var parent_id = $(t).val();
+        var url = '/index.php?m=Home&c=Api&a=getTwon&parent_id=' + parent_id;
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (twon) {
+                twon = '<option value="0" selected>请选择乡镇</option>' + twon;
+                callback(twon);
+            },
+            error: function (request) {
+                alert("服务器繁忙, 请联系管理员!");
+                return;
+            },
+        });
+    }
+    //弹出确认框
+    function alert_confrim(callback) {
+        var html = '<div class="mod_alert show fixed"><p>确认删除该地址吗?</p><p class="btns"><a href="javascript:;" id="ui_btn_confirm" class="btn btn_1">确定</a><a href="javascript:;" id="ui_btn_cancel" class="btn btn_1">取消</a></p></div>';
+        $('.wx_wrap').append(html);
+        $('#ui_btn_confirm').on('click', function () {
+            $('.mod_alert').remove();
+            callback(true);
+        })
+        $('#ui_btn_cancel').on('click', function () {
+            $('.mod_alert').remove();
+            callback(false);
+        })
+    }
+</script>
+</html>

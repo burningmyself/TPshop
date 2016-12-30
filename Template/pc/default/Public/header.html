@@ -1,0 +1,255 @@
+<script src="__PUBLIC__/js/jquery-1.10.2.min.js"></script>
+<script src="__PUBLIC__/js/global.js"></script>
+<!--最顶部-->
+<include file="Public/siteTopbar" />
+
+ <!--------在线客服-------------->
+<include file="Public/kefu" />
+ <!--------在线客服-------------->
+
+<!--顶部banner开始-->    
+<?php if(MODULE_NAME.'/'.CONTROLLER_NAME.'/'.ACTION_NAME == 'Home/Index/index' && $_COOKIE["top-banner"] == null){ ?>
+<div class="top-banner" id="top-banner-block">
+    <div class="top-banner-max">
+    <!---广告 select * from __PREFIX__ad where position_id = 1 limit 1-->
+    <adv pid = "1" limit="1" item="v">
+    <a href="{$v.ad_link}" <if condition="$v['target'] eq 1">target="_blank"</if>> <img src="{$v[ad_code]}"  title="{$v[title]}" style="{$v[style]}"/></a>    
+    <a class="button-top-banner-close" href="javascript:;" title="关闭" id="top-banner-min-close" onClick="javascript:$('#top-banner-block').hide();">－</a>
+    </adv>
+   </div>
+</div>
+<?php 
+		setcookie("top-banner", "1", time()+ 3600); // 弹过窗的 不在弹窗
+	} 
+?>
+<!--顶部banner结束-->    
+
+<header>
+    
+    <div class="layout">
+    
+    <!--logo开始-->
+        <div class="logo"><a href="/" title="TPshop"><img src="{$tpshop_config['shop_info_store_logo']}" alt="TPshop"></a></div>
+    <!--logo结束-->
+    
+    <!-- 搜索开始-->
+        <div class="searchBar">
+            <div class="searchBar-form">
+                <form name="sourch_form" id="sourch_form" method="post" action="{:U("/Home/Goods/search")}">
+                    <input type="text" class="text" name="q" id="q" value="<?php echo I('q'); ?>"  placeholder="  搜索关键字"/>
+                    <input type="button" class="button" value="搜索" onclick="if($.trim($('#q').val()) != '') $('#sourch_form').submit();"/>
+                </form>
+            </div>
+            <div class="searchBar-hot">
+                <b>热门搜索</b>
+               	<foreach name="tpshop_config.hot_keywords" item="wd" key="k">
+        			<a target="_blank" href="{:U('Home/Goods/search',array('q'=>$wd))}" <if condition="$k eq 0">class="ht"</if>>{$wd}</a>
+        		</foreach>
+            </div>
+        </div>
+        <!-- 搜索结束-->
+        
+        <div class="ri-mall">
+            <div class="my-mall">
+            <!---我的商城-开始 -->
+                <div class="mall">
+                    <div class="le"><a href="{:U('/Home/User')}" >我的商城</a></div> 
+                </div>
+                <!---我的商城-结束 -->
+            </div>
+            <div class="my-mall" id="header_cart_list">
+                <!---购物车-开始 -->
+                <div class="micart">
+                    <div class="le les">
+                    	<a href="{:U('Home/Cart/cart')}" >我的购物车
+                            <span class="shopping-num"><em id="cart_quantity"></em><b></b></span>
+                        </a>                       
+                    </div>
+                    
+                    <div class="ri ris" style="display:">
+                       <if condition="count($cartList) eq 0">
+                            <div class="micart-about">
+                                <span class="micart-xg">您的购物车是空的，赶紧选购吧！</span>
+                            </div>
+                        </if>
+                        <div class="commod">
+                        <ul>
+                        <foreach name="cartList" item="v"  key="k">
+                            <li class="goods">
+                                <div>
+                                    <div class="p-img">
+                                        <a href="">
+                                            <img src="{$v.goods_id|goods_thum_images=428,428}" alt="">
+                                        </a>
+                                     </div>
+                                     <div class="p-name">
+                                        <a href="">
+                                            <span class="p-slogan">{$v[goods_name]}</span>
+                                            <span class="p-promotions hide"></span>
+                                        </a>
+                                     </div>
+                                     <div class="p-status">
+                                        <div class="p-price">
+                                            <b>¥&nbsp;{$v[goods_price]}</b>
+                                            <em>x</em>
+                                            <span>{$v[goods_num]}</span>
+                                        </div>
+                                        <div class="p-tags"></div>
+                                     </div>
+                                     <!--
+                                     <a href="" class="icon-minicart-del" title="删除">删除</a>
+                                       -->
+                                </div>
+                            </li>
+                         </foreach>   							
+                        </ul>
+                        </div>
+                        <div class="settle">
+                            <p>共<em>{$cart_total_price[anum]}</em>件商品，金额合计<b>¥&nbsp;{$cart_total_price[total_fee]}</b></p>
+                            <a class="js-button" href="{:U('Home/Cart/cart')}">去结算</a>
+                        </div>
+                    </div>
+                </div>
+                <!---购物车-结束 -->
+                
+            </div>
+        </div>
+        <div class="qr-code">
+            <img src="__STATIC__/images/gz_weixin.jpg" alt="二维码" />
+            <p>扫一扫</p>
+        </div>
+    </div>
+</header>
+   <!-- 导航-开始-->
+   
+   
+   	<div class="navigation">
+    	<div class="layout">
+        	<!--全部商品-开始-->
+        	<div class="allgoods">
+            	<div class="goods_num"><h2>全部商品</h2><i class="trinagle"></i></div>
+            	<div class="list" <?php if(MODULE_NAME.'/'.CONTROLLER_NAME.'/'.ACTION_NAME == 'Home/Index/index') echo 'style="display:block;"'; ?> >
+                   <ul class="list_ul"> 
+                       <foreach name="goods_category_tree" key="k" item='v'>
+                           <if condition="$v[level] eq 1">                       
+                                <li class="list-li">
+                                    <div class="list_a">
+                                        <h3><a href="{:U('Home/Goods/goodsList',array('id'=>$v[id]))}"><span>{$v['name']}</span></a></h3>
+                                        <p> <!--$v[id][name] 数组中括号 里面的 id name 不能有 引号 sql 参数 必须双引号-->
+	                                       <assign name="index" value="1" />
+                                           <foreach name="v[tmenu]" item="v2" key="k2" >
+                                             <if condition="$v2[parent_id] eq $v[id]">
+                                                <?php if($index++ > 3) break; ?>
+                                           	 	<a href="{:U('Home/Goods/goodsList',array('id'=>$v2[id]))}">{$v2['name']}</a>
+                                             </if>                                            
+                                           </foreach>
+                                        </p>
+                                    </div>
+                                    <div class="list_b">
+                                        <div class="list_bigfl">
+	                                       <assign name="index" value="1" />                                        
+                                           <foreach name="v[tmenu]" item="v2" key="k2" >
+                                               <if condition="$v2[parent_id] eq $v[id]">
+                                                <?php if($index++ > 6) break; ?>
+                                                    <a class="list_big_o ma-le-30" href="{:U('Home/Goods/goodsList',array('id'=>$v2[id]))}">{$v2['name']}<i>＞</i></a>
+                                               </if> 
+                                           </foreach>                                                                                    
+                                        </div>
+                                        <div class="subitems">                                        
+                                           <foreach name="v[tmenu]" item="v2" key="k2" >
+                                               <if condition="$v2[parent_id] eq $v[id]">
+                                                    <dl class="ma-to-20 cl-bo">
+                                                        <dt class="bigheader wh-sp"><a href="{:U('Home/Goods/goodsList',array('id'=>$v2[id]))}">{$v2['name']}</a><i>＞</i></dt>
+                                                        <dd class="ma-le-100">
+                                                           <foreach name="v2[sub_menu]" item="v3" key="k3" >
+	                                                         <if condition="$v3[parent_id] eq $v2[id]">                                                           
+	                                                            <a class="hover-r ma-le-10 ma-bo-10 pa-le-10 bo-le-hui fl wh-sp" href="{:U('Home/Goods/goodsList',array('id'=>$v3[id]))}">{$v3['name']}</a>
+                                                              </if>
+                                                           </foreach>
+                                                        </dd>
+                                                    </dl>
+                                                </if>
+                                           </foreach>
+                                        </div>
+                                    </div>
+                                    <i class="list_img"></i>
+                                </li>
+                            </if>    
+    				 </foreach>	
+                	</ul>
+                </div>
+            </div>
+            <!--全部商品-结束-->
+            
+            <div class="ongoods">
+            	<ul class="navlist">
+            		<li class="homepage"><a href="/"><span>首页</span></a></li>
+                    <tpshop sql="SELECT * FROM `__PREFIX__navigation` where is_show = 1 ORDER BY `sort` DESC" key="k" item='v'>
+            			<li class="page"><a href="{$v[url]}" <if condition="$v[is_new] eq 1">target="_blank" </if><span>{$v[name]}</span></a></li>
+					</tpshop> 
+            	</ul>
+            </div>
+        </div>
+    </div>
+   <!-- 导航-结束-->
+<script>
+$(function(){
+    var active_li = '{$active}';
+    if(active_li){
+        $('li').remove('curr-res');
+        $('#'+active_li).addClass('curr-res');
+    }
+   	
+    var uname= getCookie('uname');
+    if(uname == ''){
+    	$('.islogin').remove();
+    	$('.nologin').show();
+    }else{
+    	$('.nologin').remove();
+    	$('.islogin').show();
+    	$('.userinfo').html(decodeURIComponent(uname));
+    }
+    get_cart_num();
+})
+
+
+
+function get_cart_num(){
+	  var cart_cn = getCookie('cn');
+	  if(cart_cn == ''){
+		$.ajax({
+			type : "GET",
+			url:"/index.php?m=Home&c=Cart&a=header_cart_list",//+tab,
+			success: function(data){								 
+				cart_cn = getCookie('cn');		
+				$('#cart_quantity').html(cart_cn);
+			}
+		});	
+	  }
+	  $('#cart_quantity').html(cart_cn);
+}
+/**
+* 鼠标移动端到头部购物车上面 就ajax 加载
+*/
+// 鼠标是否移动到了上方
+var header_cart_list_over = 0; 
+$("#header_cart_list > .micart > .les").hover(function(){	 
+       if(header_cart_list_over == 1) 
+			return false;	
+        header_cart_list_over = 1; 
+		$.ajax({
+			type : "GET",
+			url:"/index.php?m=Home&c=Cart&a=header_cart_list",//+tab,
+			success: function(data){								 
+			 	$("#header_cart_list > .micart > .ris").html(data);	
+			 	get_cart_num();
+			}
+		});			
+}).mouseout(function(){
+	
+	 (typeof(t) == "undefined") || clearTimeout(t); 	 
+	 t = setTimeout(function () { 
+			header_cart_list_over = 0; /// 标识鼠标已经离开
+		}, 1000);		
+});
+</script>

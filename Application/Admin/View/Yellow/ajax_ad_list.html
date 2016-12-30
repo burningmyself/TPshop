@@ -1,0 +1,75 @@
+<form method="post" enctype="multipart/form-data" target="_blank" id="form-order">
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <td style="width: 1px;" class="text-center">
+                    <!--
+                        <input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);">
+                    -->
+                </td>
+                <td class="text-right">
+                    <a href="javascript:sort('ad_id');">ID</a>
+                </td>
+                <td class="text-center">
+                    <a href="javascript:sort('type_id');">类型ID</a>
+                </td>
+                <td class="text-center">
+                    <a href="javascript:sort('name');">类型名称</a>
+                </td>
+                <td class="text-center">
+                    <a href="javascript:sort('pid');">广告id</a>
+                </td>
+                <td class="text-center">
+                    <a href="javascript:sort('is_show');">是否显示</a>
+                </td>
+                <td class="text-center">
+                    <a href="javascript:sort('is_hot');">是否推荐</a>
+                </td>
+                <td class="text-right">操作</td>
+            </tr>
+            </thead>
+            <tbody>
+            <volist name="lists" id="list">
+                <tr>
+                    <td class="text-center">
+                        <!-- <input type="checkbox" name="selected[]" value="6">-->
+                        <input type="hidden" name="shipping_code[]" value="flat.flat">
+                    </td>
+                    <td class="text-right">{$list.ad_id}</td>
+                    <td class="text-center">{$list.type_id}</td>
+                    <td class="text-center">{$list.name|getSubstr=0,33}</td>
+                    <td class="text-center">{$list.pid}</td>
+                    <td class="text-center">
+                        <img width="20" height="20"
+                             src="__PUBLIC__/images/<if condition='$list[is_show] eq 1'>yes.png<else />cancel.png</if>"
+                             onclick="changeTableVal('ad_type','ad_id','{$list.ad_id}','is_show',this)"/>
+                    </td>
+                    <td class="text-center">
+                        <img width="20" height="20"
+                             src="__PUBLIC__/images/<if condition='$list[is_hot] eq 1'>yes.png<else />cancel.png</if>"
+                             onclick="changeTableVal('ad_type','ad_id','{$list.ad_id}','is_hot',this)"/>
+                    </td>
+                    <td class="text-right">
+                        <a href="{:U('Admin/Yellow/addEditAd',array('ad_id'=>$list['ad_id']))}"
+                           class="btn btn-primary" title="编辑"><i class="fa fa-pencil"></i></a>
+                        <a href="javascript:void(0);" onclick="del('{$list[ad_id]}')" class="btn btn-danger"
+                           title="删除"><i class="fa fa-trash-o"></i></a>
+                    </td>
+                </tr>
+            </volist>
+            </tbody>
+        </table>
+    </div>
+</form>
+<div class="row">
+    <div class="col-sm-3 text-left"></div>
+    <div class="col-sm-9 text-right">{$page}</div>
+</div>
+<script>
+    // 点击分页触发的事件
+    $(".pagination  a").click(function () {
+        cur_page = $(this).data('p');
+        ajax_get_table('search-form2', cur_page);
+    });
+</script>

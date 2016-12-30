@@ -1,0 +1,28 @@
+<volist name="orders" id="v">
+    <!-- S 奖品 -->
+    <div class="record ">
+        <div class="record_hd"> 状态：
+            <if condition="$v.is_win eq 0"><span class="icon_tag_txt c_grey">未抢中     </span>
+                <elseif condition="$v.is_win gt 0"/>
+                <span class="icon_tag_txt c_red">已揭晓 </span>
+            </if>
+            <div class="record_hd_right"><a
+                    href="{:U('OneShop/goods_info',array('goods_id'=>$v['goods_id']))}"
+                    class="btn c_orange">立即抢宝</a></div>
+        </div>
+        <div class="record_content">
+            <div class="cover">
+                <a href="{:U('OneShop/goods_info',array('goods_id'=>$v['goods_id'],'dbshop_id'=>$v['dbshop_id'],'periods'=>$v['periods']))}"><img
+                        src="{$v['img_url']}">
+                </a></div>
+            <div class="info"><p class="title">{$v.name}</p>
+                <p class="no">第{$v.periods}期</p>
+                <p class="no">用户昵称：<span>{$v.nickname}</span></p>
+                <p class="no">用户ID&nbsp&nbsp ：<span> {$v.user_id}(唯一不变的标识)</span></p>
+                <p class="times">中奖号码：<span><em>{$v.win_code}</em></span></p>
+                <p class="times"><span>本期参与：</span><em>{$v.db_count}</em>人次</p>
+                <p class="times"><span>下单时间：</span><em>{$v.create_time|date='Y-m-d H:i',###}</em></p>
+            </div>
+        </div>
+    </div><!-- S 奖品 -->
+</volist>

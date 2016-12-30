@@ -1,0 +1,36 @@
+<body style="cursor: auto;">
+<style>
+    *{
+        padding: 0;
+        margin: 0;
+    }
+    .tags{
+        height: 22px;
+        background: white;
+    	margin-left:20px;
+    	margin-top:10px;
+    }
+    .tags > i{
+        background:url('/Public/images/wrong.png');
+        background-repeat:no-repeat;
+        width: 16px;
+        height: 16px;
+    }	
+</style>
+	<img alt="" src="/plugins/shipping/shunfeng/template.jpg">
+<script src="/Public/js/jquery-1.8.2.min.js"></script>
+<script src="/Public/js/jquery-ui.min.js" type="text/javascript"></script>
+<script>
+    $(function(){
+        $( ".tags" ).draggable();
+		//alert(location.href);
+    });
+    $( ".tags").dblclick(function(){
+        $(this).hide();
+    })
+</script>
+
+<div class="tags ui-draggable ui-draggable-handle" style="position: relative; width: 130px; right: auto; height: 22px; bottom: auto; left: 72px; top: -424px;">网店-联系电话<i style="cursor:default" onclick="$(this).parent().remove();">    </i></div>
+<div class="tags ui-draggable ui-draggable-handle" style="position: relative; width: 120px; right: auto; height: 22px; bottom: auto; left: 227px; top: -419px;">收件人-手机<i style="cursor:default" onclick="$(this).parent().remove();">    </i></div>
+<div class="tags ui-draggable ui-draggable-handle" style="position: relative; width: 120px; right: auto; height: 22px; bottom: auto; left: 71px; top: -435px;">收件人-邮编<i style="cursor:default" onclick="$(this).parent().remove();">    </i></div>
+</body>

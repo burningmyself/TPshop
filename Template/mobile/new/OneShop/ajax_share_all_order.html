@@ -1,0 +1,44 @@
+<volist name="comm" id="v">
+    <div class="treasure_feedback">  <!-- 晒单用户 -->
+        <div class="treasure_feedback_user">
+            <div class="treasure_feedback_user_img"><img
+                    src="{$v[head_url]}"
+                    data-loaded="1"></div>
+            <div class="treasure_feedback_user_info"><p class="treasure_feedback_user_name">{$v[nickname]}</p>
+                <p class="treasure_feedback_user_desc"><span>用户ID：</span>{$v[user_id]}</p>
+                <p class="treasure_feedback_user_time">{$v[add_time]|date='Y-m-d H:s:i',###}</p></div>
+        </div>  <!-- 晒单商品 -->
+        <div class="treasure_feedback_pro" data-click="go2check">
+            <div class="treasure_feedback_pro_cover"></div>
+            <div class="treasure_feedback_pro_info"><p class="treasure_feedback_pro_name">{$v[name]}</p>
+                <p class="treasure_feedback_pro_issue">第{$v[periods]}期</p>
+                <a href="{:U('OneShop/goods_info',array('goods_id'=>$v['goods_id']))}">
+                    <div class="treasure_feedback_pro_btn">立即抢宝</div>
+                </a>
+            </div>
+        </div> <!-- 晒单内容 -->
+        <div class="treasure_feedback_content gotodetail" data-order_id="{$v['order_id']}">
+            <div><span class="showAll">{$v[content]}</span></div>
+            <div class="treasure_feedback_content_img">
+                <ul class="list_cols_3">
+                    <if condition="!empty($v[img_url0])">
+                        <li><a><img
+                                src="{$v[img_url0]}"
+                                data-loaded="1" class="full_w"></a></li>
+                    </if>
+                    <if condition="!empty($v[img_url1])">
+                        <li><a><img
+                                src="{$v[img_url1]}"
+                                data-loaded="1" class="full_w"></a></li>
+                    </if>
+                    <if condition="!empty($v[img_url2])">
+                        <li><a><img
+                                src="{$v[img_url2]}"
+                                data-loaded="1" class="full_w"></a></li>
+                    </if>
+                </ul>
+                <i class="treasure_feedback_content_img_num">{$v[img_sum]}</i>
+            </div>
+        </div>
+    </div>
+</volist>

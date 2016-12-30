@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>每个人的直播平台</title>
+    <meta name="format-detection" content="telephone=no, email=no">
+    <meta name="keyword" content="">
+    <meta name="description" content="">
+    <meta name="viewport" content="initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/video_reset.css">
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/video_play.css">
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/layer.css"/>
+    <script type="text/javascript" src="__STATIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/layer.js"></script>
+</head>
+<body data-page-point="h5tv1" style="font-size: 24px;">
+<div class="container">
+    <include file="Video/header"/>
+    <div class="video-area">
+        <div class="player">
+            <video id="dy-video-player" class="video-js" type="application/x-mpegURL" webkit-playsinline=""
+                   preload="auto" autoplay="autoplay"
+                   src="{$video.video_url}"
+                   style="margin-top: 0px;">
+                <p>您的浏览器不支持 video 标签</p>
+            </video>
+            <div class="poster" style="display: none;"><img
+                    src="{$video[img_url]}"
+                    id="video-poster">
+                <div class="play-btn"></div>
+                <div class="room-info">
+                    <span class="name">{$video.title}</span>
+                    <span class="class">{$video.name}</span>
+                </div>
+                <div class="room-stop-focus">
+                    <p class="stop-title">直播已结束</p>
+                    <p class="stop-tip">赶快关注主播不错过下次开播~</p>
+                    <button class="stop-more hd-focus">关注</button>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <div id="infoArea" class="info-area">
+        <div class="info-room">
+            <img class="dy-photo" src="https://apic.douyucdn.cn/upload/avatar/default/13_middle.jpg" alt="">
+            <div class="dy-info">
+                <p class="dy-name-content">主播：<span id="nickname" class="dy-name">{$video.name}</span></p>
+                <p class="online-content" id="online">
+                    共<span class="online">{$video.play_count}</span>人正在观看
+                </p>
+            </div>
+        </div>
+        <!--<div class="info-handle">-->
+        <!--<div id="sendBar" class="hd-item hd-send">-->
+        <!--<img class="icon" src="https://shark.douyucdn.cn/app/douyu-mobile/m-douyu/res/hd-send.png?mv=2.5"-->
+        <!--alt="">发弹幕-->
+        <!--<b class="split-line"></b>-->
+        <!--</div>-->
+        <!--<div id="focusRoom" class="hd-item hd-focus">-->
+        <!--<img class="icon" src="https://shark.douyucdn.cn/app/douyu-mobile/m-douyu/res/hd-focus.png?mv=2.5"-->
+        <!--alt="">关注-->
+        <!--<b class="split-line"></b>-->
+        <!--</div>-->
+        <!--<div id="shareRoom" class="hd-item hd-share">-->
+        <!--<img class="icon" src="https://shark.douyucdn.cn/app/douyu-mobile/m-douyu/res/hd-share.png?mv=2.5"-->
+        <!--alt="">分享-->
+        <!--</div>-->
+        <!--</div>-->
+    </div>
+    <div class="favors" data-url="/roomlists" data-type="" data-page="0" data-pagecount="403">
+        <div class="title"><span class="hot"></span></div>
+        <div class="live-list">
+            <volist name="video_hot" id="v">
+                <a href="{:U('Video/play_video',array('video_id'=>$v[video_id]))}" class="live">
+                    <img src="{$v[img_url]}" class="live-feature">
+                    <div class="live-title">{$v[title]}</div>
+                    <div class="live-info">
+                        <span class="dy-name">{$v[content]}</span>
+                        <span class="popularity">{$v[play_count]}人</span>
+                    </div>
+                </a>
+            </volist>
+        </div>
+    </div>
+    <div class="favors" id="js-list-area">
+        <div class="title"><span class="likeness"></span></div>
+        <div class="live-list">
+
+        </div>
+        <div class="more">
+            加载更多
+        </div>
+    </div>
+    <include file="Video/foot"/>
+</div>
+<div class="share-bar" data-point="4">
+    <div class="share-list" data-share-btn="more">
+        <a id="weixin" href="javascript:;" data-point-2="1"><img
+                src="https://shark.douyucdn.cn/app/douyu-mobile/m-douyu/res/weixin.png?mv=2.5"><span>朋友圈</span></a>
+        <a href="javascript:;" target="_blank" data-to="tsina" data-point-2="2"><img
+                src="https://shark.douyucdn.cn/app/douyu-mobile/m-douyu/res/weibo.png?mv=2.5"><span>微博</span></a>
+        <a href="javascript:;" target="_blank" data-to="cqq" data-point-2="3"><img
+                src="https://shark.douyucdn.cn/app/douyu-mobile/m-douyu/res/qq.png?mv=2.5"><span>QQ好友</span></a>
+        <a href="javascript:;" target="_blank" data-to="qzone" data-point-2="4"><img
+                src="https://shark.douyucdn.cn/app/douyu-mobile/m-douyu/res/zone.png?mv=2.5"><span>QQ空间</span></a>
+    </div>
+    <div class="close">取 消</div>
+</div>
+
+<div class="modal" id="url-modal">
+    <div class="mask close"></div>
+    <div class="modal-body url-content">
+        <div class="x-close close"></div>
+        <p>分享到朋友圈</p>
+        <img src="https://shark.douyucdn.cn/app/douyu-mobile/m-douyu/res/moe.png?mv=2.5" class="moe">
+        <p class="url">https://m.douyu.com/782360</p>
+        <p class="description">#斗鱼# 我正在斗鱼观看直播NBA猛龙VS篮网，你也快来加入吧~</p>
+        <span>长按复制地址</span>
+    </div>
+</div>
+<a class="modal" id="download-modal" href=" https://www.douyu.com/client/mobile" target="_blank">
+    <div class="mask"></div>
+    <div class="modal-body guide">
+        <img class="bg" src="https://shark.douyucdn.cn/app/douyu-mobile/m-douyu/res/guide.png?mv=2.5">
+        <div class="download-btn"><img src="https://shark.douyucdn.cn/app/douyu-mobile/m-douyu/res/download.png?mv=2.5">
+        </div>
+    </div>
+</a>
+<div class="modal" id="weixin-modal">
+    <div class="mask"></div>
+    <div class="modal-body weixin-guide">
+        <img src="https://shark.douyucdn.cn/app/douyu-mobile/m-douyu/res/weixin-guide.png?mv=2.5">
+    </div>
+</div>
+
+<div class="modal" id="landscape-modal">
+    <div class="mask"></div>
+    <div class="modal-body landscape-modal">
+        <img src="https://shark.douyucdn.cn/app/douyu-mobile/m-douyu/res/landscape.png?mv=2.5">
+    </div>
+</div>
+<script>
+    var page = 0;
+    var type_id = {$video[type_id]};
+    $(function () {
+        ajax_vides();
+        $('.more').on('click', function () {
+            ajax_vides();
+        });
+    });
+    function ajax_vides() {
+        $.ajax({
+            type: "get",
+            url: "/index.php?m=Mobile&c=Video&a=ajax_video_type_list&type_id=" + type_id + "&page=" + page,
+            dataType: "html",
+            success: function (data) {
+                if (data.length > 20) {
+                    page++;
+                    $('#js-list-area>.live-list').append(data);
+                } else {
+                    $('.more').hide();
+                    layer.open(
+                        {
+                            content: '加载完成'
+                            , skin: 'msg'
+                            , time: 2 //2秒后自动关闭
+
+                        }
+                    )
+                }
+            }, error: function () {
+                layer.open(
+                    {
+                        content: '加载失败'
+                        , skin: 'msg'
+                        , time: 2 //2秒后自动关闭
+
+                    }
+                )
+            }
+        });
+    }
+</script>
+</body>
+</html>

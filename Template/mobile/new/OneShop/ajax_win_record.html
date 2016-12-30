@@ -1,0 +1,72 @@
+<volist name="orders" id="v">
+    <!-- S 奖品 -->
+    <div class="record {$v[is_win]>0?'success':''}">
+        <div class="record_hd"> 状态：
+            <switch name="v.status">
+                <case value="-5"><span class="icon_tag_txt c_grey">退款失败</span></case>
+                <case value="-4"><span class="icon_tag_txt c_red">退款成功</span></case>
+                <case value="-3"><span class="icon_tag_txt c_orange">退款中</span></case>
+                <case value="-2"><span class="icon_tag_txt c_blue">退款</span></case>
+                <case value="-1"><span class="icon_tag_txt c_grey">支付失败</span></case>
+                <case value="0"><span class="icon_tag_txt c_grey">未支付</span></case>
+                <case value="1"><span class="icon_tag_txt c_orange">待揭晓</span></case>
+                <case value="2">
+                    <span class="icon_tag_txt c_blue">已揭晓</span>
+                    <switch name="v.is_win">
+                        <case value="0"><span class="icon_tag_txt c_grey">未抢中</span></case>
+                        <case value="1"><span class="icon_tag_txt c_red">已中奖</span></case>
+                        <case value="2"><span class="icon_tag_txt c_orange">已领奖</span></case>
+                        <default/>
+                        <span class="icon_tag_txt c_grey">未知</span>
+                    </switch>
+                </case>
+                <case value="3"><span class="icon_tag_txt c_blue">待发货</span></case>
+                <case value="4"><span class="icon_tag_txt c_orange">待签收</span></case>
+                <case value="5"><span class="icon_tag_txt c_blue">已签收</span></case>
+                <case value="6"><span class="icon_tag_txt c_orange">已晒单</span></case>
+                <default/>
+                <span class="icon_tag_txt c_grey">未知</span>
+            </switch>
+            <div class="record_hd_right">
+                <switch name="v.is_win">
+                    <case value="0">
+                        <a href="{:U('OneShop/goods_info',array('goods_id'=>$v['goods_id']))}"
+                           class="btn c_orange">再次参与</a>
+                    </case>
+                    <case value="1">
+                        <a href="{:U('OneShop/confirm_address',array('order_id'=>$v['order_id']))}"
+                           class="btn c_red">马上领取</a>
+                    </case>
+                    <case value="2">
+                        <switch name="v.status">
+                            <case value="4">
+                                <a href="javascript:void(0);" class="btn c_blue confirm_receipt"
+                                   data-order_id={$v['order_id']}>确认收货</a>
+                            </case>
+                            <case value="5">
+                                <a class="btn c_blue waitShare"
+                                   href="{:U('OneShop/share_order',array('order_id'=>$v['order_id']))}"
+                                   data-order_id={$v['order_id']}>立即晒单</a>
+                                <a href="{:U('OneShop/goods_info',array('goods_id'=>$v['goods_id']))}"
+                                   class="btn c_orange">再次参与</a>
+                            </case>
+                            <default/>
+                            <a href="{:U('OneShop/goods_info',array('goods_id'=>$v['goods_id']))}"
+                               class="btn c_orange">再次参与</a>
+                        </switch>
+                    </case>
+                    <default/>
+                </switch>
+            </div>
+        </div>
+        <div class="record_content">
+            <div class="cover">
+                <a href="{:U('OneShop/order_detail',array('order_id'=>$v['order_id']))}">
+                    <img src="{$v['img_url']}"></a>
+            </div>
+            <div class="info"><p class="title">{$v.name}</p>
+                <p class="no">第{$v.periods}期</p>
+                <p class="times"><span>本期参与：</span><em>{$v.db_count}</em>人次</p></div>
+        </div>
+    </div><!-- S 奖品 -->
+</volist>

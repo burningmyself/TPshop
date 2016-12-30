@@ -1,0 +1,11 @@
+<volist name="users" id="v">
+    <div class="user">
+        <div class="photo"><img
+                src="{$v.head_url}">
+        </div>
+        <div class="info"><p class="name">{$v.nickname}</p>
+            <p>用户ID：<span>{$v.user_id}(唯一不变的标识)</span></p>
+            <p><span>参与了<em>{$v.db_count}</em>人次</span>{$v[pay_time]/1000|date='Y-m-d
+                H:s:i',###}:{$v[millisecond]}</p></div>
+    </div>
+</volist>

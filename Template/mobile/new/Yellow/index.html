@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="sitemap" content="基础-其他">
+    <title>黄页</title>
+    <link rel="stylesheet" href="/Template/mobile/new/Yellow/category.css">
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/layer.css"/>
+    <script type="text/javascript" src="__STATIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/layer.js"></script>
+    <script>
+        $(function () {
+            //当窗体加载时判断屏幕宽度,更改样式
+            var height = screen.height;
+            var width = screen.width;
+            var wx_wrap_height = height - hd_bar_height;
+            var hd_bar_height = $('.hd_bar').height();
+            $('.wx_wrap').css({width: width + 'px'});
+            $('#yScroll1').css({
+                'overflow': 'hidden',
+                'position': 'absolute',
+                'top': '45px',
+                'left': '0px',
+                'width': '80px',
+                'height': wx_wrap_height + 'px',
+                'background-color': 'rgb(243, 243, 243)'
+            });
+            $('#yScroll2').css({
+                'overflow': 'hidden',
+                'position': 'absolute',
+                'top': '45px',
+                'left': '80px',
+                'height': wx_wrap_height + 'px'
+            });
+        });
+    </script>
+    <script>
+        //滑动事件
+        $(function () {
+            var left_slide = document.getElementById('yScroll1')
+            var right_side = document.getElementById('yScroll2');
+            var left_xx, left_yy, left_XX, left_YY;
+            var right_xx, right_yy, ringt_XX, rightYY;
+            left_slide.addEventListener('touchstart', function (event) {
+//                event.stopPropagation();//阻止冒泡
+//                event.preventDefault();//阻止浏览器默认事件
+                left_xx = event.targetTouches[0].screenX;
+                left_yy = event.targetTouches[0].screenY;
+            });
+            left_slide.addEventListener('touchmove', function (event) {
+//                event.stopPropagation();//阻止冒泡
+//                event.preventDefault();//阻止浏览器默认事件
+                left_XX = event.targetTouches[0].screenX;
+                left_YY = event.targetTouches[0].screenY;
+                var offset_x = left_xx - left_XX;
+                var offset_y = left_yy - left_YY;
+                if (Math.abs(offset_x) < Math.abs(offset_y)) {
+                    //上下滑动
+                    //transition: 0ms cubic-bezier(0.1, 0.57, 0.1, 1); -webkit-transition: 0ms cubic-bezier(0.1, 0.57, 0.1, 1); transform: translate(0px, -227px) translateZ(0px);
+                    if (offset_y > 0) {
+                        //向上
+                        //获取偏移量的值
+                        var offset = $(left_slide).find('ul').css('transform').substring(7).replace(')', '').split(',')[5] || 0;
+//                       alert(offset);
+                        offset = offset - offset_y * 0.1;
+
+                        $(left_slide).find('ul').css({
+                            'transition': '0ms cubic-bezier(0.1, 0.57, 0.1, 1)',
+                            '-webkit-transition': '0ms cubic-bezier(0.1, 0.57, 0.1, 1)',
+                            'transform': 'translate(0px,' + offset + 'px) translateZ(0px)'
+                        })
+                    } else {
+                        //向下
+                        var offset = $(left_slide).find('ul').css('transform').substring(7).replace(')', '').split(',')[5] || 0;
+//                        alert(offset);
+                        offset = offset - offset_y * 0.1;
+                        //if(parseFloat(offset)>0)return;
+                        $(left_slide).find('ul').css({
+                            'transition': '0ms cubic-bezier(0.1, 0.57, 0.1, 1)',
+                            '-webkit-transition': '0ms cubic-bezier(0.1, 0.57, 0.1, 1)',
+                            'transform': 'translate(0px,' + offset + 'px) translateZ(0px)'
+                        })
+                    }
+                } else {
+                    //左右滑动
+                }
+            });
+            left_slide.addEventListener('touchend', function (event) {
+//                event.stopPropagation();//阻止冒泡
+//                event.preventDefault();//阻止浏览器默认事件
+                //获得左滑动栏高度
+                var left_height = $('#allcontent').height();
+                var offset = $(left_slide).find('ul').css('transform').substring(7).replace(')', '').split(',')[5] || 0;
+                var sum = parseFloat(offset) + left_height;
+                if (sum < 2 * left_height || sum > 3 * left_height) {
+                    $(left_slide).find('ul').css({
+                        'transition': '0ms cubic-bezier(0.1, 0.57, 0.1, 1)',
+                        '-webkit-transition': '0ms cubic-bezier(0.1, 0.57, 0.1, 1)',
+                        'transform': 'translate(0px,' + 0 + 'px) translateZ(0px)'
+                    })
+                }
+            });
+            right_side.addEventListener('touchstart', function (event) {
+//                event.stopPropagation();//阻止冒泡
+//                event.preventDefault();//阻止浏览器默认事件
+                right_xx = event.targetTouches[0].screenX;
+                right_yy = event.targetTouches[0].screenY;
+            });
+            right_side.addEventListener('touchmove', function (event) {
+//                event.stopPropagation();//阻止冒泡
+//                event.preventDefault();//阻止浏览器默认事件
+                ringt_XX = event.targetTouches[0].screenX;
+                rightYY = event.targetTouches[0].screenY;
+                var offset_x = right_xx - ringt_XX;
+                var offset_y = right_yy - rightYY;
+                if (Math.abs(offset_x) < Math.abs(offset_y)) {
+                    //上下滑动
+                    //transition: 0ms cubic-bezier(0.1, 0.57, 0.1, 1); -webkit-transition: 0ms cubic-bezier(0.1, 0.57, 0.1, 1); transform: translate(0px, -227px) translateZ(0px);
+                    if (offset_y > 0) {
+                        //向上
+                        //获取偏移量的值
+                        var offset = $(right_side).find('div:first').css('transform').substring(7).replace(')', '').split(',')[5] || 0;
+//                        alert(offset);
+                        offset = offset - offset_y * 0.1;
+
+                        $(right_side).find('div:first').css({
+                            'transition': '0ms cubic-bezier(0.1, 0.57, 0.1, 1)',
+                            '-webkit-transition': '0ms cubic-bezier(0.1, 0.57, 0.1, 1)',
+                            'transform': 'translate(0px,' + offset + 'px) translateZ(0px)'
+                        })
+                    } else {
+                        //向下
+                        var offset = $(right_side).find('div:first').css('transform').substring(7).replace(')', '').split(',')[5] || 0;
+//                        alert(offset);
+                        offset = offset - offset_y * 0.1;
+                        //if(parseFloat(offset)>0)return;
+                        $(right_side).find('div:first').css({
+                            'transition': '0ms cubic-bezier(0.1, 0.57, 0.1, 1)',
+                            '-webkit-transition': '0ms cubic-bezier(0.1, 0.57, 0.1, 1)',
+                            'transform': 'translate(0px,' + offset + 'px) translateZ(0px)'
+                        })
+                    }
+                } else {
+                    //左右滑动
+                }
+            });
+            right_side.addEventListener('touchend', function (event) {
+//                event.stopPropagation();//阻止冒泡
+//                event.preventDefault();//阻止浏览器默认事件
+                //获得左滑动栏高度
+                var right_height = $(right_side).height();
+                var offset = $(right_side).find('div:first').css('transform').substring(7).replace(')', '').split(',')[5] || 0;
+                var sum = parseFloat(offset)+right_height;
+                if (sum <2*right_height||sum>3*right_height) {
+                    $(right_side).find('div:first').css({
+                        'transition': '0ms cubic-bezier(0.1, 0.57, 0.1, 1)',
+                        '-webkit-transition': '0ms cubic-bezier(0.1, 0.57, 0.1, 1)',
+                        'transform': 'translate(0px,' + 0 + 'px) translateZ(0px)'
+                    })
+                }
+            });
+        });
+    </script>
+    <script>
+        //搜索事件
+        $(function () {
+            $('.hd_search_txt').on('click', function (e) {
+                e.preventDefault();
+                $('.hd_search_frm').addClass('hd_search_frm_focus');
+                $('#topSearchbtn').show();
+                $('#topSearchClear').show();
+//                $('#smartboxBlock').show();
+//                $('.wx_wrap').hide();
+            });
+            //监听取消点击事件
+            $('#topSearchClear').on('click', function () {
+                $(this).hide();
+                $('.hd_search_txt').val('');
+            });
+            $('#topSearchbtn').on('click', function () {
+                var keyWord = $('.hd_search_txt').val();
+                window.location.href = 'search_result?keyWord=' + keyWord;
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="hd_bar">
+    <form action="###" class="hd_search_frm" onsubmit="return false;">
+        <input type="search" class="hd_search_txt" id="topSearchTxt" placeholder="请输入你要知道的">
+        <a class="hd_search_clear" href="javascript:;" id="topSearchClear" style="display: none;">x</a>
+    </form>
+    <div class="hd_me">
+        <div>
+            <a href="javascript:;" id="topSearchbtn" class="hd_search_btn_blue" style="display: none;">搜索</a>
+            <a href="javascript:;" id="topSearchCbtn" class="hd_search_btn" style="display:none">取消</a>
+        </div>
+    </div>
+    <!-- <div class="WX_me">
+
+      <div class="WX_me_btn"></div>
+    </div> -->
+</div>
+
+<div id="smartboxBlock" style="display: none;">
+    <div class="search_panel_wrapper" dtab="s-tab" style="">
+        <div class="search_panel_title">
+            <div class="text">最近搜索</div>
+            <div class="title_btn" dtab="s-btn" rd="7095.8.1" style="display: none;">清除</div>
+        </div>
+        <div class="search_panel_con two_row">
+            <ul class="tags" dtab="s-row">
+                <div class="s_empty">暂无搜索历史</div>
+            </ul>
+        </div>
+        <div class="search_panel_title">
+            <div class="text">热门搜索</div>
+            <div class="title_btn" dtab="c-btn" rd="7095.8.2">换一批</div>
+        </div>
+        <div class="search_panel_con">
+            <ul class="tags" dtab="s-tag">
+                <li class="keyword"
+                    tarhref="//wqsou.jd.com/search/searchn?key=护手霜&amp;as=0&amp;projectId=371&amp;PTAG=37816.3.1&amp;pps=keyword.5O103%3A5O1C87O45O17306%3A4O14DO200D1FOBO1001FD2920540F3CC04F&amp;sf=15"
+                    key="护手霜" rd="7095.8.15" pid="371"><a href="javascript:" rd="7095.8.15" pid="371">护手霜</a></li>
+                <li class="keyword"
+                    tarhref="//wqsou.jd.com/search/searchn?key=情侣装冬装&amp;as=0&amp;projectId=371&amp;PTAG=37816.3.1&amp;pps=keyword.5O103%3A5O44F7O45O17306%3A4O14DO200DFOCO1001AD53B66C1DB44A1E&amp;sf=15"
+                    key="情侣装冬装" rd="7095.8.16" pid="371"><a href="javascript:" rd="7095.8.16" pid="371">情侣装冬装</a></li>
+                <li class="keyword"
+                    tarhref="//wqsou.jd.com/search/searchn?key=食品&amp;as=0&amp;projectId=371&amp;PTAG=37816.3.1&amp;pps=keyword.5O103%3A5O84A7O45O17306%3A4O14DO200C9FOBO100136E199B4C073135D&amp;sf=15"
+                    key="食品" rd="7095.8.17" pid="371"><a href="javascript:" rd="7095.8.17" pid="371">食品</a></li>
+                <li class="keyword"
+                    tarhref="//wqsou.jd.com/search/searchn?key=电子秤&amp;as=0&amp;projectId=371&amp;PTAG=37816.3.1&amp;pps=keyword.5O103%3A5O4F77O45O17306%3A4O14DO200C5FOBO10014971BCCD60E56697&amp;sf=15"
+                    key="电子秤" rd="7095.8.18" pid="371"><a href="javascript:" rd="7095.8.18" pid="371"><i
+                        class="sign_red" rd="7095.8.18">HOT</i>电子秤</a></li>
+                <li class="keyword"
+                    tarhref="//wqsou.jd.com/search/searchn?key=插座&amp;as=0&amp;projectId=371&amp;PTAG=37816.3.1&amp;pps=keyword.5O103%3A5OB957O45O17306%3A4O14DO200CAFOBO1001D70D2907A177C4F3&amp;sf=15"
+                    key="插座" rd="7095.8.19" pid="371"><a href="javascript:" rd="7095.8.19" pid="371">插座</a></li>
+                <li class="keyword"
+                    tarhref="//wqsou.jd.com/search/searchn?key=加绒衬衫男&amp;as=0&amp;projectId=371&amp;PTAG=37816.3.1&amp;pps=keyword.5O103%3A5OCF47O45O17306%3A4O14DO200CEFOBO100170C492092BC20E5F&amp;sf=15"
+                    key="加绒衬衫男" rd="7095.8.20" pid="371"><a href="javascript:" rd="7095.8.20" pid="371">加绒衬衫男</a></li>
+                <li class="keyword"
+                    tarhref="//wqsou.jd.com/search/searchn?key=汽车座套&amp;as=0&amp;projectId=371&amp;PTAG=37816.3.1&amp;pps=keyword.5O103%3A5O3567O45O17306%3A4O14DO200C6FOBO100175DF9F0E361BCD2F&amp;sf=15"
+                    key="汽车座套" rd="7095.8.21" pid="371"><a href="javascript:" rd="7095.8.21" pid="371">汽车座套</a></li>
+                <li class="keyword"
+                    tarhref="//wqsou.jd.com/search/searchn?key=酷派&amp;as=0&amp;projectId=371&amp;PTAG=37816.3.1&amp;pps=keyword.5O103%3A5O79B7O45O17306%3A4O14DO200CCFOBO100131475FD89BF01D04&amp;sf=15"
+                    key="酷派" rd="7095.8.22" pid="371"><a href="javascript:" rd="7095.8.22" pid="371">酷派</a></li>
+                <li class="keyword"
+                    tarhref="//wqsou.jd.com/search/searchn?key=bb霜&amp;as=0&amp;projectId=371&amp;PTAG=37816.3.1&amp;pps=keyword.5O103%3A5O1B67O45O17306%3A4O14DO200C8FOBO1001D26D04E2275975DD&amp;sf=15"
+                    key="bb霜" rd="7095.8.23" pid="371"><a href="javascript:" rd="7095.8.23" pid="371">bb霜</a></li>
+                <li class="keyword"
+                    tarhref="//wqsou.jd.com/search/searchn?key=围裙&amp;as=0&amp;projectId=371&amp;PTAG=37816.3.1&amp;pps=keyword.5O103%3A5OB747O45O17306%3A4O14DO200C7FOBO10017A5F4829E6BA5DAB&amp;sf=15"
+                    key="围裙" rd="7095.8.24" pid="371"><a href="javascript:" rd="7095.8.24" pid="371">围裙</a></li>
+                <li class="keyword"
+                    tarhref="//wqsou.jd.com/search/searchn?key=底妆&amp;as=0&amp;projectId=371&amp;PTAG=37816.3.1&amp;pps=keyword.5O103%3A5OCAB7O45O17306%3A4O14DO200CFFOBO1001817A737EA6AFC776&amp;sf=15"
+                    key="底妆" rd="7095.8.25" pid="371"><a href="javascript:" rd="7095.8.25" pid="371">底妆</a></li>
+                <li class="keyword"
+                    tarhref="//wqsou.jd.com/search/searchn?key=母女亲子装&amp;as=0&amp;projectId=371&amp;PTAG=37816.3.1&amp;pps=keyword.5O103%3A5O7547O45O17306%3A4O14DO200C4FOBO1001BD8F121F4961A1EE&amp;sf=15"
+                    key="母女亲子装" rd="7095.8.26" pid="371"><a href="javascript:" rd="7095.8.26" pid="371"><i
+                        class="sign_red" rd="7095.8.26">HOT</i>母女亲子装</a></li>
+                <li class="keyword"
+                    tarhref="//wqsou.jd.com/search/searchn?key=灯&amp;as=0&amp;projectId=371&amp;PTAG=37816.3.1&amp;pps=keyword.5O103%3A5OD817O45O17306%3A4O14DO200D2FOBO100137C6EE2BE888F1A2&amp;sf=15"
+                    key="灯" rd="7095.8.27" pid="371"><a href="javascript:" rd="7095.8.27" pid="371">灯</a></li>
+                <li class="keyword"
+                    tarhref="//wqsou.jd.com/search/searchn?key=咖啡&amp;as=0&amp;projectId=371&amp;PTAG=37816.3.1&amp;pps=keyword.5O103%3A5O1017O45O17306%3A4O14DO200CDFOBO1001E2FCDD53FF00E79A&amp;sf=15"
+                    key="咖啡" rd="7095.8.28" pid="371"><a href="javascript:" rd="7095.8.28" pid="371">咖啡</a></li>
+                <li class="keyword"
+                    tarhref="//wqsou.jd.com/search/searchn?key=加绒裤 男&amp;as=0&amp;projectId=371&amp;PTAG=37816.3.1&amp;pps=keyword.5O103%3A5OD0D7O45O17306%3A4O14DO200CBFOBO1001490246A9CE16525A&amp;sf=15"
+                    key="加绒裤 男" rd="7095.8.29" pid="371"><a href="javascript:" rd="7095.8.29" pid="371">加绒裤 男</a></li>
+            </ul>
+        </div>
+    </div>
+    <ul class="s_row" dtab="smartWrap" style="display: none;"></ul>
+</div>
+
+<div class="wx_wrap">
+    <div id="yScroll1">
+        <ul class="category1" id="allcontent">
+            <li class="cur" data-type_id="0"><span> 热搜推荐</span>
+
+            </li>
+            <volist name="left_nav" id="v">
+                <li data-type_id="{$v[type_id]}"><span
+                    <if condition="$v[is_hot] eq 1">class="red_dot"</if>
+                    >{$v[name]|getSubstr=0,4}</span>
+                </li>
+            </volist>
+        </ul>
+    </div>
+    <div id="yScroll2">
+
+    </div>
+</div>
+<div class="wx_loading2" style="display: none;"><i class="wx_loading_icon"></i></div>
+
+
+<div class="wx_footer">
+    <div class="jd_logo" id="jdBtmLogo"></div>
+</div>
+<div class="wx_nav_mask"></div>
+</body>
+<script>
+    $(function () {
+        //加载热搜推荐
+        load_hot_search();
+        //左导航栏点击事件
+        $('.category1 li').on('click', function () {
+            $('.category1 li').removeClass('cur')
+            var $this = $(this);
+            $this.addClass('cur');
+            var type_id = $this.data('type_id')
+            if (type_id == 0) {
+                load_hot_search();
+                return false;
+            }
+            load_bus(type_id);
+        });
+    });
+    //热搜索推荐
+    function load_hot_search() {
+        url = "hot_search";
+        $('.wx_loading2').show();
+        $.ajax({
+            url: url,
+            type: 'get',
+            dataType: 'html',
+            success: function (data) {
+                $('#yScroll2').empty().append(data);
+                $('.wx_loading2').hide();
+            }
+        });
+    }
+    //加载右边商家列表
+    function load_bus(type_id) {
+        $('.wx_loading2').show();//.css({'display':'block'});
+        var url = 'get_yellow_info'
+        $.ajax({
+            url: url,
+            type: 'get',
+            typeData: 'html',
+            data: {type_id: type_id},
+            success: function (data) {
+                $('#yScroll2').empty().append(data);
+                $('.wx_loading2').hide();
+            }
+        })
+    }
+</script>
+</html>

@@ -1,0 +1,104 @@
+<form method="post" enctype="multipart/form-data" target="_blank" id="form-order">
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <td style="width: 1px;" class="text-center">
+                    <!--
+                        <input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);">
+                    -->
+                </td>
+                <td class="text-right">
+                    <a href="javascript:sort('info_id');">黄页信息id</a>
+                </td>
+                <td class="text-left">
+                    <a href="javascript:void(0);">黄页类型</a>
+                </td>
+                <td class="text-left">
+                    <a href="javascript:sort('name');">商家名称</a>
+                </td>
+                <td class="text-left">
+                    <a href="javascript:sort('content');">内容</a>
+                </td>
+                <td class="text-left">
+                    <a href="javascript:sort('address');">地址</a>
+                </td>
+                <td class="text-left">
+                    <a href="javascript:sort('linkman');">联系人</a>
+                </td>
+                <td class="text-left">
+                    <a href="javascript:sort('phone');">联系电话</a>
+                </td>
+                <td class="text-center">
+                    <a href="javascript:void(0);">图片地址</a>
+                </td>
+                <td class="text-center">
+                    <a href="javascript:sort('url');">商家url</a>
+                </td>
+                <td class="text-center">
+                    <a href="javascript:sort('sort');">排序</a>
+                </td>
+                <td class="text-center">
+                    <a href="javascript:sort('is_show');">是否显示</a>
+                </td>
+                <td class="text-center">
+                    <a href="javascript:sort('is_show');">是否推荐</a>
+                </td>
+                <td class="text-right">操作</td>
+            </tr>
+            </thead>
+            <tbody>
+            <volist name="lists" id="list">
+                <tr>
+                    <td class="text-center">
+                        <!-- <input type="checkbox" name="selected[]" value="6">-->
+                        <input type="hidden" name="shipping_code[]" value="flat.flat">
+                    </td>
+                    <td class="text-right">{$list.info_id}</td>
+                    <td class="text-left">{$list.type_name}</td>
+                    <td class="text-left">{$list.name|getSubstr=0,33}</td>
+                    <td class="text-left">{$list.content|getSubstr=0,33}</td>
+                    <td class="text-left">{$list.address|getSubstr=0,33}</td>
+                    <td class="text-left">{$list.linkman}</td>
+                    <td class="text-left">{$list.phone}</td>
+                    <td class="text-center">{$list.img_url|getSubstr=0,33}</td>
+                    <td class="text-center">{$list.url|getSubstr=0,33}</td>
+                    <td class="text-center">
+                        <input type="text" onkeyup="this.value=this.value.replace(/[^\d]/g,'')"
+                               onpaste="this.value=this.value.replace(/[^\d]/g,'')"
+                               onchange="updateSort('yellow_info','info_id','{$list.info_id}','sort',this)" size="4"
+                               value="{$list.sort}"/>
+                    </td>
+                    <td class="text-center">
+                        <img width="20" height="20"
+                             src="__PUBLIC__/images/<if condition='$list[is_show] eq 1'>yes.png<else />cancel.png</if>"
+                             onclick="changeTableVal('yellow_info','info_id','{$list.info_id}','is_show',this)"/>
+                    </td>
+                    <td class="text-center">
+                        <img width="20" height="20"
+                             src="__PUBLIC__/images/<if condition='$list[is_hot] eq 1'>yes.png<else />cancel.png</if>"
+                             onclick="changeTableVal('yellow_info','info_id','{$list.info_id}','is_hot',this)"/>
+                    </td>
+                    <td class="text-right">
+                        <a href="{:U('Admin/Yellow/addEditYellowInfo',array('info_id'=>$list['info_id']))}"
+                           class="btn btn-primary" title="编辑"><i class="fa fa-pencil"></i></a>
+                        <a href="javascript:void(0);" onclick="del('{$list[info_id]}')" class="btn btn-danger"
+                           title="删除"><i class="fa fa-trash-o"></i></a>
+                    </td>
+                </tr>
+            </volist>
+            </tbody>
+        </table>
+    </div>
+</form>
+<div class="row">
+    <div class="col-sm-3 text-left"></div>
+    <div class="col-sm-9 text-right">{$page}</div>
+</div>
+<script>
+    // 点击分页触发的事件
+    $(".pagination  a").click(function () {
+        cur_page = $(this).data('p');
+        ajax_get_table('search-form2', cur_page);
+    });
+</script>

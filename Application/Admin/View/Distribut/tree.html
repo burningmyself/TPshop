@@ -1,0 +1,112 @@
+﻿<include file="Public/min-header"/>
+	<title>Bootstrap树形菜单JS代码特效 - JS代码网</title>
+	<!--图标样式-->
+	<link rel="stylesheet" type="text/css"
+		href="/Public/bootstrap/css/bootstrap.min.css">
+	<!--主要样式-->
+	<link rel="stylesheet" type="text/css"
+		href="/Public/bootstrap/css/style.css">
+
+	<script type="text/javascript" src="/Public/js/jquery-1.8.2.min.js"></script>
+	<style type="text/css">
+[class^="icon-"], [class*=" icon-"] {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	margin-top: 1px;
+	line-height: 14px;
+	vertical-align: text-top;
+	background-image: url("/Public/bootstrap/img/glyphicons-halflings.png");
+	background-position: 14px 14px;
+	background-repeat: no-repeat;
+}
+
+.icon-folder-open {
+	width: 16px;
+	background-position: -408px -120px;
+}
+
+.icon-minus-sign {
+	background-position: -24px -96px;
+}
+
+.icon-plus-sign {
+	background-position: 0 -96px;
+}
+
+.icon-leaf {
+	background-position: -48px -120px;
+}
+
+.tree li:last-child::before {
+	height: 25px;
+}
+</style>
+	<div class="wrapper">
+		 <include file="Public/breadcrumb"/>
+		<section class="content">
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="box">
+						<div class="box-header">
+							<nav class="navbar navbar-default">
+								<div class="collapse navbar-collapse">
+									<form method="post" role="search"
+										class="navbar-form form-inline" id="search-form" action="#">
+										<div class="form-group">
+											<input placeholder="上级id" name="user_id" id="user_id"
+												class="form-control" type="text">
+										</div>
+										<button class="btn btn-info" type="submit">
+											<i class="fa fa-search"></i> 筛选
+										</button>
+										<input name="__hash__"
+											value="a01e6d1e396fb3ce0a93cb19f162cfd3_be7214b9765f4f67074fcc6e709eab7a"
+											type="hidden">
+									</form>
+								</div>
+							</nav>
+						</div>
+						<div class="box-body">
+							<div class="tree well">
+								<ul>
+
+									<foreach name="users" item="v" key="k" >
+									<li><span class="tree_span" data-id="{$v.user_id}">
+										<i class="icon-folder-open"></i> {$v.user_id}: {$v.nickname}
+									</span></li>
+									</foreach>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+
+	<script>
+
+//  ajax 请求树下面的节点 
+$('.tree').on('click','.tree_span',function(){
+	
+	    tmp_span = $(this);		
+		tmp_span.siblings('ul').toggle();
+		if(tmp_span.hasClass('requrst'))
+		  return false;
+		  
+		$.ajax({
+			type : "get",
+			url:"/index.php?m=Admin&c=Distribut&a=gets&id="+tmp_span.data('id'),//+tab,
+			//data : $('#'+form).serialize(),// 你的formid
+			success: function(data){
+					tmp_span.after(data);
+					tmp_span.addClass('requrst'); // 表示ajax 请求过了 不再请求第二次
+			}
+		});
+	 
+});
+</script>
+
+</body>
+</html>

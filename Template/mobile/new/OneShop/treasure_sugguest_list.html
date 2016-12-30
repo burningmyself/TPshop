@@ -1,0 +1,11 @@
+<volist name="periods_goods" id="v">
+    <div class="item go_goods" data-goods_id="{$v[goods_id]}">
+        <div class="inner">
+            <div class="cover"><img
+                    src="{$v.goods_id|goods_thum_images=400,400}"
+                    data-loaded="1"></div>
+            <div class="info"><p class="name">{$v.name}
+            </p></div>
+        </div>
+    </div>
+</volist>

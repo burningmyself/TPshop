@@ -1,0 +1,91 @@
+<include file="Public/min-header"/>
+<div class="wrapper">
+    <include file="Public/breadcrumb"/>
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <i class="fa fa-list"></i>&nbsp;评论列表
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <nav class="navbar navbar-default">
+                            <div class="collapse navbar-collapse">
+                                <form action="{:U('OneShop/comment_list')}" id="search-form2" class="navbar-form form-inline" role="search" method="post">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="content" placeholder="搜索评论内容">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="nickname" placeholder="搜索用户">
+                                    </div>
+                                    <button type="button" onclick="ajax_get_table('search-form2',1)" class="btn btn-info"><i class="fa fa-search"></i> 筛选</button>
+                                </form>
+                            </div>
+                        </nav>
+                        <div id="ajax_return">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+<script>
+    // 删除操作
+    function del(id, t) {
+        if (!confirm('确定要删除吗?'))
+            return false;
+        location.href = $(t).data('href');
+    }
+
+    function op() {
+        //获取操作
+        var op_type = $('#operate').find('option:selected').val();
+        if (op_type == 0) {
+            layer.msg('请选择操作', {icon: 1, time: 1000});   //alert('请选择操作');
+            return;
+        }
+        //获取选择的id
+        var selected = $('input[name*="selected"]:checked');
+        var selected_id = [];
+        if (selected.length < 1) {
+
+            layer.msg('请选择项目', {icon: 1, time: 1000}); //            alert('请选择项目');
+            return;
+        }
+        $(selected).each(function () {
+            selected_id.push($(this).val());
+        })
+        $('#op').find('input[name="selected"]').val(selected_id);
+        $('#op').find('input[name="type"]').val(op_type);
+        $('#op').submit();
+    }
+
+    $(document).ready(function () {
+        ajax_get_table('search-form2', 1);
+    });
+
+
+    // ajax 抓取页面
+    function ajax_get_table(tab, page) {
+        cur_page = page; //当前页面 保存为全局变量
+        $.ajax({
+            type: "POST",
+            url: "/index.php/Admin/OneShop/ajax_comment/p/" + page,//+tab,
+            data: $('#' + tab).serialize(),// 你的formid
+            success: function (data) {
+                $("#ajax_return").html('');
+                $("#ajax_return").append(data);
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

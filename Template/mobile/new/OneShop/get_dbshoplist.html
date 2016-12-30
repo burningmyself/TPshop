@@ -1,0 +1,16 @@
+<volist name="lists" id="v">
+    <li data-goods_id="{$v[goods_id]}">
+        <div class="item">
+            <a class="cover"> <img
+                    src="{$v.goods_id|goods_thum_images=400,400}">
+            </a>
+            <div class="info"><a class="name">{$v.name}</a>
+                <div class="progress">
+                    <div class="progress_bar">
+                        <div class="progress_bar_rate" style="width:{$v.width}%;"></div>
+                    </div>
+                </div>
+                <p class="num">还需<em>{$v.shengyu}</em>人次</p> <a class="btn" >立即参加</a></div>
+        </div>
+    </li>
+</volist>

@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>规则</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta itemprop="name" content="一元抢宝">
+    <meta itemprop="description" content="一块钱的梦想你敢不敢谈">
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    <meta name="viewport" content="width=640, user-scalable=no">
+    <style>
+        body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td, figure {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            vertical-align: baseline
+        }
+
+        article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+            display: block
+        }
+
+        ol, ul {
+            list-style: none
+        }
+
+        body {
+            background: #none;
+            font: 24px/1 "Helvetica Neue", Helvetica, STHeiTi, sans-serif;
+            color: #333;
+            -webkit-font-smoothing: antialiased;
+            -webkit-text-size-adjust: none;
+            -webkit-touch-callout: none;
+            -webkit-user-select: text;
+            -webkit-touch-callout: none;
+            word-break: break-all;
+            word-wrap: break-word;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: normal
+        }
+
+        h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+            font-weight: inherit
+        }
+
+        input, select, form, img {
+            vertical-align: middle;
+            outline: none;
+        }
+
+        a, button, input, select, textarea, a:focus, button:focus, input:focus, select:focus, textarea:focus, [onclick] {
+            outline: 0;
+            -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+        }
+
+        a {
+            text-decoration: none;
+            color: #333;
+            outline: 0;
+            -webkit-touch-callout: none;
+        }
+
+        .clearfix {
+            *zoom: 1;
+            clear: both;
+        }
+
+        .clearfix:after {
+            display: block;
+            content: '';
+            visibility: hidden;
+            clear: both;
+        }
+
+        .p_act {
+            width: 600px;
+            padding: 20px 20px 0 20px;
+            height: auto;
+            margin: 0 auto;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            margin-left: -320px;
+        }
+
+        .p_act a:hover {
+            text-decoration: none;
+        }
+
+        .p_act1 {
+            height: 40px;
+            width: 600px;
+        }
+
+        .line {
+            width: 130px;
+            height: 1px;
+            float: left;
+            background: #666;
+            margin-top: 20px;
+        }
+
+        .title {
+            float: left;
+            margin: 0 42px;
+            color: #f56d2a;
+            font-size: 32px;
+            line-height: 40px;
+        }
+
+        .p_act2 {
+            height: auto;
+            width: 600px;
+            padding-bottom: 270px;
+            position: relative;
+        }
+
+        .p_act2 h2 {
+            display: block;
+            width: 133px;
+            height: 40px;
+            margin: 18px 0 10px 0;
+            font-size: 24px;
+            line-height: 40px;
+            background: #f56d2a;
+            text-align: center;
+            color: #fff;
+        }
+
+        .p_act2 p {
+            line-height: 42px;
+            color: #666;
+            font-weight: 24px;
+            text-align: justify;
+        }
+
+        .p_act2 img {
+            margin: 10px 0;
+        }
+
+        .p_act2 .tit1 {
+            width: 253px;
+        }
+
+        .p_act2 .tit2 {
+            width: 229px;
+        }
+
+        .p_act2 .tit3 {
+            width: 182px;
+        }
+
+        .p_act2 .logo {
+            position: absolute;
+            left: -20px;
+            bottom: 0;
+            margin: 0;
+        }
+    </style>
+    <style>
+        .mod_alert_info .title:after {
+            content: '';
+            height: 0;
+            display: block;
+            border-bottom: 1px solid #ddd;
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0
+        }
+
+        @media only screen and (-webkit-min-device-pixel-ratio: 2) {
+            .mod_alert_info .title:after {
+                -webkit-transform: scaleY(.5);
+                -webkit-transform-origin: 50% 100%
+            }
+        }
+
+        .mod_alert .btns {
+            display: -webkit-box;
+            display: box;
+            display: -webkit-flex;
+            display: flex
+        }
+
+        .mod_alert .btns .btn {
+            display: block;
+            -webkit-box-flex: 1;
+            box-flex: 1;
+            -webkit-flex: 1;
+            flex: 1
+        }
+
+        .mod_alert .input input {
+            border: none;
+            background: none;
+            -webkit-appearance: none;
+            -webkit-border-radius: 0
+        }
+
+        .mod_alert {
+            position: relative;
+            width: 210px;
+            margin: 20px auto 0;
+            padding: 15px;
+            background: rgba(0, 0, 0, .8);
+            color: #fff;
+            border-radius: 3px;
+            text-align: center
+        }
+
+        .mod_alert .icon {
+            display: block;
+            width: 50px;
+            height: 50px;
+            margin: 0 auto;
+            background: url(//wq.360buyimg.com/fd/base/img/base/mod_alert.png);
+            background-size: 50px 200px
+        }
+
+        .mod_alert .icon_fail {
+            background-position: 0 -50px
+        }
+
+        .mod_alert .icon_wait {
+            background-position: 0 -100px
+        }
+
+        .mod_alert .icon_success {
+            background-position: 0 -150px
+        }
+
+        .mod_alert .close {
+            padding: 12px;
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 2
+        }
+
+        .mod_alert .close:after {
+            content: '\20';
+            display: block;
+            width: 20px;
+            height: 20px;
+            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoBAMAAAB+0KVeAAAAKlBMVEUAAAD///////////////////////////////////////////////////+Gu8ovAAAADnRSTlMAgHUWSmMsJhsIQF5XQU6cuhAAAACySURBVCjPY6A3YHdVFAopQBWbpSgIBEIrkcXYgGJg0QQkQUdBKBBBiPEIwsEBZIUYStkEkQDM1EnIgppQwYWCgtJNIAGNjYKCslBBoHskmIGEkEEjkIB6RhDENxIUVAbJCEK8xQJkgQRAEkDgABZkFYQohSgUDAALMglClEIUCiqABRkFIUohCgUFcAliasdlEaaTcDse05uYAYI76DADGTM6cEccZhRjJgYCyQaRwOgMAAImK1MVROY0AAAAAElFTkSuQmCC) no-repeat 50%;
+            background-size: 20px 20px
+        }
+
+        .mod_alert p {
+            font-size: 14px;
+            margin: 10px 0
+        }
+
+        .mod_alert p.small {
+            font-size: 12px;
+            color: hsla(0, 0%, 100%, .7)
+        }
+
+        .mod_alert p.alignLeft {
+            text-align: left
+        }
+
+        .mod_alert hr {
+            height: 1px;
+            background: hsla(0, 0%, 100%, .3);
+            border: none;
+            margin: 0 15px
+        }
+
+        .mod_alert .btn {
+            width: 100%;
+            height: 30px;
+            line-height: 30px;
+            background: #f3f3f3;
+            color: #333;
+            font-size: 12px;
+            border-radius: 3px
+        }
+
+        .mod_alert .btn.disabled {
+            background: #666;
+            color: #fff
+        }
+
+        .mod_alert .btn_1 {
+            background: #3985ff;
+            color: #fff
+        }
+
+        .mod_alert .disabled span {
+            margin-left: 5px;
+            color: red
+        }
+
+        .mod_alert.fixed {
+            display: none;
+            z-index: 899;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            margin: auto;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%)
+        }
+
+        .mod_alert .btns {
+            margin: 15px -5px 0
+        }
+
+        .mod_alert .btns .btn {
+            text-align: center;
+            margin: 0 5px
+        }
+
+        .mod_alert .input {
+            position: relative;
+            background: #fff;
+            height: 30px;
+            padding: 0 40px 0 10px
+        }
+
+        .mod_alert .input input {
+            display: block;
+            height: 30px;
+            line-height: 1
+        }
+
+        .mod_alert .input img {
+            display: block;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 75px;
+            height: 30px
+        }
+
+        .mod_alert_info {
+            padding: 0 15px 15px
+        }
+
+        .mod_alert_info .title {
+            height: 48px;
+            line-height: 48px;
+            font-size: 18px;
+            font-weight: 400;
+            position: relative
+        }
+
+        .mod_alert_info .title:after {
+            border-color: hsla(0, 0%, 100%, .3)
+        }
+
+        .mod_alert_info .inner {
+            margin: 10px 0;
+            max-height: 220px;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            text-align: left
+        }
+
+        .mod_alert_info .inner dl {
+            margin-bottom: 10px
+        }
+
+        .mod_alert_info .inner dt {
+            font-size: 14px;
+            font-weight: 400;
+            color: #fff;
+            margin-bottom: 5px
+        }
+
+        .mod_alert_info .inner dd, .mod_alert_info .inner li {
+            font-size: 12px;
+            color: hsla(0, 0%, 100%, .7);
+            margin-left: 0
+        }
+
+        .mod_alert_loading {
+            background: none
+        }
+
+        .mod_alert_large {
+            width: 290px
+        }
+
+        .mod_alert_mask {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            z-index: 898
+        }
+
+        .mod_alert.show, .mod_alert_mask.show {
+            display: block
+        }
+    </style>
+    <style>
+        .wx_footer {
+            margin: 50px 0;
+        }
+
+        .wx_footer .jd_logo:after {
+            content: '\20';
+            display: block;
+            height: 30px;
+            width: 172px;
+            margin: 0 auto;
+            background: url('__STATIC__/images/oneshop/foot_logo.png');
+            background-size: cover;
+            -webkit-background-size: cover;
+        }
+    </style>
+</head>
+<body class="p_mini">
+<div class="p_act">
+    <div class="p_act1">
+        <p class="line"></p>
+        <p class="title">一元抢宝问题解答</p>
+        <p class="line"></p>
+    </div>
+    <div class="p_act2">
+        <h2>栏目说明</h2>
+        <p>一元抢宝是杨福兵推出的全新平台业务，旨在为用户和商家提供预售服务的网络平台。每个用户只需1元就有机会获得一件商品。</p>
+        <h2>参与方式</h2>
+        <p>1、用户进入栏目页面，挑选喜欢的商品，点击“立即去抢”，进入抢宝商品详情页；<br>
+            2、在抢宝详情页面，通过支付1元或者更多参与抢宝；支付得越多，抢中商品的机率就越高，每支付1元，即可获得1个抢宝码；<br>
+            3、当用户参与抢宝的商品集满其所需人次后，系统即会计算抢中商品的抢宝码，当揭晓的抢宝码与用户参与活动时所获得的抢宝码一致时，则该用户抢中该商品，否则即视为抢宝失败，金额不退还；<br>
+            4、用户可进入“个人中心”查看抢宝订单，抢宝成功用户等待发货，未获抢中用户订单完结。</p>
+        <img src="__STATIC__/images/oneshop/workflow.png" width="600" alt="">
+        <h2 class="tit1">幸运号码的计算方法</h2>
+        <p>1、商品的所有号码分配完毕后，将公示该认购时间点并向前截取，一元抢宝平台全部商品的近50个下单时间；<br>
+            2、将这50个时间的数值进行求和，得到数值A（每个时间按时、分、秒、毫秒的顺序组合，如20:13:14.362则为201314362，若时间为20:13:14.002则数值为20131402），为了防止用户批量进行毫秒级下单，毫秒百位为0，自动舍去，数字将从9位，修改成8位进行求和计算；<br>
+            3、数值A除以该商品总需人次得到的余数【余数=mod（数值A/商品总需人次）】 + 原始数 10000001，得到幸运号码，拥有该幸运号码者，直接获得该商品。</p>
+        <h2 class="tit2">怎样确认抢宝成功</h2>
+        <p>1、抢宝成功后用户将会收到提示短信和卡盾科技服务号的提示信息，提示您尽快确认收货地址及联系方式；<br>
+            2、也可以进入“个人中心”的抢宝订单中查看抢宝是否成功。</p>
+        <h2 class="tit3">其他注意事项</h2>
+        <p>1、成功参与一元抢宝后，用户不能取消订单；<br>
+            2、抢宝成功的用户需按照短信/卡盾科技服务号的提示，确认填写收货地址及联系电话。确认完毕后，商家会在用户抢宝成功3-15个工作日内安排发货，部分热销爆品发货周期会相对延长，敬请谅解；<br>
+            3、抢宝成功后，确认收货地址的时间为七天，若逾期未填写，则视为用户自动放弃当期商品，当期商品将重新计算幸运号码；<br>
+            4、有任何疑问，可通过关注卡盾科技服务号或进入“购物--个人中心--“在线客服”进行咨询反馈。</p>
+        <h2>常见问题</h2>
+        <p>1、当期剩余人次小于我想要参与的人次怎么办？<br>
+            方案一：可以先参与当期，再参与下一期；<br>
+            方案二：等待新一期开始后参与；<br>
+            2、如何领取实物商品？<br>
+            若您成功抢得实物商品，会收到提示完善收货地址的短信指引和卡盾科技服务号的提示信息，您需进入我的抢宝页面，确认填写收货地址及联系电话。确认完毕后，商家即会尽快给您发货。<br>
+            3、付款失败怎么办？<br>
+            付款失败后请查看是否已扣款，若款项未扣除，欢迎您重新支持继续抢宝，若款项已扣除，请及时与我们联系。<br>
+            4、获取抢宝码失败？<br>
+            获取抢宝号码失败后，系统将会进行自动退款，退回款项将在1-15个工作日内到账，请您及时查收。<br>
+            5、为什么参与很多次都没有成功？<br>
+            抢宝具有很大的随机性，扩大支持金额可以增加抢宝成功概率，并非参与就能抢到宝物。抢宝有风险，建议用户理性参与。<br>
+            6、订单状态说明：<br>
+            待支付：等待用户付款；<br>
+            参与成功：已获取抢宝号码等待揭晓；<br>
+            参与失败：等待退款；<br>
+            退款成功：退款完成，当前订单完结；<br>
+            已取消：12小时未支付会自动取消订单；<br>
+            揭晓中：系统正在计算幸运号码；<br>
+            抢宝成功：幸运用户获得商品；<br>
+            未抢中：此状态为参与成功，但用户持有抢宝码与幸运号码不相同，不能获得本期商品，支付款项将用于为幸运用户购买当期商品，款项不予以退还，订单完结；<br>
+            过期放弃：7天内未确认收货地址，视为自动放弃商品；<br>
+            已发货：商家已将抢中宝物发出；<br>
+            已收货：物流信息显示派送成功7天后会自动确认收货。<br>
+            7、如何查看抢宝订单：<br>
+            进入手机微信，选择我的抢宝入口，即可查看您所参与的抢宝订单。<br>
+            8、意见反馈：<br>
+            可通过关注卡盾科技服务号“卡盾科技”或进入“购物--个人中心--“在线客服”进行咨询反馈。
+        </p>
+        <div class="wx_footer">
+            <div class="jd_logo" id="jdBtmLogo"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

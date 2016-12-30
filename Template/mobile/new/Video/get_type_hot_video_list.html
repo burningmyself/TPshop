@@ -1,0 +1,12 @@
+<div class="live-list">
+    <volist name="video_list" id="v">
+        <a href="{:U('Video/play_video',array('video_id'=>$v[video_id]))}" class="live">
+            <img src="{$v[img_url]}" class="live-feature">
+            <div class="live-title">{$v[title]}</div>
+            <div class="live-info">
+                <span class="dy-name">{$v[content]}</span>
+                <span class="popularity">{$v[play_count]}人</span>
+            </div>
+        </a>
+    </volist>
+</div>

@@ -1,0 +1,16 @@
+<volist name="periods_goods" id="v">
+    <li>
+        <!--<a href="{:U('Mobile/Goods/goodsInfo',array('id'=>$v[goods_id]))}" title="{$v.goods_name}">-->
+        <div class="index_pro go_goods_info"  data-goods_id="{$v[goods_id]}">
+            <div class="products_kuang">
+                 <img src="{$v.goods_id|goods_thum_images=400,400}"></div>
+            <div class="info"><a class="name goods_name">{$v.name}</a>
+                <div class="progress">
+                    <div class="progress_bar">
+                        <div class="progress_bar_rate" style="width:{$v.width}%;"></div>
+                    </div>
+                </div>
+                <p class="num" style="width:80%;">还需<em>{$v.shengyu}</em>人次</p> <a class="btn">立即参加</a></div>
+        </div>
+    </li>
+</volist>

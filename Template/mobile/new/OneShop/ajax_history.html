@@ -1,0 +1,19 @@
+<volist name="periods" id="v">
+    <a class="period done" href="{:U('OneShop/goods_info',array('dbshop_id'=>$v[dbshop_id],'goods_id'=>$v[goods_id],'periods'=>$v[periods]))}">
+        <div class="period_hd"> 第{$v.periods}期
+            <div class="date">揭晓时间：{$v.win_time|date='Y-m-d H:s:i',###}</div>
+        </div>
+        <div class="period_user">
+            <div class="photo"><img
+                    src="{$v.head_url}"
+                    onerror="javascript:this.onerror='';this.src='//img11.360buyimg.com/jdphoto/s160x160_jfs/t2977/243/1558083655/15607/bbb3b2eb/5786f7a6N4b1151cd.png'">
+            </div>
+            <div class="info"><p><span>幸运用户：</span>{$v.nickname}</p>
+                <p><span>用户ID：</span>{$v.user_id}(唯一不变的标识)</p>
+                <p><span>幸运号码：</span>{$v.win_code}</p>
+                <p><span>参与人次：</span>{$v.buy_count}人次</p>
+                <p><span>抢宝IP：</span>{$v.ip}</p>
+            </div>
+        </div>
+    </a>
+</volist>

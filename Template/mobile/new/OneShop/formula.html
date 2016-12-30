@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN" style="font-size: 24.5625px;">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>计算公式</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta itemprop="name" content="一元抢宝">
+    <meta itemprop="description" content="一块钱的梦想你敢不敢谈">
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/one_min.css"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/oneshop.css"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/layer.css"/>
+    <script type="text/javascript" src="__STATIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/layer.js"></script>
+    <style>
+        /** 加载样式 */
+        .loading {
+            margin: 20px;
+            text-align: center;
+        }
+
+        .loading img {
+            display: block;
+            width: 16px;
+            height: 16px;
+            margin: 0 auto 5px;
+        }
+
+        .loading_img {
+            width: 16px;
+            height: 16px;
+        }
+
+        .sharetips {
+            display: none;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            background: rgba(0, 0, 0, .8);
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #fff;
+            text-align: center;
+            z-index: 9999;
+        }
+
+        .sharetips::before {
+            content: '';
+            display: block;
+            margin-right: 0.5rem;
+            height: 8rem;
+            background-size: 4.2rem 5rem;
+        }
+    </style>
+    <style type="text/css">
+        .wxsq_topTips {
+            position: relative;
+            padding: 8px 35px 8px 8px;
+            background: #fffad0;
+            font-size: 10px;
+        }
+
+        .wxsq_topTips span {
+            display: block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            position: absolute;
+            top: 0;
+            right: 0;
+            color: #3985ff;
+            text-align: center;
+        }
+    </style>
+    <!--此JS不可删除-->
+    <script>
+        (function () {
+            var b = document.documentElement,
+                    a = function () {
+                        var a = b.getBoundingClientRect().width;
+                        b.style.fontSize = .0625 * (640 <= a ? 640 : a) + "px"
+                    },
+                    c = null;
+            window.addEventListener("resize", function () {
+                clearTimeout(c);
+                c = setTimeout(a, 300)
+            });
+            a()
+        })();
+    </script>
+</head>
+<body>
+<div class="wx_wrap">
+    <div class="formula_result" style="visibility: visible;">
+        <div class="formula_result_notice">计算结果</div>
+        <div class="form_center">
+            幸运号码：<em id="luckyNumber">{$periods.win_code}</em>
+        </div>
+    </div>
+    <div class="formula_head" style="visibility: visible;">
+        <div class="text">计算公式：(数值A/商品所需次数）取余数+10000001
+        </div>
+        <div class="desc">
+            数值A
+            <br>＝该商品最后一个抢宝号码分配完毕时间点前，一元抢宝平台最后50个下单时间相加求和
+            <br>
+            <span class="color_red">＝<span id="payTimeSum">{$periods.time_sum}</span></span></div>
+    </div>
+    <div id="failpanel">
+        <div style="display: none;">
+            <div data-type="page" class="empty_wrapper" style="margin:30px 0 30px 0;">
+                <div class="treasure_failimg"></div>
+                <div class="empty_notice">活动太火爆了！ <br>请您稍等一会刷新看看~</div>
+                <div class="t_btn bg2 empty_btn"> 刷新看看</div>
+            </div>
+            <div data-type="next" class="empty_wrapper" style="margin:10px 0 10px 0">
+                <div class="empty_notice">太火爆了，稍等一会刷新看看~</div>
+                <div class="t_btn bg2 empty_btn"> 刷新看看</div>
+            </div>
+        </div>
+    </div>
+    <div class="wins_record bordertop1px borderbottom1px">
+        <div class="wins_record_head">
+            <span class="t_l">抢宝记录</span>
+            <span class="t_r">用户昵称</span>
+        </div>
+        <div id="members">
+            <volist name="orders" id="v">
+            <div class="item bordertop1px">
+                <div class="time">{$v[pay_time]/1000|date='Y-m-d H:s:i',###}:{$v[millisecond]}——<em>{$v[time_num]}</em></div>
+                <div class="name">{$v[nickname]}</div>
+            </div>
+            </volist>
+        </div>
+    </div>
+
+</div>
+<div class="wx_footer">
+    <div class="jd_logo" id="jdBtmLogo"></div>
+</div>
+</body>
+</html>

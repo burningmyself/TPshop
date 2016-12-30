@@ -1,0 +1,35 @@
+<p>
+    <label for="">
+        <span class="tit">收货人</span><input id="consignee" type="text" value="" placeholder="姓名">
+    </label>
+</p>
+<p>
+    <label for="">
+        <span class="tit">联系方式</span><input id="mobile" value="" type="tel" placeholder="手机或电话号码 ">
+    </label>
+</p>
+<p class="area">
+    <label for=""><span class="tit">省</span><select class="select" id="selectProvince">
+        <option value="0" selected>请选择省</option>
+        <volist name="province" id="v">
+            <option value="{$v[id]}">{$v[name]}</option>
+        </volist>
+    </select></label>
+    <label for="" style="display: none;">
+        <span class="tit">市</span><select id="selectCity"> </select>
+    </label>
+    <label for="" style="display: none;">
+        <span class="tit">区/县</span><select id="selectCounty"> </select>
+    </label>
+    <label for="" style="display: none;">
+        <span class="tit">街道</span><select class="select" id="selectTown"> </select>
+    </label>
+</p>
+<p>
+    <label for="">
+        <span class="tit">详细地址</span><input id="adinfo" value="" type="text" placeholder="街道地址">
+    </label>
+</p>
+<p class="action">
+    <button class="submit" id="submitAddress">确认</button>
+</p>

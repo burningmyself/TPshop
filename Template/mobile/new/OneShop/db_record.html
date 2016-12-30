@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN" style="font-size: 24.5625px;">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>夺宝记录</title>
+    <meta http-equiv="keywords" content="{$tpshop_config['shop_info_store_keyword']}"/>
+    <meta name="description" content="{$tpshop_config['shop_info_store_desc']}"/>
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/one_record.css"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/layer.css"/>
+    <script type="text/javascript" src="__STATIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/layer.js"></script>
+    <style>
+        /** 加载样式 */
+        .loading {
+            margin: 20px;
+            text-align: center;
+        }
+
+        .loading img {
+            display: block;
+            width: 16px;
+            height: 16px;
+            margin: 0 auto 5px;
+        }
+
+        .loading_img {
+            width: 16px;
+            height: 16px;
+        }
+
+        .sharetips {
+            display: none;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            background: rgba(0, 0, 0, .8);
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #fff;
+            text-align: center;
+            z-index: 9999;
+        }
+
+        .sharetips::before {
+            content: '';
+            display: block;
+            margin-right: 0.5rem;
+            height: 8rem;
+            background-size: 4.2rem 5rem;
+        }
+    </style>
+</head>
+<body>
+<div class="qq_menu_layer_v2" style="display:none;z-index:1005" id="__mqqmenu">
+</div>
+<div style="display:none">
+</div>
+<div class="wx_wrap">
+    <!-- S 个人抢宝纪录 -->
+    <div class="treasure_nav_wrap">
+        <!-- 吸顶： treasure_nav 添加 class="fixed" -->
+        <nav id="tab_list" class="treasure_nav fixed">
+            <a class="item cur" data-type="0">全部记录</a>
+            <a class="item" data-type="1">抢宝成功</a>
+            <a class="item" data-type="2">晒单记录</a>
+        </nav>
+    </div>
+    <div class="treasure_record" data-type="0" style="display: block;">
+        <div class="list_view">
+
+        </div>
+        <div class="list_loading loading" style="display:none;">
+            <img src="//static.paipaiimg.com/wx/img/common/loading.gif">
+            <span>加载中</span>
+        </div>
+        <div class="treasure_hint" style="display: none;">
+            <div data-type="page"><i class="icon icon_empty"></i>
+                <p>你还没有抢宝纪录！</p>
+                <div class="btns atonce_db"><a class="btn btn_2">立即抢宝</a></div>
+            </div>
+        </div>
+    </div>
+    <div class="treasure_record" data-type="1" style="display: none;">
+        <div class="list_view">
+
+        </div>
+        <div class="list_loading loading" style="display: none">
+            <img src="//static.paipaiimg.com/wx/img/common/loading.gif">
+            <span>加载中</span>
+        </div>
+        <div class="treasure_hint" style="display: none;">
+            <div data-type="page"><i class="icon icon_empty"></i>
+                <p>你还没有抢中纪录哦！</p>
+                <div class="btns atonce_db"><a class="btn btn_2">立即抢宝</a></div>
+            </div>
+        </div>
+    </div>
+    <div class="treasure_record" data-type="2" style="display: none;">
+        <div class="list_view">
+
+        </div>
+        <div class="list_loading loading" style="display: none;">
+            <img src="__STATIC__/images/oneshop/loading.gif">
+            <span>加载中</span>
+        </div>
+        <div class="treasure_hint" style="display: none;">
+            <div data-type="page"><i class="icon icon_empty"></i>
+                <p>暂无晒单记录！</p>
+                <div class="btns no_share"><a class="btn btn_2">快去分享喜悦吧</a></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- S 推荐商品 -->
+    <div class="treasure_sugguest" style="visibility: visible;">
+        <div class="treasure_sugguest_title">
+            热门推荐
+        </div>
+        <div class="treasure_sugguest_list">
+
+        </div>
+    </div>
+    <!-- E 推荐商品 -->
+    <!-- E 个人抢宝纪录-->
+    <!-- S 底部导航 -->
+    <include file="OneShop/foot_nav"/>
+    <!-- E 底部导航-->
+</div>
+
+<div class="wx_footer">
+    <div class="jd_logo" id="jdBtmLogo"></div>
+</div>
+<div class="wx_loading" style="display:none;">
+    <div class="wx_loading_inner"><i class="wx_loading_icon"></i>请求处理中...</div>
+</div>
+</body>
+<script type="text/javascript">
+    //控制脚部导航样式
+    $(function () {
+        $('.footer_inner_item').removeClass('cur');
+        var $obj = $('.footer_inner_item:eq(3)');
+        $obj.addClass('cur');
+        $obj.find('.footer_item_img img').attr('src', '__STATIC__/images/oneshop/mered.png');
+    });
+    //热门推荐
+    $(function () {
+        $.ajax({
+            url: "/index.php/Mobile/OneShop/treasure_sugguest_list",
+            dataType: "html",
+            type: "get",
+            success: function (data) {
+                if (data.length > 20) {
+                    $('.treasure_sugguest_list').append(data);
+                }
+            }
+        })
+    });
+    var all_page = 1;
+    var win_page = 1;
+    var com_page = 1;
+    $(function () {
+        //首先加载全部纪录
+        all_record(function (data) {
+            $('.treasure_record:first').find('.list_view').append(data);
+        })
+        //切换上面菜单
+        $('#tab_list a').on('click', function () {
+            $('#tab_list a').removeClass('cur');
+            var type = $(this).data('type');
+            $('.treasure_record').hide();
+            $('.treasure_record').each(function () {
+                var $this = $(this);
+                if ($this.data('type') == type) {
+                    $this.show();
+                    switch (type) {
+                        case 0:
+                            all_record(function (data) {
+                                $this.find('.list_view').append(data);
+                                $this.find('.list_loading').hide()
+                            });
+                            break;
+                        case 1:
+                            win_record(function (data) {
+                                $this.find('.list_view').append(data);
+                                $this.find('.list_loading').hide()
+                            });
+                            break;
+                        case 2:
+                            comment_list(function (data) {
+                                $this.find('.list_view').append(data);
+                                $this.find('.list_loading').hide()
+                            });
+                            break;
+                    }
+                }
+            })
+            $(this).addClass('cur');
+        });
+        //确认收货
+        $('.list_view').on('click', '.confirm_receipt', function () {
+            var order_id = $(this).data('order_id');
+            alert_confrim(function (flag) {
+                if (flag) {
+                    confirm_receipt(order_id);
+                }
+            })
+        })
+        //查看晒单详情
+        $('.wx_wrap').on('click', '.gotodetail', function () {
+            var order_id = $(this).data('order_id');
+            window.location.href = '/index.php?m=Mobile&c=OneShop&a=share_order_detail&order_id=' + order_id;
+        });
+        //没有抢宝没中奖，跳转到首页
+        $('.atonce_db').on('click', function () {
+            window.location.href = '/Mobile/OneShop/index';
+        });
+        //没有晒单
+        $('.no_share').on('click', function () {
+            $('.treasure_record').hide();
+            $('#tab_list a').removeClass('cur');
+            $('#tab_list a:eq(1)').addClass('cur');
+            $('.treasure_record:eq(1)').show();
+            win_page = 1;
+            win_record(function (data) {
+                $('.treasure_record:eq(1)').find('.list_view').empty();
+                $('.treasure_record:eq(1)').find('.list_view').append(data);
+                if (data.length < 20) {
+                    $('.treasure_record:eq(1)').find('.treasure_hint').show();
+                }
+            });
+        });
+        //热销商品点击事件
+        $('.treasure_sugguest_list').on('click','.go_goods', function () {
+            var goods_id = $(this).data('goods_id');
+            window.location.href = '/Mobile/OneShop/goods_info/goods_id/' + goods_id;
+        });
+    });
+    var com_flag = true;
+    var all_flag = true;
+    var win_flag = true;
+    var flag = true;//滚动标识
+    //滚动监听
+    $(window).scroll(function () {
+        if ($(window).scrollTop() + $(window).height() + $('.treasure_sugguest').height() + $('.list_loading ').height() + 100 > $(document).height()) {
+            var $this = $('.treasure_record:visible');
+            var type = $this.data('type');
+            if (!flag)return;
+            $this.find('.list_loading').show();
+            switch (type) {
+                case 0:
+                    all_record(function (data) {
+                        $this.find('.list_view').append(data);
+                        $this.find('.list_loading').hide()
+                    });
+                    break;
+                case 1:
+                    win_record(function (data) {
+                        $this.find('.list_view').append(data);
+                        $this.find('.list_loading').hide()
+                    });
+                    break;
+                case 2:
+                    comment_list(function (data) {
+                        $this.find('.list_view').append(data);
+                        $this.find('.list_loading').hide()
+                    });
+                    break;
+            }
+        }
+    });
+    //确认收货
+    function confirm_receipt(order_id) {
+        $('.wx_loading').show();
+        $.ajax({
+            url: '/index.php?m=Mobile&c=OneShop&a=confirm_receipt&order_id=' + order_id,
+            type: 'get',
+            dataType: 'json',
+            success: function (data) {
+                if (data['status'] == 1) {
+                    layer.open({content: data['msg'], time: 2});
+                    window.location.href = '/index.php?m=Mobile&c=OneShop&a=db_record';
+                } else {
+                    layer.open({content: data['msg'], time: 2});
+                }
+            },
+            error: function () {
+                $('wx_loading').content('请求处理失败');
+            }
+        });
+        $('wx_loading').hide();
+    }
+    //弹出确认框
+    function alert_confrim(callback) {
+        var html = '<div class="mod_alert show fixed"><p>确认签收?</p><p class="btns"><a href="javascript:;" id="ui_btn_confirm" class="btn btn_1">确定</a><a href="javascript:;" id="ui_btn_cancel" class="btn btn_1">取消</a></p></div>';
+        $('.wx_wrap').append(html);
+        $('#ui_btn_confirm').on('click', function () {
+            $('.mod_alert').remove();
+            callback(true);
+        })
+        $('#ui_btn_cancel').on('click', function () {
+            $('.mod_alert').remove();
+            callback(false);
+        })
+    }
+    //加载评论
+    function comment_list(callback) {
+        if (!com_flag) {
+            $('.treasure_record:last').find('.list_loading').hide();
+            return false;
+        }
+        com_flag = false;
+        $('.treasure_record:last').find('.list_loading').show();
+        var url = '/index.php?m=Mobile&c=OneShop&a=ajax_comment&p=' + com_page;
+        $.ajax({
+            type: "get",
+            dataType: "html",
+            url: url,
+            success: function (data) {
+                if (data.length > 20) {
+                    com_page++;
+                    callback(data);
+                    com_flag = true;
+                } else {
+                    com_flag = false;
+                    if (com_page == 1) {
+                        $('.treasure_record:last').find('.treasure_hint').show();
+                    }
+                }
+                $('.treasure_record:last').find('.list_loading').hide();
+            },
+            error: function () {
+                $('.treasure_record:last').find('.list_loading').hide();
+                $('.treasure_record:last').find('.treasure_hint').show();
+            },
+        });
+    }
+    //加载全部纪录
+    function all_record(callback) {
+        if (!all_flag) {
+            $('.treasure_record:first').find('.list_loading').hide();
+            return false;
+        }
+        all_flag = false;
+        $('.treasure_record:first').find('.list_loading').show();
+        var url = '/index.php?m=Mobile&c=OneShop&a=ajax_all_record&p=' + all_page;
+        $.ajax({
+            type: "get",
+            dataType: "html",
+            url: url,
+            success: function (data) {
+                if (data.length > 20) {
+                    all_page++;
+                    callback(data);
+                    all_flag = true;
+                } else {
+                    all_flag = false;
+                    if (all_page == 1) {
+                        $('.treasure_record:first').find('.treasure_hint').show();
+                    }
+                }
+                $('.treasure_record:first').find('.list_loading').hide();
+            },
+            error: function () {
+                $('.treasure_record:first').find('.list_loading').hide();
+                $('.treasure_record:first').find('.treasure_hint').show();
+            },
+        });
+    }
+    //加载中奖纪录
+    function win_record(callback) {
+        if (!win_flag) {
+            $('.treasure_record:eq(1)').find('.list_loading').hide();
+            return false;
+        }
+        flag = false;
+        $('.treasure_record:eq(1)').find('.list_loading').show();
+        var url = '/index.php?m=Mobile&c=OneShop&a=ajax_win_record&p=' + win_page;
+        $.ajax({
+            type: "get",
+            dataType: "html",
+            url: url,
+            success: function (data) {
+                if (data.length > 20) {
+                    win_page++;
+                    callback(data);
+                    win_flag = true;
+                } else {
+                    win_flag = false;
+                    if (win_page == 1) {
+                        $('.treasure_record:eq(1)').find('.treasure_hint').show();
+                    }
+                }
+                $('.treasure_record:eq(1)').find('.list_loading').hide();
+            },
+            error: function () {
+                $('.treasure_record:eq(1)').find('.list_loading').hide();
+                $('.treasure_record:eq(1)').find('.treasure_hint').show();
+            },
+        });
+    }
+</script>
+</html>

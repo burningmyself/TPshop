@@ -1,0 +1,37 @@
+<div class="header">
+    <div class="header-top clearfix">
+        <a href="/index.php/Mobile/Video/index.html">
+            <div class="logo"></div>
+        </a>
+        <div class="classes"></div>
+    </div>
+    <div class="header-nav">
+        <div class="n-list clearfix" style="cursor: -webkit-grab;" data-type="/roomlists">
+            <volist name="types" id="vo">
+                <a href="{:U('Video/video_type_list',array('type_id'=>$vo[type_id],'name'=>$vo['name']))}">
+                    <div class="swiper-slide n-list-item" data-type_id="{$vo['type_id']}">
+                        <img src="{$vo.img_url}">
+                        <br>{$vo.name}
+                    </div>
+                </a>
+            </volist>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        var width = window.screen.width;
+        var height = window.screen.height;
+        var size = width / 5;
+        $('html').css({"font-size": size + "px","width":width+"px","height":height+"px"});
+    });
+    $(function () {
+        //导航栏
+        $(function () {
+            $(".header-top>.classes").on("click", function () {
+                $(this).toggleClass("open");
+                $('.header-nav').toggle();
+            });
+        });
+    })
+</script>

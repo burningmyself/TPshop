@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>确认订单</title>
+    <meta http-equiv="keywords" content="{$tpshop_config['shop_info_store_keyword']}"/>
+    <meta name="description" content="{$tpshop_config['shop_info_store_desc']}"/>
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/oneshop.css"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/layer.css"/>
+    <script type="text/javascript" src="__STATIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/layer.js"></script>
+    <style>
+        body {
+            background: #e8e8ed;
+            font-size: 12px;
+            color: #333;
+        }
+
+        .wx_wrap {
+            min-height: 375px
+        }
+
+        @media only screen and (max-height: 480px) {
+            .wx_wrap {
+                min-height: 360px
+            }
+        }
+
+        .buy_toptips, .wx_wrap {
+            position: relative
+        }
+
+        .buy_toptips {
+            background: #fff;
+            margin-bottom: 15px;
+            padding: 10px;
+            font-size: 12px;
+            color: #666
+        }
+
+        .buy_toptips em {
+            color: #333
+        }
+
+        .address_defalut {
+            background: #fff;
+            padding: 12px 10px 12px 58px;
+            position: relative
+        }
+
+        .address_defalut.fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 2
+        }
+
+        .address_defalut li span {
+            color: #3985ff
+        }
+
+        .address_defalut h3 {
+            position: absolute;
+            top: 12px;
+            left: 10px;
+            width: 2em;
+            font-weight: 400;
+            font-size: 14px;
+            color: #999
+        }
+
+        .address_defalut ul {
+            position: relative;
+            padding-right: 30px
+        }
+
+        .address_defalut ul:after {
+            right: 2px;
+            width: 8px;
+            height: 8px;
+            border-color: #666
+        }
+
+        .address_defalut li {
+            word-wrap: break-word;
+            word-break: break-all;
+            font-size: 14px
+        }
+
+        .address_defalut li strong {
+            font-weight: 400
+        }
+
+        .address_defalut li.error, .address_defalut li em {
+            color: #e4393c
+        }
+
+        .address_defalut li.error:before {
+            content: '\20';
+            display: inline-block;
+            vertical-align: middle;
+            margin: -2px 3px 0 0
+        }
+
+        .address_defalut li.tips {
+            color: #ff9600;
+            font-size: 10px
+        }
+
+        .address_defalut .addr_select {
+            margin-left: 0
+        }
+
+        .address_defalut .address_defalut_text {
+            position: relative;
+            margin: 10px 0 0 -48px;
+            padding-top: 10px
+        }
+
+        .address_defalut .address_defalut_text span {
+            color: #999
+        }
+
+        .address_defalut .address_defalut_text:before {
+            border-color: #ddd
+        }
+
+        .address_defalut.address_border {
+            padding-bottom: 16px;
+            background: #fff url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAAICAMAAAAFmMshAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAACNUExURV6X8v3n57TP+faUlPf6/2ad8/zf3/JeXv/////7+9/q/Pefn+fw/X6t9crd+/719fz9//NoaPJhYW6i85S69vm0tO/1/tTk/PV+fv7v76rI+Han9PzU1PJkZPNubviqqvq/v/q+vvR1dfipqfWIiPvKyoqz9p7A95/B9/aKioiy9b7V+vvJyb/W+vR3dzIYPh8AAACcSURBVCjPldLHDoNADEXRAQaYofcOKaS3//+8VAV7Z7/91ZEsCwXnnF36mgG13kHQF9YCpIbFYLc3xAYFg+0jpRa49TM6O200ZKsTg82viVrgeDXS2bRErOxsOmub8hN9YV2mdHacY8SaHLaTv+wN6/VEZzO/hWxyzxlXPlb/8AXvH4yfsgz0U1HPYIsAlGJoGOzOQWwdMtiLh9onBzMVnawViSIAAAAASUVORK5CYII=) -7px bottom repeat-x;
+            background-size: 60px 4px
+        }
+
+        .order_info {
+            margin-top: 15px;
+            margin-bottom: 15px;
+            padding: 0 10px;
+            background: #fff;
+            position: relative
+        }
+
+        .order_info h4 {
+            font-size: 12px;
+            font-weight: 400;
+            height: 40px;
+            line-height: 40px
+        }
+
+        .order_info dl {
+            border-bottom: 1px dotted #cbcbcb
+        }
+
+        .order_info dt {
+            padding: 14px 40px 14px 0;
+            line-height: 16px;
+            position: relative
+        }
+
+        .order_info dt:before {
+            right: 10px
+        }
+
+        .order_info dt span {
+            float: left;
+            width: 30%;
+            text-align: center
+        }
+
+        .order_info dt span:first-child {
+            padding-right: 5px;
+            width: 40%;
+            text-align: left
+        }
+
+        .order_info dt span:last-child {
+            width: 30%;
+            text-align: right;
+            color: #fc004d
+        }
+
+        .order_info dt i {
+            margin: 0 4px;
+            color: #fc004d
+        }
+
+        .order_info dd {
+            display: none
+        }
+
+        .order_info .on dd {
+            display: block
+        }
+
+        .order_info .only {
+            border-bottom-style: solid;
+            padding-top: 15px
+        }
+
+        .order_info .only .message, .order_info .only dt {
+            display: none
+        }
+
+        .order_info .only dd {
+            display: block
+        }
+
+        .order_info .order_info_list li {
+            padding: 10px 20px 10px 0;
+            overflow: hidden;
+            position: relative
+        }
+
+        .order_info .order_info_list li:before {
+            border-color: #cbcbcb
+        }
+
+        .order_info .order_info_list li:after {
+            right: -2px
+        }
+
+        .order_info .order_info_list .message {
+            padding-right: 0
+        }
+
+        .order_info .order_info_list .message:after {
+            display: none
+        }
+
+        .order_info .order_info_list strong {
+            float: left;
+            font-weight: 400
+        }
+
+        .order_info .order_info_list span {
+            float: right;
+            max-width: 200px
+        }
+
+        .order_info li {
+            padding: 14px 10px;
+            line-height: 16px;
+            position: relative
+        }
+
+        .order_info .hproduct {
+            position: relative;
+            min-height: 75px;
+            padding: 0;
+            font-size: 12px;
+            padding-top: 15px
+        }
+
+        .order_info .hproduct:before {
+            border-color: #cbcbcb
+        }
+
+        .order_info .hproduct .sku .tag {
+            background: #e4393c;
+            color: #fff;
+            padding: 0 5px;
+            margin-left: 5px;
+            font-size: 10px
+        }
+
+        .order_info .hproduct .fn, .order_info .hproduct .sku, .order_info .hproduct .sku_coll {
+            padding-left: 85px
+        }
+
+        .order_info .hproduct .fn, .order_info .hproduct .sku_coll {
+            padding-right: 65px
+        }
+
+        .order_info .hproduct .sku {
+            word-wrap: break-word;
+            word-break: break-all;
+            margin-bottom: 2px
+        }
+
+        .order_info .hproduct .photo {
+            width: 75px;
+            height: 75px;
+            position: absolute;
+            top: 15px;
+            left: 0
+        }
+
+        .order_info .hproduct .photo_tag {
+            display: block;
+            width: 75px;
+            height: 15px;
+            line-height: 15px;
+            font-size: 10px;
+            color: #fff;
+            text-align: center;
+            background: rgba(0, 0, 0, .5);
+            position: absolute;
+            left: 0;
+            top: 75px;
+            z-index: 1
+        }
+
+        .order_info .hproduct .fn {
+            height: 40px;
+            color: #333;
+            line-height: 20px;
+            margin-bottom: 5px
+        }
+
+        .order_info .hproduct .fn span {
+            display: inline-block;
+            width: 50px;
+            height: 15px;
+            line-height: 15px;
+            background: #000;
+            color: #fff;
+            margin-right: 5px;
+            font-size: 10px;
+            text-align: center;
+            vertical-align: 1px
+        }
+
+        .order_info .hproduct .sku em {
+            color: #999
+        }
+
+        .order_info .hproduct .sku span {
+            color: #333
+        }
+
+        .order_info .hproduct .sku .price {
+            color: #e4393c
+        }
+
+        .order_info .hproduct .sku .empty {
+            color: #fc004d
+        }
+
+        .order_info .hproduct .last {
+            margin: 0 5px
+        }
+
+        .order_info .hproduct .last strong {
+            margin: 0 2px
+        }
+
+        .order_info .hproduct .last em {
+            color: #e4393c
+        }
+
+        .order_info .hproduct .count {
+            width: 46px;
+            text-align: center;
+            padding: 0;
+            line-height: normal;
+            border: 1px solid #ddd;
+            height: 18px;
+            border-radius: 1px;
+            -webkit-appearance: none;
+            background: #efefef
+        }
+
+        .order_info .hproduct .sku_coll {
+            font-size: 10px;
+            color: #999;
+            margin-bottom: 5px
+        }
+
+        .order_info .hproduct .sku_price {
+            position: absolute;
+            top: 18px;
+            right: 0;
+            color: #e4393c;
+            font-weight: 700
+        }
+
+        .order_info .hproduct .sku_count {
+            position: absolute;
+            top: 38px;
+            right: 0
+        }
+
+        .order_info .hproduct .num_wrap {
+            margin: 10px 0
+        }
+
+        .order_info .give_link, .order_info .give_list {
+            display: block;
+            position: relative;
+            padding: 10px 0 10px 30px
+        }
+
+        .order_info .give_link:after, .order_info .give_list:after {
+            content: '\20';
+            right: 10px
+        }
+
+        .order_info .give_link i, .order_info .give_list i {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background: #e4393c;
+            color: #fff;
+            font-size: 10px;
+            text-align: center;
+            line-height: 16px;
+            margin-right: 5px
+        }
+
+        .order_info .give_link {
+            margin-left: 85px;
+            padding: 5px 0
+        }
+
+        .order_info .give_list {
+            position: relative
+        }
+
+        .order_info .give_list:before {
+            border-color: #cbcbcb
+        }
+
+        .order_info .give_list p {
+            margin: 5px 0;
+            padding-right: 30px
+        }
+
+        .order_info .promo p {
+            clear: both;
+            font-size: 11px;
+            text-align: right;
+            padding-top: 10px;
+            color: #999
+        }
+
+        .order_info .promo .coupon {
+            height: 18px;
+            line-height: 18px;
+            font-size: 12px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-right: 0;
+            padding: 0 8px;
+            margin: -2px 10px 0 0;
+            position: relative;
+            float: right
+        }
+
+        .order_info .promo .coupon:before {
+            content: '\20';
+            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAoCAYAAADkDTpVAAAA/0lEQVRIS+2XMQuEMAyFo4tQBJfi4ub//0uKiw4uLiKIVO8iVNTz0CM+h6MFcan5+l6T2HpZlk0EHB4cML0HQkCe53NY7zGAJaZpeougDwUOsPfVWXSaaTCL2ralruuI35tCk6bpMAzUNM0S2EpcKlkC4OBVVZExhnzfJ6XU/NzSKtbBgyCgKIo2+yPuRXVdz7YcBRcr4MAMYFu01oeZJVJgVx+G4eL5niIClGVJfd9THMdf60IEKIqCxnG8BuDV8EiS5LRK7QQ4AG4RfJPhacp7AS00BlxuFfBmJwFYJbB2vS4c2A/HnSou9yc7EXaq+GPAzyaffPDcDQd+CUQDXoPYj0QE5vc1AAAAAElFTkSuQmCC) no-repeat;
+            background-size: 12px 20px;
+            -webkit-background-size: 12px 20px;
+            width: 12px;
+            height: 20px;
+            position: absolute;
+            right: -8px;
+            top: -1px
+        }
+
+        .order_info .promo .coupon em {
+            color: #fc004d;
+            margin-right: 1px
+        }
+
+        .order_info .appointment span {
+            padding-right: 30px
+        }
+
+        .order_info .appointment em {
+            display: block;
+            text-align: right;
+            margin-bottom: 5px
+        }
+
+        .order_info .appointment em:last-child {
+            margin-bottom: 0
+        }
+
+        .order_info .message {
+            padding: 10px
+        }
+
+        .order_info .message textarea {
+            background: #eff1f3;
+            border: 1px solid #e0e4e8;
+            width: 100%;
+            padding: 10px;
+            height: 36px;
+            font-size: 10px;
+            -webkit-appearance: none
+        }
+
+        .order_info .return span {
+            text-align: right;
+            width: 80%;
+            margin-right: 20px;
+            padding-right: 0;
+            height: 16px;
+            overflow: hidden
+        }
+
+        .order_info .return em {
+            display: inline-block;
+            font-size: 12px;
+            height: 16px;
+            line-height: 16px;
+            margin-right: 5px;
+            padding: 0 5px;
+            background-color: #e4393c;
+            color: #fff;
+            border-radius: 3px
+        }
+
+        .order_info_more {
+            margin: 20px 0;
+            text-align: center
+        }
+
+        .order_info_more i {
+            position: relative;
+            margin-left: 10px;
+            display: inline-block;
+            width: 23px;
+            height: 23px;
+            vertical-align: middle
+        }
+
+        .order_info_more i:after {
+            width: 10px;
+            height: 10px;
+            left: 6px;
+            border-color: #666
+        }
+
+        .mod_box {
+            padding: 0 10px 10px;
+            margin: 15px 0 -1px;
+            background: #fff;
+            position: relative
+        }
+
+        .mod_box_link {
+            position: relative;
+            display: block;
+            margin-bottom: -10px;
+            padding: 10px 30px 10px 0
+        }
+
+        .mod_box_link:before {
+            border-color: #ddd
+        }
+
+        .mod_box_link:after {
+            content: '\20';
+            display: block;
+            right: 10px;
+            width: 10px;
+            height: 10px;
+            margin-top: -5px
+        }
+
+        .mod_box_link p span {
+            color: #999
+        }
+
+        .mod_box_link small {
+            font-size: 10px;
+            color: #999
+        }
+
+        .mod_box_title {
+            position: relative;
+            padding: 10px 0;
+            font-size: 12px;
+            color: #333
+        }
+
+        .mod_box_title_slider {
+            margin-bottom: -10px
+        }
+
+        .mod_box_title_slider:after {
+            right: 10px
+        }
+
+        .mod_box_title_slider + .account_info_des {
+            margin-top: 0;
+            max-height: 0;
+            overflow: hidden;
+            -webkit-transition: all 1s;
+            transition: all 1s;
+            -webkit-transition: all .5s
+        }
+
+        .mod_box_title_slider.open + .account_info_des {
+            max-height: 300px;
+            margin-top: 10px
+        }
+
+        .account_info_form input[type=tel], .account_info_form input[type=text] {
+            display: block;
+            margin-bottom: 10px;
+            width: 80%;
+            padding: 0 10px;
+            border: 1px solid #ddd;
+            height: 30px;
+            font-size: 12px
+        }
+
+        .account_info_form input[type=tel].error, .account_info_form input[type=text].error {
+            border-color: #e4393c;
+            color: #e4393c
+        }
+
+        .account_info_form input[type=tel]:after, .account_info_form input[type=text]:after {
+            content: '222'
+        }
+
+        .account_info_form > p {
+            margin-bottom: 10px;
+            font-size: 10px;
+            color: #999
+        }
+
+        .account_info_form .mod_select select {
+            height: 38px
+        }
+
+        .account_info_form .mod_blockTips {
+            margin-top: -11px
+        }
+
+        .account_info_form .select {
+            position: relative
+        }
+
+        .account_info_form .select:before {
+            content: '\20';
+            display: inline-block;
+            vertical-align: middle;
+            margin: -2px 2px 0 0
+        }
+
+        .account_info_form .select.selected:before {
+            background-position: 0 -20px
+        }
+
+        .account_info_des p {
+            margin-bottom: 5px
+        }
+
+        .account_info_des strong {
+            font-weight: 400;
+            color: #333
+        }
+
+        .buy_checkout {
+            overflow: hidden;
+            position: relative;
+            background: #fff;
+            margin-bottom: 15px
+        }
+
+        .buy_checkout .mod_blockTips {
+            margin: -1px 0;
+            z-index: 1
+        }
+
+        .buy_checkout .mod_blockTips:after {
+            right: 15px
+        }
+
+        .buy_checkout li {
+            position: relative;
+            overflow: hidden
+        }
+
+        .buy_checkout li.disabled .buy_dou, .buy_checkout li.disabled em {
+            color: #999
+        }
+
+        .buy_checkout li:before {
+            border-color: #ddd;
+            left: 10px
+        }
+
+        .buy_checkout li strong {
+            display: inline-block;
+            font-weight: 400;
+            position: absolute;
+            left: 10px;
+            top: 13px
+        }
+
+        .buy_checkout li small {
+            font-size: 10px;
+            color: #999;
+            display: block
+        }
+
+        .buy_checkout li em {
+            display: inline-block;
+            vertical-align: middle;
+            margin-top: -2px;
+            color: #e4393c
+        }
+
+        .buy_checkout li em.disabled {
+            color: #999
+        }
+
+        .buy_checkout li a em {
+            padding-right: 0
+        }
+
+        .buy_checkout li .coupon {
+            display: inline-block;
+            position: relative;
+            font-size: 10px;
+            height: 18px;
+            line-height: 18px;
+            padding: 0 8px 0 12px;
+            color: #e4393c;
+            margin-right: 5px
+        }
+
+        .buy_checkout li .coupon, .buy_checkout li .coupon:after {
+            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAAkBAMAAADBdxqfAAAAJFBMVEUAAADkOTzkOTzkOTzkOTzkOTzkOTzkOTzkOTzkOTzkOTzkOTxt03x6AAAAC3RSTlMAxPKAQ+ayVxgM0LoH8uYAAACjSURBVFjD7Zg7DkBQEEVvKIjODvQapQ0oRKuzBI1eI7EFncYaxCcymxNiA7oTcZppT96dzOSNMgNSqjIgq0xAjK0VCsWjRXszuBY0RBi/1kutVDh6k80NreW92DTUO21AtFsuuXPH0vLj5Cp1wgrR3e5STEIRLHcZI6FwDrIWNERmyzMHBHScQpcPdVULyK/1oS8G7M3gWtAQYWC1oGc35pHyBOmB8Or28hxCAAAAAElFTkSuQmCC) no-repeat 0 0;
+            background-size: 150px 18px
+        }
+
+        .buy_checkout li .coupon:after {
+            position: absolute;
+            right: 0;
+            top: 0;
+            content: '\20';
+            display: block;
+            width: 4px;
+            height: 18px;
+            background-position: right 0
+        }
+
+        .buy_checkout li .content {
+            display: block;
+            text-align: right;
+            font-size: 12px;
+            color: #333;
+            padding: 13px 30px 13px 65px;
+            position: relative
+        }
+
+        .buy_checkout li a.content:after {
+            right: 5px
+        }
+
+        .buy_checkout li .input {
+            display: inline-block;
+            vertical-align: middle;
+            width: 50px;
+            height: 30px;
+            line-height: 30px;
+            position: relative;
+            margin: -10px 5px -9px
+        }
+
+        .buy_checkout li .input:after {
+            border-color: #ddd
+        }
+
+        .buy_checkout li .input input {
+            width: 100%;
+            text-align: center;
+            -webkit-user-select: auto;
+            user-select: auto
+        }
+
+        .buy_checkout li .textarea {
+            position: relative;
+            background: #eff1f3;
+            margin: 10px
+        }
+
+        .buy_checkout li .textarea textarea {
+            position: relative;
+            width: 100%;
+            padding: 10px
+        }
+
+        .buy_checkout li .textarea:after {
+            border-color: #ddd
+        }
+
+        .buy_checkout li .address {
+            padding: 0 25px 0 3px;
+            text-align: left;
+            color: #666
+        }
+
+        .buy_checkout li .address .blue {
+            color: #3985ff
+        }
+
+        .buy_checkout .buy_select {
+            display: inline-block;
+            width: 80px
+        }
+
+        .buy_checkout .buy_select select {
+            color: #999
+        }
+
+        .buy_checkout .buy_select.selected select {
+            color: #333
+        }
+
+        .buy_checkout .tips_dou {
+            position: absolute;
+            top: -1px;
+            right: -5px;
+            width: 40px;
+            height: 40px;
+            display: block;
+            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAY1BMVEX///8zMzNERERBQUE5OTn7+/uKior6+vrJycnNzc3T09Otra2ZmZny8vLr6+vCwsK5ublkZGRhYWGamppOTk7x8fHk5OSHh4d3d3d1dXVYWFhXV1egoKBcXFySkpJpaWmFhYUILT0pAAABGElEQVQ4y5VTa5ODIAx0A4q21Cf27fX+/688r2HYU2fO6X4AQpaEvLIPkDdFL9ZKXzR5tsXJCxLEn9b6VoDHUNbO1eXwAKRdWr8AXUW56oBL/kd/gz0uLR4tbmQUMIe1z4NBkfzDUk+GRRv/L4j2ywDAfI/RC0Rj8ej05gsKc1a5g//dnKDS98BUZuNMCzEWiJu3BneVXwjRNEq9uaN5h+BVNHiuDsM7kF75xJgsVOjnVVAv9RNCPNaQebVwC31IUWQOdkM4G80qCSsXAUHf08Xik08g6vnJAgOvrpgoaJiaKBJeFGKinEGVbcFUs1gEi8VyKwyuemC52TAksGF2Wm6/affbfjs4eZ4GZzN6BgnGn/4fXtZ3Hz/vIwvEk04KHwAAAABJRU5ErkJggg==) no-repeat 50%;
+            background-size: 16px 16px
+        }
+
+        .buy_checkout .input_password {
+            margin: 15px 10px;
+            position: relative
+        }
+
+        .buy_checkout .input_password:after {
+            border-color: #ddd
+        }
+
+        .buy_checkout .input_password input {
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            font-size: 12px;
+            color: #999;
+            padding: 0 10px
+        }
+
+        .buy_checkout .tips {
+            padding: 10px;
+            font-size: 12px;
+            color: #999
+        }
+
+        .buy_checkout .tips a {
+            display: inline-block;
+            color: #3985ff
+        }
+
+        .buy_checkout .avaliable {
+            position: relative;
+            padding-right: 35px
+        }
+
+        .buy_checkout .avaliable.disabled, .buy_checkout .avaliable.disabled .money {
+            color: #999
+        }
+
+        .buy_checkout .avaliable.disabled .slider_button {
+            background-color: #fff;
+            border: 1px solid #ddd
+        }
+
+        .buy_checkout .avaliable.disabled .slider_button:before {
+            border: 1px solid #e1e1e1;
+            -webkit-transform: translateX(-24px);
+            transform: translateX(-24px);
+            margin-top: 0
+        }
+
+        .buy_checkout .avaliable .money {
+            color: #e4393c
+        }
+
+        .buy_checkout .slider_button {
+            position: absolute;
+            right: -20px;
+            top: -6px;
+            width: 50px;
+            height: 26px;
+            background-color: #e4393c;
+            border-radius: 13px;
+            -webkit-transition: background-color .2s ease;
+            transition: background-color .2s ease
+        }
+
+        .buy_checkout .slider_button:before {
+            content: '';
+            display: inline-block;
+            margin-top: 1px;
+            width: 24px;
+            height: 24px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 3px 4px rgba(0, 0, 0, .3);
+            -webkit-transform: translateX(-1px);
+            transform: translateX(-1px);
+            -webkit-transition: -webkit-transform .2s ease;
+            transition: -webkit-transform .2s ease;
+            transition: transform .2s ease;
+            transition: transform .2s ease, -webkit-transform .2s ease
+        }
+
+        .pay_area {
+            overflow: hidden;
+            text-align: center;
+            padding: 0 10px;
+            background: #fff;
+            position: relative;
+        }
+
+        .pay_area .price {
+            font-size: 16px;
+            margin: 20px 0;
+        }
+
+        .pay_area .price strong {
+            color: #e4393c;
+            font-weight: 400;
+        }
+
+        .qq_footer {
+            margin: 45px 0 60px !important;
+        }
+
+        .qq_footer .jd_logo {
+            height: 15px;
+            width: 86px;
+            margin: 15px auto 0;
+            background: url(//wq.360buyimg.com/fd/h5/base/gb/images/jd_logo_min_d0fee1fd.png);
+            background-size: cover;
+            -webkit-background-size: cover;
+        }
+
+        .qq_footer .qq_info {
+            font-size: 12px;
+            text-align: center;
+            color: #666;
+        }
+
+        .pay_btn {
+            overflow: hidden;
+            text-align: center;
+            padding: 0 10px;
+            background: #fff;
+            position: relative;
+        }
+
+        .pay_weixin {
+            font-size: 16px;
+            margin: 20px 0;
+            background-color: #00A651;
+            color: #ffffff;
+            height: 50px;
+            line-height: 50px;
+        }
+
+        .buy_toptips {
+            background: #fff2ca;
+        }
+    </style>
+</head>
+<body>
+<div class="wx_wrap" id="wrapBody">
+    <div id="pagePay">
+        <div class="buy_toptips">
+            <p>温馨提示：支付成功后，敬请等待抢宝结果通知</p>
+        </div>
+        <div class="order_info" id="orderInfo">
+            <ul>
+                <li class="hproduct"><img class="photo"
+                                          src="{$order.img_url}"
+                                          alt="{$order.name}">
+                    <div class="fn">{$order.name}</div>
+                    <p class="sku_coll">第{$order.periods}期</p></li>
+            </ul>
+        </div>
+        <div class="mod_box" style="margin: 15px 0px;" id="userInfoArea">
+            <p class="mod_box_title">手机号码</p>
+            <form class="account_info_form">
+                <input placeholder="请输入11位手机号码" id="telNum" type="tel" pattern="^1[345678][0-9]{9}$" required
+                       value="{$order.phone}">
+                <p>用于接收抢宝活动通知短信，请准确填写</p>
+                <a href="javascript:void(0)" class="mod_blockTips" id="phoneBindTip" style="display:none;">
+                    <p>该手机号已注册京东账号，<em>马上绑定</em>即可享受会员服务</p>
+                </a>
+                <div class="select selected" id="agreeMent"><input type="checkbox" id="argee_box"/> 我已阅读并同意<a
+                        id="indiana_protocal"
+                        href="/Mobile/OneShop/protocol.html"
+                        style="color: #3985ff;">《一元抢宝用户服务协议》</a>
+                </div>
+            </form>
+        </div>
+        <div class="buy_checkout" id="userAssetArea" style="">
+            <ul>
+                <li id="jdQuanTab" style=""><a href="javascript:void(0);" class="content"> <strong>券</strong> <em
+                        class="disabled">无可用</em> </a></li>
+                <a href="javascript:void(0);" class="mod_blockTips" id="bindJd" style="display:none;">
+                </a>
+            </ul>
+            <div id="payPass" style="display: none;">
+                <div class="input_password" id="longPass" style="display: none;">
+                    <input placeholder="请输入京东支付密码" type="password">
+                </div>
+
+                <div class="input_password_num" id="shortPass" style="display: none;">
+                    <label class="input_password_num_label">支付密码</label>
+                    <div class="input_password_num_input" id="copyInput">
+                    </div>
+                    <input class="i-text" id="shortPassInput" maxlength="6" style="height:1px;border-style:none"
+                           type="tel">
+                </div>
+                <p class="tips">京豆、京券及京东卡/E卡是您的虚拟资产，为保障您的资产安全，请输入京东支付密码！<br>忘记密码？<a href="javascript:void(0);"
+                                                                                    id="resetPassword">重置京东支付密码</a></p>
+            </div>
+        </div>
+        <div class="mod_alert" id="payPassModel" style="display: none;">
+            <span id="cancel" class="close"></span>
+            <i class="icon"></i>
+            <p>
+                <small>为了保障您的资产安全，您需要开通<br>京东支付密码，才能使用京券、<br>京东卡/E卡、京豆等虚拟资产！</small>
+            </p>
+            <p class="btns">
+                <a href="javascript:void(0);" id="confirm" class="btn btn_1">开启</a>
+            </p>
+        </div>
+        <div class="pay_area" id="payArea"><p class="price">总价：<strong
+                id="pageTotalPrice">¥{$order.order_amount}</strong></p>
+            <div class="pay_btn">
+                <p class="pay_weixin" onclick="payWeixin()">微信支付</p>
+            </div>
+        </div>
+    </div>
+    <div id="jdQuanPage" style="display: none;" class="promo_list"></div>
+</div>
+<div class="wx_footer">
+    <div class="jd_logo" id="jdBtmLogo"></div>
+</div>
+<div class="wx_loading" id="wxloading" style="display: none;">
+    <div class="wx_loading_inner">
+        <i class="wx_loading_icon"></i>
+        请求加载中...
+    </div>
+</div>
+<script type="text/javascript">
+    function payWeixin() {
+        var phone = $("#telNum").val();
+        var flag = vailPhone(phone);
+        if (flag) {
+            var url = '/index.php?m=Mobile&c=OneShop&a=payWeiXin&order_id={$order.order_id}&phone=' + phone;
+            $('.wx_loading').show();
+            window.location.href=url;
+        }
+    }
+    function vailPhone(phone) {
+        var message = "";
+        var flag = false;
+        var myreg = /^(((13[0-9]{1})|(14[0-9]{1})|(17[0-9]{1})|(15[0-3]{1})|(15[5-9]{1})|(18[0-9]{1}))+\d{8})$/;
+        if (phone == '') {
+            message = "手机号码不能为空！";
+        } else if (phone.length != 11) {
+            message = "请输入有效的手机号码！";
+        } else if (!myreg.test(phone)) {
+            message = "请输入有效的手机号码！";
+        } else if ($('#argee_box').attr("checked") != "checked") {
+            message = "你没有勾选同意一元夺宝协议！";
+        } else {
+            flag = true;
+        }
+        if (!flag) {
+            layer.open({
+                content: message
+                , skin: 'msg'
+                , time: 2 //2秒后自动关闭
+            });
+        }
+        return flag;
+    }
+</script>
+</body>
+</html>

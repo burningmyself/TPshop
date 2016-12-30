@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta itemprop="name" content="一元抢宝">
+    <meta itemprop="description" content="一块钱的梦想你敢不敢谈">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    <title>发表晒单</title>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/oneshop.css"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/css/layer.css"/>
+    <script type="text/javascript" src="__STATIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script type="text/javascript" src="__STATIC__/js/layer.js"></script>
+    <style>
+        .mod_sharetips {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 900;
+            background: rgba(0, 0, 0, .8);
+            opacity: 0;
+            -webkit-transition: opacity .2s;
+            transition: opacity .2s;
+            top: -100%
+        }
+
+        .mod_sharetips:before {
+            content: '\20';
+            display: block;
+            width: 74px;
+            height: 102px;
+            overflow: hidden;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background-image: url(data:image/png;base64,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);
+            background-size: 74px 102px
+        }
+
+        .mod_sharetips p {
+            position: absolute;
+            width: 100%;
+            height: auto;
+            text-align: center;
+            top: 110px;
+            font-size: 16px;
+            line-height: 28px;
+            color: #fff
+        }
+
+        .mod_sharetips.active {
+            top: 0;
+            opacity: 1
+        }
+
+        .treasure_post .treasure_post_upload ul:after {
+            content: '\20';
+            display: block;
+            clear: both
+        }
+
+        body {
+            background: #e8e8ed
+        }
+
+        .treasure_post {
+            background: #fff
+        }
+
+        .treasure_post .treasure_post_content {
+            padding: 10px;
+            height: 135px
+        }
+
+        .treasure_post .treasure_post_content textarea {
+            width: 100%;
+            border: 0 none;
+            height: 100%;
+            resize: none;
+            color: #666;
+            font-size: 12px
+        }
+
+        .treasure_post .treasure_post_upload {
+            padding: 10px 10px 0
+        }
+
+        .treasure_post .treasure_post_upload li {
+            position: relative;
+            float: left;
+            width: 75px;
+            height: 75px;
+            margin-right: 10px;
+            margin-bottom: 10px
+        }
+
+        .treasure_post .treasure_post_upload li img {
+            width: 100%
+        }
+
+        .treasure_post .treasure_post_upload_del {
+            position: absolute;
+            top: -7px;
+            right: -7px;
+            width: 15px;
+            height: 15px;
+            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAMAAAAM7l6QAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAABjUExURQAAAOQ5POQ5POQ5POQ5POQ5POQ5POQ5POQ5POQ5POQ5POQ5POQ5POQ5POQ5POQ5POQ5POQ5POQ5POQ5POQ5POQ5POQ5POQ5POQ5POQ5POQ5POQ5POQ5POQ5PP////nQ0fnR0k4p3ewAAAAddFJOUwBYBq1M6YDqAxCW+eiSlJMFV+zF+PrGkYHH68RN+LEchAAAALNJREFUKM+Fk+sOgyAMRityEcX7fVun7/+UizqNopTzh6QnIS18BdgpeN+ZpjFdzwuw0VLhwUvqqw0MXjDBSUYx3oijw4b4QLj7HB/JNluig3LtWbi0WPqX6EQCMOXWigFHAg4ppXN4U7oGRWkFyXpOX5tpKSdOPW/ac3lNt+YZjHyWD7CKfFTPlxAfqjQZh38cMzJMvih6grysgdWfCKwlGk7zV4O+bVnB01G0rRhTzo7iD/7eThkfQy3ZAAAAAElFTkSuQmCC) no-repeat;
+            background-size: 15px auto
+        }
+
+        .treasure_post .treasure_post_upload_btn {
+            box-sizing: border-box;
+            position: relative;
+            display: block;
+            width: 75px;
+            height: 75px;
+            border: 1px solid #ddd;
+            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAhCAMAAACY2smqAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAABIUExURQAAAJmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmaf68UsAAAAXdFJOUwCqKXDzVIsG+dVqWwvg25rlNENnxT5Pkb3QRAAAAMhJREFUOMut0+kOwiAQBGDuhdL7cN7/TTUxape4pETnX9OvzQCLUucsYFmUnInTSZa9c730VGTj/5mwiXTn7Rbs7DUrt5efnsPpwelRUnUpv1HyeoguaU+ftXynt/FVbfRVSgFI1hAZm4BAlQIBsXufh0OQqUdcP09rhJcozejOvTvMJNCMRGwzErJANSzfOAst0BGGU4NBoA5UzC+iQGNJSaTD9QINy2rYrIYjaDjYlnFpGcJHh3K0axcmPy9Mpn9ewyq9mgZ6B3pUIkaC/eETAAAAAElFTkSuQmCC) 50% no-repeat;
+            background-size: 21px auto
+        }
+
+        .treasure_msg {
+            margin: 10px 0;
+            position: relative;
+            overflow: hidden;
+            background: #fff;
+            text-align: center
+        }
+
+        .treasure_msg .treasure_msg_icon {
+            margin: 25px auto 15px;
+            display: block;
+            width: 50px;
+            height: 50px
+        }
+
+        .treasure_msg .treasure_msg_icon.icon_success {
+            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAACHUExURQAAABjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYRjEYVz8Vu0AAAAsdFJOUwD6mqfuJ+YF8RQRHtwMZDcrliOssz31y1BzkcjgWrjE174IoxgzLoZrb0TPCwwbQwAAA71JREFUaN69mumaqjAMhosgFAQBBQV3Hffz3f/1nYI6ozMsbaHND51nLLxdkzQJIZzi3m+LZOlbFKCWv0wWt7tL+pTJ1VyhQlbmddIPYXjxixfSbZxn4dALCAm8YZjl8ZYW//cvw64E77pkL7LMcVT1azQ2Lfbz8up1GcRgBtiL1Klv4qQLG5gNZIcz/GK9TDKnrZ2TJayhKYNxYwMGbweHA9Y4Ft5tY4shRvztRwxjjYUQoz2wPYt167wF9gLdWlPRXr1GT9ecbQ8DYCq1Kb0pMDjwtDzOYeSymz43MD+2N4tW8EP5o3XysYraGoUWtp0UnzuH1dLJlGJ66KaJgg1o2jgOii+HdBTHBG0Yy5kx+lDcX6C1h+xoY+r0AXGmsGuOpbPEMujHBh3Yq6q7O4Dfm0F1fQwqdQlmZ9KbnGeo0DAjijHpUcagf5dlj2mvzgeZYv8XbHv9Qjz799S4FtakZ1nD+txIMTakd9kg/rDRhhH1D4kM491HMKt3dVcZwHwbCIyRCsjIwPCNqGQgHy92Z5iogUwwe22wHAlRJAle7sIOmSpIht3T9sN2VEEcG6fyjwsWRJkscCm/faRdrce+1kik8B87wOo4W+7ur8L9ni+r3LnX92MpI8cd/tWbVBPX8nOskMFsSDGGFSKFDBLBZhMK2pExb7Z2FC65Y66UQba4k1sXp5GDwezh7fu0qGIwzbhgKkzauI98LNu9j4yp3zlCpQwSskVfydoSTgbTKCtiwZNlbLme9GCxbRzIMvgeDNhBBKQYK14GKQiNkCCvVtATAUZBaJyupPoKKcQopqtx4dNZFYUx9vwLWSx88xauoogxyi3cchjTP5fuoS3EKA9jm1phFNPpwCjVSquC/KQwxkbsYBUKsl3Vh/Tnei/OKFU9h9H6oRQM0dBLYbR4zO+LEkkw2EE8EmJzOBIPihSjdCT4XKKThelJhvF0ificu1MRL08kXM2Hc8fppoaGFOPppvI63JlUmOrpcOu5Omi5BGm5zum5mGq5YqsLFsRvL1YY9oiUB3DiD2WiJRSlJaimJDyY/Q4Pagl06gnZ6gk+awmj60kINOQjhCVYYl7jDox6S9JsapM0etJNehJnelKAepKZj7TsSZ7BlZbtmGC+8SWY9aTKSZn0tyU0/9rmT/qTR/nCRtBWRhux8gXyKMSIRQoxYkOi5KEsKYl5S0piqZKS4klTeXFMiVFf5lNOWr5rL1ja5Z3t0Km29Mp6lF6dSC8yuZp2VRGZ3VsR2WvinuVwbJVmouVw/wEe7W6sHzJGVgAAAABJRU5ErkJggg==) no-repeat;
+            background-size: 50px auto
+        }
+
+        .treasure_msg p {
+            font-size: 16px
+        }
+
+        .treasure_msg .mod_btns {
+            margin: 20px 10px 25px
+        }
+
+        .treasure_follow {
+            margin: 10px 0;
+            padding: 15px 10px;
+            background: #fff;
+            text-align: center
+        }
+
+        .treasure_follow img {
+            padding: 10px 0
+        }
+
+        .treasure_submit {
+            height: 44px
+        }
+
+        .treasure_submit.fixed {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            max-width: 540px;
+            z-index: 101
+        }
+
+        .treasure_submit .mod_btns {
+            margin: 0
+        }
+    </style>
+    <style>
+        /** 加载样式 */
+        .loading {
+            margin: 20px;
+            text-align: center;
+        }
+
+        .loading img {
+            display: block;
+            width: 16px;
+            height: 16px;
+            margin: 0 auto 5px;
+        }
+
+        .loading_img {
+            width: 16px;
+            height: 16px;
+        }
+
+        .sharetips {
+            display: none;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            background: rgba(0, 0, 0, .8);
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #fff;
+            text-align: center;
+            z-index: 9999;
+        }
+
+        .sharetips::before {
+            content: '';
+            display: block;
+            margin-right: 0.5rem;
+            height: 8rem;
+            background-size: 4.2rem 5rem;
+        }
+    </style>
+    <script>
+        wx.config({
+            debug: false,
+            appId: "{$signPackage['appId']}",
+            timestamp: '{$signPackage["timestamp"]}',
+            nonceStr: '{$signPackage["nonceStr"]}',
+            signature: '{$signPackage["signature"]}',
+            jsApiList: ["chooseImage",
+                'previewImage',
+                'uploadImage',
+                'downloadImage',
+                'checkJsApi',
+                'openLocation',
+                'getLocation', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareQZone', 'hideOptionMenu'] // 功能列表，我们要使用JS-SDK的什么功能
+        });
+        var ShareLink = "http://{$_SERVER[HTTP_HOST]}/index.php?m=Mobile&c=OneShop&a=goods_info&goods_id={$order[goods_id]}"; //默认分享链接
+        var ShareImgUrl = "http://{$_SERVER[HTTP_HOST]}{$order[img_url]}"; // 分享图标
+        var Title = "{$order[name]}";
+        var Desc = "一块钱的梦想你敢不敢谈";
+
+        // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在 页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready 函数中。
+        wx.ready(function () {
+            // 获取"分享到朋友圈"按钮点击状态及自定义分享内容接口
+            wx.onMenuShareTimeline({
+                title: Title, // 分享标题
+                desc: Desc,
+                link: ShareLink,
+                imgUrl: ShareImgUrl,// 分享图标
+                success: function (res) {
+                    // alert('已分享');
+                    $('#wx_share').hide();
+                    layer.open({content: '已分享', time: 2});
+                },
+                cancel: function (res) {
+                    // alert('已取消');
+                    $('#wx_share').hide();
+                    layer.open({content: '已取消', time: 2});
+                }
+            });
+
+            // 获取"分享给朋友"按钮点击状态及自定义分享内容接口
+            wx.onMenuShareAppMessage({
+                title: Title, // 分享标题
+                desc: Desc,
+                link: ShareLink,
+                imgUrl: ShareImgUrl,// 分享图标
+                success: function (res) {
+                    // alert('已分享');
+                    $('#wx_share').hide();
+                    layer.open({content: '已分享', time: 2});
+                },
+                cancel: function (res) {
+                    // alert('已取消');
+                    $('#wx_share').hide();
+                    layer.open({content: '已取消', time: 2});
+                }
+            });
+            // 分享到QQ
+            wx.onMenuShareQQ({
+                title: Title, // 分享标题
+                desc: Desc,
+                link: ShareLink,
+                imgUrl: ShareImgUrl,// 分享图标
+                success: function (res) {
+                    // alert('已分享');
+                    $('#wx_share').hide();
+                    layer.open({content: '已分享', time: 2});
+                },
+                cancel: function (res) {
+                    // alert('已取消');
+                    $('#wx_share').hide();
+                    layer.open({content: '已取消', time: 2});
+                }
+            });
+            // 分享到QQ空间
+            wx.onMenuShareQZone({
+                title: Title, // 分享标题
+                desc: Desc,
+                link: ShareLink,
+                imgUrl: ShareImgUrl,// 分享图标
+                success: function (res) {
+                    // alert('已分享');
+                    $('#wx_share').hide();
+                    layer.open({content: '已分享', time: 2});
+                },
+                cancel: function (res) {
+                    // alert('已取消');
+                    $('#wx_share').hide();
+                    layer.open({content: '已取消', time: 2});
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="wx_wrap">
+    <div class="treasure_post">
+        <div class="treasure_post_content">
+            <textarea id="shareContent" placeholder="说说你抢宝成功的喜悦～"></textarea>
+        </div>
+        <div class="treasure_post_upload">
+            <ul>
+                <li id="uploadImg">
+                    <i class="treasure_post_upload_btn"></i>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- S 发布成功 -->
+    <div class="treasure_msg" style="display: none;">
+        <i class="treasure_msg_icon icon_success"></i>
+        <p>已成功发布晒单分享</p>
+        <div class="mod_btns">
+            <a class="mod_btn bg_2" data-type="check" href="{:U('OneShop/share_order_detail',array('order_id'=>$order['order_id']))}">查看我的晒单</a>
+            <a class="mod_btn" data-type="share" id="share_friend">分享到朋友圈</a>
+        </div>
+    </div>
+
+    <div class="treasure_follow" style="display: none;">
+        <p class="treasure_follow_txt">关注“一元抢宝”服务号<br>第一时间获取抢宝优惠信息和开奖通知</p>
+        <img src="__STATIC__/images/gz_weixin.jpg">
+        <p class="treasure_follow_tip">长按二维码关注</p>
+    </div>
+    <!-- E 发布成功-->
+
+    <!-- S 弹窗 -->
+    <!-- 遮罩层 -->
+    <!-- 显示：添加class="show" -->
+    <div class="mod_alert_mask "></div>
+    <div class="mod_alert fixed">
+        <i class="icon icon_warn"></i>
+        <p>文案文案文案文案</p>
+        <div class="btns">
+            <a class="btn btn_1">文案</a>
+        </div>
+    </div>
+    <!-- E 弹窗-->
+</div>
+<!-- S 吸底提交按钮 -->
+<div class="treasure_submit fixed">
+    <div class="mod_btns">
+        <a class="mod_btn bg_2" id="submitBtn">提交</a>
+    </div>
+</div>
+<!-- E 吸底提交按钮-->
+<div class="wx_loading" style="display:none;">
+    <div class="wx_loading_inner"><i class="wx_loading_icon"></i>上传中...</div>
+</div>
+<div class="wx_footer">
+    <div class="jd_logo" id="jdBtmLogo">
+    </div>
+</div>
+<div id="wx_share" style="display: none;">
+    <div class="share_panel">
+        <div class="mod_sharetips active"><p>点击右上角， <br><span id="sharetips">分享到【朋友圈】或发送给微信好友</span></p></div>
+    </div>
+</div>
+</body>
+<script>
+    //上传图片最大几张
+    var imgMax = 9;
+    var imgData = [];//图片数据
+    var wxLocalIds = [];//选中的图片数据
+    $(function () {
+        $('#uploadImg').on('click', function (e) {
+            addImg();
+        });
+        $('.treasure_post_upload').on('click', '.treasure_post_upload_del', function (e) {
+            var _this = $(this);
+            alert_confrim(function (flag) {
+                if (flag) {
+                    --imgMax;
+                    _this.parent().remove();
+                    $('#uploadImg').show();
+                }
+                _this = null;//释放资源
+            }, '是否确定删除');
+        });
+        $('#submitBtn').on('click', function () {
+            var c = $.trim($('#shareContent').val());
+            var $images = $('.treasure_post_upload_del');
+            if (!c) {
+                layer.open({content: '您还没有填写晒单感想', time: 2});return;
+            }
+            if (c.length < 5) {
+                layer.open({content: '您填写的晒单感想少于5个字，请您继续补充~', time: 2});return;
+            }
+            if (c.length > 150) {
+                layer.open({content: '最多只能填写150个字', time: 2});return;
+            }
+            if ($images.length == 0) {
+                layer.open({content: '您还没有上传图片', time: 2});return;
+            }
+            if ($images.length > 9) {
+                layer.open({content: '最多只能上传' + 9 + '张图片', time: 2});return;
+            }
+            $('.wx_loading').show();
+            submitComment(c, function (data) {
+                if (data['status'] == 1) {
+                    $('.treasure_post, .treasure_submit').hide();
+                    $('.treasure_msg, .treasure_follow').show();
+                    layer.open({content: data['msg'], time: 2});
+                }
+                else {
+                    layer.open({content: data['msg'], time: 2});
+                }
+            });
+            $('.wx_loading').hide();
+        });
+        $('#share_friend').on('click', function () {
+            $('#wx_share').show();
+        })
+    });
+    //添加图片
+    function addImg() {
+        wx.chooseImage({
+            success: function (res) {
+                var ret = /(ok|cancel)$/.test(res.errMsg);
+                if (!ret) {
+                    layer.open({content: '选取图片失败，请重新选取~', time: 2});
+                    return;
+                }
+                wxLocalIds = res.localIds || [];
+                var shengyu = imgMax - imgData.length;//最多还能上传的图片数量
+                if (wxLocalIds.length > imgMax - imgData.length) {
+                    layer.open({content: '您上传的图片数量过多(还能上传' + shengyu + ')，请重新上传。', time: 2});
+                    return;
+                }
+                setTimeout(wxUpload, 100);
+            }, fail: function (res) {
+                layer.open({content: '选取图片失败，请重新选取:', time: 2});
+            }
+        });
+
+    }
+    //微信图片上传
+    function wxUpload() {
+        var imgWxId;
+        if (imgWxId = wxLocalIds.shift()) {
+            startTime = Date.now();
+            wx.uploadImage({
+                localId: imgWxId, isShowProgressTips: 1, success: function (res) {
+                    var ret = /(ok|cancel)$/.test(res.errMsg);
+                    if (!ret) {
+                        layer.open({content: '上传微信失败，请重新上传~', time: 2});
+                        return;
+                    }
+                    imgData.push(res.serverId);
+                    $('#uploadImg').before('<li><i class="treasure_post_upload_del"></i><img data-uploadsrc="' + res.serverId + '" src="' + (imgWxId) + '" width="75" height="75"></li>');
+                    if (imgData.length >= imgMax) {
+                        $('#uploadImg').hide();
+                    }
+                    setTimeout(wxUpload, 100);
+                }, fail: function (res) {
+                    layer.open({content: '上传微信失败，请重新上传~~', time: 2});
+                }
+            });
+        }
+    }
+
+    function submitComment(content, callback) {
+        var score = 5;
+        var imageJson = imgData ? imgData.join(",") : '';
+        content = content.replace(/\n/g, '\\n');
+        $.ajax({
+            url: '/index.php?m=Mobile&c=OneShop&a=share_order',
+            data: {order_id: {$order[order_id]}, imageJson: imageJson, content: content},
+            dataType: 'json',
+            type: 'post',
+            success: function (data) {
+                callback(data);
+            },
+            error: function () {
+                layer.open({content: '上传微信失败，请重新上传~~', time: 2});
+            }
+        })
+    }
+    //弹出确认框
+    function alert_confrim(callback, msg) {
+        var html = '<div class="mod_alert show fixed"><p>' + msg + '</p><p class="btns"><a href="javascript:;" id="ui_btn_confirm" class="btn btn_1">确定</a><a href="javascript:;" id="ui_btn_cancel" class="btn btn_1">取消</a></p></div>';
+        $('.wx_wrap').append(html);
+        $('#ui_btn_confirm').on('click', function () {
+            $('.mod_alert').remove();
+            callback(true);
+        })
+        $('#ui_btn_cancel').on('click', function () {
+            $('.mod_alert').remove();
+            callback(false);
+        })
+    }
+</script>
+</html>
